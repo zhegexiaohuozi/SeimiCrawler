@@ -9,22 +9,19 @@ import cn.wanghaomiao.seimi.struct.Request;
  */
 public interface SeimiQueue {
     /**
-     * 出队一个请求
+     * 阻塞式出队一个请求
      * @return
      */
     Request bPop(String crawlerName);
-
     /**
      * 入队一个请求
      * @param req
      * @return
      */
     boolean push(Request req);
-
     /**
      * 任务队列剩余长度
      * @return
      */
     int len(String crawlerName);
-
 }
