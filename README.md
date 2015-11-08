@@ -2,11 +2,14 @@ SeimiCrawler
 ==========
 An agile,powerful,distributed crawler framework.
 
-## 简介 ##
+# 简介 #
 
 SeimiCrawler是一个敏捷的，支持分布式的爬虫开发框架，希望能在最大程度上降低新手开发一个可用性高且性能不差的爬虫系统的门槛，以及提升开发爬虫系统的开发效率。在SeimiCrawler的世界里，绝大多数人只需关心去写抓取的业务逻辑就够了，其余的Seimi帮你搞定。设计思想上SeimiCrawler受Python的爬虫框架Scrapy启发很大，同时融合了Java语言本身特点与Spring的特性，并希望在国内更方便且普遍的使用更有效率的XPath解析HTML，所以SeimiCrawler默认的HTML解析器是[JsoupXpath](http://jsoupxpath.wanghaomiao.cn),默认解析提取HTML数据工作均使用XPath来完成（当然，数据处理亦可以自行选择其他解析器）。
 
-## 快速开始 ##
+# 原理示例 #
+![SeimiCrawler原理图](http://77g8ty.com1.z0.glb.clouddn.com/v2_Seimi.png)
+
+# 快速开始 #
 
 添加maven依赖(已经同步到中央maven库)：
 ```
@@ -60,7 +63,7 @@ public class Boot {
 ```
 以上便是一个最简单的爬虫系统开发流程。
 
-## 更多文档 ##
+# 更多文档 #
 
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档将在[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步完善说明，敬请期待...
 
