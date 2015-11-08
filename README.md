@@ -1,6 +1,6 @@
 SeimiCrawler
 ==========
-An agile, distributed crawler framework.
+An agile,powerful,distributed crawler framework.
 
 ## 简介 ##
 
