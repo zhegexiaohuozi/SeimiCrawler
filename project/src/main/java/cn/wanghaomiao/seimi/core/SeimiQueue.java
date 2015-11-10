@@ -23,5 +23,18 @@ public interface SeimiQueue {
      * 任务队列剩余长度
      * @return
      */
-    int len(String crawlerName);
+    long len(String crawlerName);
+
+    /**
+     * 判断一个URL是否处理过了
+     * @param req
+     * @return
+     */
+    boolean isProcessed(Request req);
+
+    /**
+     * 目前总共的抓取数量
+     * @return
+     */
+    long totalCrawled(String crawlerName);
 }

@@ -50,6 +50,11 @@ public class SeimiProcessor implements Runnable {
                         logger.info("SeimiProcessor[{}] will stop!",Thread.currentThread().getName());
                         break;
                     }
+                    //判断一个Request是否已经被处理过了
+                    if (queue.isProcessed(request)){
+                        logger.info("this request has bean processed,so current request={} will be dropped!",request);
+                        continue;
+                    }
                     HttpClient hc;
                     if (crawlerModel.isUseCookie()){
                         hc = HttpClientFactory.getHttpClient(10000,crawlerModel.getInstance().getCookieStore());

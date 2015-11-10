@@ -4,6 +4,7 @@ import cn.wanghaomiao.seimi.annotation.Queue;
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.struct.Request;
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,8 @@ public class DefaultRedisQueue implements SeimiQueue {
     private int port;
     @Value("${redis.password:}")
     private String password;
-    private String quueName = "SEIMI_CRAWLER_QUEUE_";
+    private String quueNamePrefix = "SEIMI_CRAWLER_QUEUE_";
+    private String setNamePrefix = "SEIMI_CRAWLER_SET_";
     private JedisPool wpool = null;
     private Logger logger = LoggerFactory.getLogger(getClass());
     public void refresh(){
@@ -75,7 +77,7 @@ public class DefaultRedisQueue implements SeimiQueue {
         Request request = null;
         try {
             jedis = getWClient();
-            List<String> res = jedis.brpop(0,quueName+crawlerName);
+            List<String> res = jedis.brpop(0, quueNamePrefix +crawlerName);
             request = JSON.parseObject(res.get(1),Request.class);
         }catch (Exception e){
             logger.warn(e.getMessage());
@@ -94,7 +96,7 @@ public class DefaultRedisQueue implements SeimiQueue {
         boolean res = false;
         try {
             jedis = getWClient();
-            res = jedis.lpush(quueName+req.getCrawlerName(),JSON.toJSONString(req))>0;
+            res = jedis.lpush(quueNamePrefix +req.getCrawlerName(),JSON.toJSONString(req))>0;
         }catch (Exception e){
             logger.warn(e.getMessage());
             refresh();
@@ -107,12 +109,12 @@ public class DefaultRedisQueue implements SeimiQueue {
     }
 
     @Override
-    public int len(String crawlerName) {
+    public long len(String crawlerName) {
         long len = 0;
         Jedis jedis = null;
         try {
             jedis = getWClient();
-            len = jedis.llen(quueName+crawlerName);
+            len = jedis.llen(quueNamePrefix +crawlerName);
         }catch (Exception e){
             logger.warn(e.getMessage());
             refresh();
@@ -121,7 +123,47 @@ public class DefaultRedisQueue implements SeimiQueue {
                 jedis.close();
             }
         }
-        return (int) len;
+        return len;
+    }
+
+    @Override
+    public boolean isProcessed(Request req) {
+        Jedis jedis = null;
+        boolean res = false;
+        try {
+            jedis = getWClient();
+            String sign = DigestUtils.md5Hex(req.getUrl());
+            res = jedis.sismember(setNamePrefix +req.getCrawlerName(),sign);
+            if (!res){
+                jedis.sadd(setNamePrefix +req.getCrawlerName(),sign);
+            }
+        }catch (Exception e){
+            logger.warn(e.getMessage());
+            refresh();
+        }finally {
+            if (jedis!=null){
+                jedis.close();
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public long totalCrawled(String crawlerName) {
+        long count = 0;
+        Jedis jedis = null;
+        try {
+            jedis = getWClient();
+            count = jedis.scard(setNamePrefix + crawlerName);
+        }catch (Exception e){
+            logger.warn(e.getMessage());
+            refresh();
+        }finally {
+            if (jedis!=null){
+                jedis.close();
+            }
+        }
+        return count;
     }
 
     public String getHost() {
@@ -148,11 +190,11 @@ public class DefaultRedisQueue implements SeimiQueue {
         this.password = password;
     }
 
-    public String getQuueName() {
-        return quueName;
+    public String getQuueNamePrefix() {
+        return quueNamePrefix;
     }
 
-    public void setQuueName(String quueName) {
-        this.quueName = quueName;
+    public void setQuueNamePrefix(String quueNamePrefix) {
+        this.quueNamePrefix = quueNamePrefix;
     }
 }
