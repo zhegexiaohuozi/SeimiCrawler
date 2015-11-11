@@ -22,7 +22,7 @@ SeimiCrawler是一个敏捷的，支持分布式的爬虫开发框架，希望�
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
@@ -81,4 +81,3 @@ public class Boot {
 # 联系我 #
 - site: [www.wanghaomiao.cn](http://www.wanghaomiao.cn)
 - email：`et.tw#163.com`
-- weibo: @这个小伙不错　　相关讨论推荐加上`#SeimiCrawler#`这个话题
