@@ -16,7 +16,7 @@ import java.util.List;
 public class Basic extends BaseSeimiCrawler {
     @Override
     public String[] startUrls() {
-        return new String[]{"http://www.cnblogs.com/"};
+        return new String[]{"http://www.cnblogs.com/","http://www.cnblogs.com/"};
     }
 
     @Override
