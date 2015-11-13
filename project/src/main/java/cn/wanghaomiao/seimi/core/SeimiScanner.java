@@ -55,7 +55,6 @@ public class SeimiScanner {
                             MetadataReader reader = readerFactory.getMetadataReader(resource);
                             String className = reader.getClassMetadata().getClassName();
                             if (ifMatchesEntityType(reader, readerFactory,typeFilters)) {
-                                //不使用class.forName()
                                 Class<?> curClass = Thread.currentThread().getContextClassLoader().loadClass(className);
                                 context.register(curClass);
                                 resClazzSet.add(curClass);
