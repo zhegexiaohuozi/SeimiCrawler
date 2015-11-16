@@ -73,6 +73,10 @@ public class Boot {
 
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
 
+# 正在TODO #
+- 支持http服务API提交Request请求
+- 添加Request的通用校验机制
+
 # 项目源码 #
 [Github](https://github.com/zhegexiaohuozi/SeimiCrawler)
 > **BTW:**
