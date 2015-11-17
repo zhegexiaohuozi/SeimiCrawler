@@ -50,11 +50,10 @@ public class PushRequestHttpdHandler extends StringHttpHandler {
             body.put("code","0");
         }catch (Exception e){
             logger.error("parse Seimi request error,receive data={}",seimiReq,e);
-            body.put("data",e.getMessage());
+            body.put("data","err:"+e.getMessage());
             body.put("code","1");
         }
         response.content(JSON.toJSONString(body)).charset(Charset.forName("UTF-8")).header("server", "SeimiCrawler")
                 .header("Content-Type", "application/json; charset=UTF-8").end();
-        control.nextHandler();
     }
 }

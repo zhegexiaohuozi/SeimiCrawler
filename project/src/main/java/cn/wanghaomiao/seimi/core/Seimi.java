@@ -59,6 +59,7 @@ public class Seimi extends SeimiContext {
                 }
             }
         }
+        logger.info("http request push service also started on port:{}",port);
         webServer.start();
     }
 
@@ -85,7 +86,7 @@ public class Seimi extends SeimiContext {
                 request.setUrl(url);
                 request.setCallBack("start");
                 queue.push(request);
-                logger.info("{} started",crawlerName);
+                logger.info("{} url={} started",crawlerName,url);
             }
         }else {
             logger.error("crawler:{} can not find start urls!",crawlerName);
