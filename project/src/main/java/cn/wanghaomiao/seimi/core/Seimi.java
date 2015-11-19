@@ -3,12 +3,12 @@ package cn.wanghaomiao.seimi.core;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.httpd.CrawlerStatusHttpdHandler;
 import cn.wanghaomiao.seimi.httpd.PushRequestHttpdHandler;
+import cn.wanghaomiao.seimi.httpd.SeimiHttpHandler;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.webbitserver.WebServer;
-import org.webbitserver.WebServers;
+import org.eclipse.jetty.server.Server;
 
 import java.util.Map;
 
@@ -44,23 +44,23 @@ public class Seimi extends SeimiContext {
      */
     public void startWithHttpd(int port,String... crawlerNames){
         start(crawlerNames);
-        WebServer webServer = WebServers.createWebServer(port);
+        SeimiHttpHandler seimiHttpHandler = new SeimiHttpHandler(crawlerModelContext);
         if (crawlerNames==null||crawlerNames.length==0){
             for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
-                webServer.add("/push/"+entry.getKey(),new PushRequestHttpdHandler(entry.getValue().getQueueInstance(),entry.getKey()))
+                seimiHttpHandler.add("/push/"+entry.getKey(),new PushRequestHttpdHandler(entry.getValue().getQueueInstance(),entry.getKey()))
                         .add("/status/"+entry.getKey(),new CrawlerStatusHttpdHandler(entry.getValue().getQueueInstance(),entry.getKey()));
             }
         }else {
             for (String name:crawlerNames){
                 CrawlerModel crawlerModel = crawlerModelContext.get(name);
                 if (crawlerModel!=null){
-                    webServer.add("/push/"+name,new PushRequestHttpdHandler(crawlerModel.getQueueInstance(),name))
+                    seimiHttpHandler.add("/push/"+name,new PushRequestHttpdHandler(crawlerModel.getQueueInstance(),name))
                             .add("/status/"+name,new CrawlerStatusHttpdHandler(crawlerModel.getQueueInstance(),name));
                 }
             }
         }
-        logger.info("http request push service also started on port:{}",port);
-        webServer.start();
+        logger.info("Http request push service also started on port:{}",port);
+        startJetty(port,seimiHttpHandler);
     }
 
     public void startAll(){
@@ -90,6 +90,17 @@ public class Seimi extends SeimiContext {
             }
         }else {
             logger.error("crawler:{} can not find start urls!",crawlerName);
+        }
+    }
+
+    private void startJetty(int port,SeimiHttpHandler seimiHttpHandler){
+        Server server = new Server(port);
+        server.setHandler(seimiHttpHandler);
+        try {
+            server.start();
+            server.join();
+        } catch (Exception e) {
+            logger.error("http service start error,{}",e.getMessage(),e);
         }
     }
 }

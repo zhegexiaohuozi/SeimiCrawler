@@ -1,6 +1,10 @@
 package cn.wanghaomiao.seimi.annotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * 定义一个用于提取数据到指定字段的xpath路径

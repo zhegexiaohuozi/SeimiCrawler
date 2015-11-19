@@ -3,15 +3,14 @@ package cn.wanghaomiao.seimi.httpd;
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.struct.Request;
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.webbitserver.HttpControl;
-import org.webbitserver.HttpRequest;
-import org.webbitserver.HttpResponse;
-import org.webbitserver.handler.StringHttpHandler;
 
-import java.nio.charset.Charset;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,23 +18,17 @@ import java.util.Map;
  * @author 汪浩淼 et.tw@163.com
  * @since 2015/11/16.
  */
-public class PushRequestHttpdHandler extends StringHttpHandler {
-    private SeimiQueue seimiQueue;
-    private String crawlerName;
+public class PushRequestHttpdHandler extends HttpRequestProcessor {
     private final static String HTTP_API_REQ_DATA_PARAM_KEY = "req";
     private Logger logger = LoggerFactory.getLogger(getClass());
     public PushRequestHttpdHandler(SeimiQueue seimiQueue, String crawlerName) {
-        super("application/json", "");
-        this.seimiQueue = seimiQueue;
-        this.crawlerName = crawlerName;
+        super(seimiQueue,crawlerName);
     }
 
     @Override
-    public void handleHttpRequest(HttpRequest request, HttpResponse response, HttpControl control) {
-        String seimiReq = request.queryParam(HTTP_API_REQ_DATA_PARAM_KEY);
-        if (StringUtils.isBlank(seimiReq)){
-            seimiReq = request.postParam(HTTP_API_REQ_DATA_PARAM_KEY);
-        }
+    public void handleHttpRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        response.setContentType("application/json; charset=utf-8");
+        String seimiReq = request.getParameter(HTTP_API_REQ_DATA_PARAM_KEY);
         Map<String,String> body = new HashMap<>();
         try {
             Request seimiRequest = JSON.parseObject(seimiReq,Request.class);
@@ -43,6 +36,7 @@ public class PushRequestHttpdHandler extends StringHttpHandler {
             //todo:必填校验
             if (seimiRequest.getUrl()!=null&&seimiRequest.getCallBack()!=null){
                 seimiQueue.push(seimiRequest);
+                logger.info("Receive an request from http api,request={}",JSON.toJSONString(seimiReq));
             }else {
                 logger.warn("SeimiRequest={} is illegal",JSON.toJSONString(seimiRequest));
             }
@@ -53,7 +47,7 @@ public class PushRequestHttpdHandler extends StringHttpHandler {
             body.put("data","err:"+e.getMessage());
             body.put("code","1");
         }
-        response.content(JSON.toJSONString(body)).charset(Charset.forName("UTF-8")).header("server", "SeimiCrawler")
-                .header("Content-Type", "application/json; charset=UTF-8").end();
+        PrintWriter out = response.getWriter();
+        out.println(JSON.toJSONString(body));
     }
 }

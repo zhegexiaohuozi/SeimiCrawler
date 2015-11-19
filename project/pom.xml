@@ -89,9 +89,9 @@
             <version>1.2.6</version>
         </dependency>
         <dependency>
-            <groupId>org.webbitserver</groupId>
-            <artifactId>webbit</artifactId>
-            <version>0.4.15</version>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.2.0.RC0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

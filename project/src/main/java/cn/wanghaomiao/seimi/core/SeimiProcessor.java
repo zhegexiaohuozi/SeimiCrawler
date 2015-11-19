@@ -7,6 +7,7 @@ import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -52,7 +53,7 @@ public class SeimiProcessor implements Runnable {
                     }
                     //判断一个Request是否已经被处理过了
                     if (queue.isProcessed(request)){
-                        logger.info("this request has bean processed,so current request={} will be dropped!",request);
+                        logger.info("this request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
                         continue;
                     }
                     HttpClient hc;
