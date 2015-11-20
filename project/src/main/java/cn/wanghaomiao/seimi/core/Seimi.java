@@ -1,8 +1,8 @@
 package cn.wanghaomiao.seimi.core;
 
 import cn.wanghaomiao.seimi.http.HttpMethod;
-import cn.wanghaomiao.seimi.httpd.CrawlerStatusHttpdHandler;
-import cn.wanghaomiao.seimi.httpd.PushRequestHttpdHandler;
+import cn.wanghaomiao.seimi.httpd.CrawlerStatusHttpProcessor;
+import cn.wanghaomiao.seimi.httpd.PushRequestHttpProcessor;
 import cn.wanghaomiao.seimi.httpd.SeimiHttpHandler;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
@@ -47,15 +47,15 @@ public class Seimi extends SeimiContext {
         SeimiHttpHandler seimiHttpHandler = new SeimiHttpHandler(crawlerModelContext);
         if (crawlerNames==null||crawlerNames.length==0){
             for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
-                seimiHttpHandler.add("/push/"+entry.getKey(),new PushRequestHttpdHandler(entry.getValue().getQueueInstance(),entry.getKey()))
-                        .add("/status/"+entry.getKey(),new CrawlerStatusHttpdHandler(entry.getValue().getQueueInstance(),entry.getKey()));
+                seimiHttpHandler.add("/push/"+entry.getKey(),new PushRequestHttpProcessor(entry.getValue().getQueueInstance(),entry.getKey()))
+                        .add("/status/"+entry.getKey(),new CrawlerStatusHttpProcessor(entry.getValue().getQueueInstance(),entry.getKey()));
             }
         }else {
             for (String name:crawlerNames){
                 CrawlerModel crawlerModel = crawlerModelContext.get(name);
                 if (crawlerModel!=null){
-                    seimiHttpHandler.add("/push/"+name,new PushRequestHttpdHandler(crawlerModel.getQueueInstance(),name))
-                            .add("/status/"+name,new CrawlerStatusHttpdHandler(crawlerModel.getQueueInstance(),name));
+                    seimiHttpHandler.add("/push/"+name,new PushRequestHttpProcessor(crawlerModel.getQueueInstance(),name))
+                            .add("/status/"+name,new CrawlerStatusHttpProcessor(crawlerModel.getQueueInstance(),name));
                 }
             }
         }

@@ -36,6 +36,10 @@ public @interface Crawler {
     boolean useCookie() default false;
 
     /**
+     * 抓取请求间隔延时，单位为秒
+     */
+    int delay() default 0;
+    /**
      * 用来指定消费队列的具体实现
      */
     Class<? extends SeimiQueue> queue() default DefaultLocalQueue.class;

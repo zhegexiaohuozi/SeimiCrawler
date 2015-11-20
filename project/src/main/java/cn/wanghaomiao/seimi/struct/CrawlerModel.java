@@ -30,6 +30,7 @@ public class CrawlerModel {
     private String crawlerName;
     private HttpHost proxy;
     private boolean useCookie = false;
+    private int delay = 0;
     private Logger logger = LoggerFactory.getLogger(CrawlerModel.class);
 
     public CrawlerModel(Class<? extends BaseSeimiCrawler> cls,ApplicationContext applicationContext){
@@ -58,6 +59,7 @@ public class CrawlerModel {
         instance.setCrawlerName(this.crawlerName);
         resolveProxy(c.proxy());
         this.useCookie = c.useCookie();
+        this.delay = c.delay();
         logger.info("Crawler[{}] init complete.", crawlerName);
     }
 
@@ -140,5 +142,9 @@ public class CrawlerModel {
 
     public boolean isUseCookie() {
         return useCookie;
+    }
+
+    public int getDelay() {
+        return delay;
     }
 }

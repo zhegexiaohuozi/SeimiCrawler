@@ -18,10 +18,10 @@ import java.util.Map;
  * @author 汪浩淼 et.tw@163.com
  * @since 2015/11/16.
  */
-public class PushRequestHttpdHandler extends HttpRequestProcessor {
+public class PushRequestHttpProcessor extends HttpRequestProcessor {
     private final static String HTTP_API_REQ_DATA_PARAM_KEY = "req";
     private Logger logger = LoggerFactory.getLogger(getClass());
-    public PushRequestHttpdHandler(SeimiQueue seimiQueue, String crawlerName) {
+    public PushRequestHttpProcessor(SeimiQueue seimiQueue, String crawlerName) {
         super(seimiQueue,crawlerName);
     }
 
@@ -33,7 +33,7 @@ public class PushRequestHttpdHandler extends HttpRequestProcessor {
         try {
             Request seimiRequest = JSON.parseObject(seimiReq,Request.class);
             seimiRequest.setCrawlerName(crawlerName);
-            //todo:必填校验
+            //todo:字段校验
             if (seimiRequest.getUrl()!=null&&seimiRequest.getCallBack()!=null){
                 seimiQueue.push(seimiRequest);
                 logger.info("Receive an request from http api,request={}",JSON.toJSONString(seimiReq));

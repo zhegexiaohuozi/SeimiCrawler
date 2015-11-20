@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 汪浩淼 [et.tw@163.com]
@@ -42,59 +43,64 @@ public class SeimiProcessor implements Runnable {
         while (true){
             try {
                 Request request = queue.bPop(crawlerModel.getCrawlerName());
-                if (request!=null){
-                    if (crawlerModel==null){
-                        logger.error("no such crawler name:'{}'",request.getCrawlerName());
-                        continue;
-                    }
-                    if (request.isStop()){
-                        logger.info("SeimiProcessor[{}] will stop!",Thread.currentThread().getName());
-                        break;
-                    }
-                    //判断一个Request是否已经被处理过了
-                    if (queue.isProcessed(request)){
-                        logger.info("this request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
-                        continue;
-                    }
-                    HttpClient hc;
-                    if (crawlerModel.isUseCookie()){
-                        hc = HttpClientFactory.getHttpClient(10000,crawlerModel.getInstance().getCookieStore());
-                    }else {
-                        hc = HttpClientFactory.getHttpClient();
-                    }
-                    RequestConfig config = RequestConfig.custom().setProxy(crawlerModel.getProxy()).build();
-                    RequestBuilder requestBuilder;
-                    if (HttpMethod.POST.equals(request.getHttpMethod())){
-                        requestBuilder = RequestBuilder.post().setUri(request.getUrl());
-                    }else {
-                        requestBuilder = RequestBuilder.get().setUri(request.getUrl());
-                    }
-                    if (request.getParams()!=null){
-                        for (Map.Entry<String,String> entry:request.getParams().entrySet()){
-                            requestBuilder.addParameter(entry.getKey(),entry.getValue());
-                        }
-                    }
-                    requestBuilder.setConfig(config);
-                    HttpResponse httpResponse = hc.execute(requestBuilder.build());
-                    Response seimiResponse = renderResponse(httpResponse,request);
-                    Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
-                    if (requestCallback!=null){
-                        for (SeimiInterceptor interceptor : interceptors) {
-                            Interceptor interAnno = interceptor.getClass().getAnnotation(Interceptor.class);
-                            if (interAnno.everyMethod()||requestCallback.isAnnotationPresent(interceptor.getTargetAnnotationClass())||crawlerModel.getClazz().isAnnotationPresent(interceptor.getTargetAnnotationClass())){
-                                interceptor.before(requestCallback, seimiResponse);
-                            }
-                        }
-                        requestCallback.invoke(crawlerModel.getInstance(),seimiResponse);
-                        for (SeimiInterceptor interceptor : interceptors) {
-                            Interceptor interAnno = interceptor.getClass().getAnnotation(Interceptor.class);
-                            if (interAnno.everyMethod()||requestCallback.isAnnotationPresent(interceptor.getTargetAnnotationClass())||crawlerModel.getClazz().isAnnotationPresent(interceptor.getTargetAnnotationClass())){
-                                interceptor.after(requestCallback, seimiResponse);
-                            }
-                        }
-                        logger.debug("Crawler[{}] ,url={} ,responseStatus={}",crawlerModel.getCrawlerName(),request.getUrl(),httpResponse.getStatusLine().getStatusCode());
+                if (request==null){
+                    continue;
+                }
+                if (crawlerModel==null){
+                    logger.error("no such crawler name:'{}'",request.getCrawlerName());
+                    continue;
+                }
+                if (request.isStop()){
+                    logger.info("SeimiProcessor[{}] will stop!",Thread.currentThread().getName());
+                    break;
+                }
+                //判断一个Request是否已经被处理过了
+                if (queue.isProcessed(request)){
+                    logger.info("this request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
+                    continue;
+                }
+                HttpClient hc;
+                if (crawlerModel.isUseCookie()){
+                    hc = HttpClientFactory.getHttpClient(10000,crawlerModel.getInstance().getCookieStore());
+                }else {
+                    hc = HttpClientFactory.getHttpClient();
+                }
+                RequestConfig config = RequestConfig.custom().setProxy(crawlerModel.getProxy()).build();
+                RequestBuilder requestBuilder;
+                if (HttpMethod.POST.equals(request.getHttpMethod())){
+                    requestBuilder = RequestBuilder.post().setUri(request.getUrl());
+                }else {
+                    requestBuilder = RequestBuilder.get().setUri(request.getUrl());
+                }
+                if (request.getParams()!=null){
+                    for (Map.Entry<String,String> entry:request.getParams().entrySet()){
+                        requestBuilder.addParameter(entry.getKey(),entry.getValue());
                     }
                 }
+                requestBuilder.setConfig(config);
+                HttpResponse httpResponse = hc.execute(requestBuilder.build());
+                Response seimiResponse = renderResponse(httpResponse,request);
+                Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
+                if (requestCallback==null){
+                    continue;
+                }
+                for (SeimiInterceptor interceptor : interceptors) {
+                    Interceptor interAnno = interceptor.getClass().getAnnotation(Interceptor.class);
+                    if (interAnno.everyMethod()||requestCallback.isAnnotationPresent(interceptor.getTargetAnnotationClass())||crawlerModel.getClazz().isAnnotationPresent(interceptor.getTargetAnnotationClass())){
+                        interceptor.before(requestCallback, seimiResponse);
+                    }
+                }
+                if (crawlerModel.getDelay()>0){
+                    TimeUnit.SECONDS.sleep(crawlerModel.getDelay());
+                }
+                requestCallback.invoke(crawlerModel.getInstance(),seimiResponse);
+                for (SeimiInterceptor interceptor : interceptors) {
+                    Interceptor interAnno = interceptor.getClass().getAnnotation(Interceptor.class);
+                    if (interAnno.everyMethod()||requestCallback.isAnnotationPresent(interceptor.getTargetAnnotationClass())||crawlerModel.getClazz().isAnnotationPresent(interceptor.getTargetAnnotationClass())){
+                        interceptor.after(requestCallback, seimiResponse);
+                    }
+                }
+                logger.debug("Crawler[{}] ,url={} ,responseStatus={}",crawlerModel.getCrawlerName(),request.getUrl(),httpResponse.getStatusLine().getStatusCode());
             }catch (Exception e){
                 logger.error(e.getMessage(),e);
             }

@@ -15,8 +15,8 @@ import java.util.Map;
  * @author 汪浩淼 et.tw@163.com
  * @since 2015/11/16.
  */
-public class CrawlerStatusHttpdHandler extends HttpRequestProcessor {
-    public CrawlerStatusHttpdHandler(SeimiQueue seimiQueue, String crawlerName) {
+public class CrawlerStatusHttpProcessor extends HttpRequestProcessor {
+    public CrawlerStatusHttpProcessor(SeimiQueue seimiQueue, String crawlerName) {
         super(seimiQueue, crawlerName);
     }
 
