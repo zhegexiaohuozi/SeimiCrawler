@@ -74,7 +74,7 @@ public class Boot {
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
 
 # Change log #
-即将发布 v0.2.0
+最新0.2.0
 ## v0.2.0 ##
 - 增加支持内嵌http服务API提交json格式的Request请求
 - 增加针对请求URL进行校验的`allowRules`和`denyRules`的自定义设置，即白名单规则和黑名单规则，格式均为正则表达式。默认为null不进行检查
