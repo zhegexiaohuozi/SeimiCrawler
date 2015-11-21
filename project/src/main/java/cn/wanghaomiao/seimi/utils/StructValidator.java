@@ -2,6 +2,7 @@ package cn.wanghaomiao.seimi.utils;
 
 import cn.wanghaomiao.seimi.annotation.validate.NotNull;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ public class StructValidator {
             if (notNullCheck!=null){
                 try {
                     Object val = FieldUtils.readField(field,object,true);
-                    if (val==null){
+                    if (StringUtils.isBlank(String.valueOf(val))){
                         logger.error("Field={}.{} can not be null!",object.getClass().getSimpleName(),field.getName());
                         return false;
                     }
