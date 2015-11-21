@@ -33,6 +33,16 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
         return cookieStore;
     }
 
+    @Override
+    public String[] allowRules() {
+        return null;
+    }
+
+    @Override
+    public String[] denyRules() {
+        return null;
+    }
+
     public void setQueue(SeimiQueue queue) {
         this.queue = queue;
     }

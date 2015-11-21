@@ -2,6 +2,7 @@ package cn.wanghaomiao.seimi.httpd;
 
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.struct.Request;
+import cn.wanghaomiao.seimi.utils.StructValidator;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,7 @@ public class PushRequestHttpProcessor extends HttpRequestProcessor {
         try {
             Request seimiRequest = JSON.parseObject(seimiReq,Request.class);
             seimiRequest.setCrawlerName(crawlerName);
-            //todo:字段校验
-            if (seimiRequest.getUrl()!=null&&seimiRequest.getCallBack()!=null){
+            if (StructValidator.validateAnno(seimiRequest)){
                 seimiQueue.push(seimiRequest);
                 logger.info("Receive an request from http api,request={}",JSON.toJSONString(seimiReq));
             }else {

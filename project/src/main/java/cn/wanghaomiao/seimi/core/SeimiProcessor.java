@@ -1,12 +1,14 @@
 package cn.wanghaomiao.seimi.core;
 
 import cn.wanghaomiao.seimi.annotation.Interceptor;
+import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.http.HttpClientFactory;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
+import cn.wanghaomiao.seimi.utils.StructValidator;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -32,11 +34,13 @@ public class SeimiProcessor implements Runnable {
     private SeimiQueue queue;
     private List<SeimiInterceptor> interceptors;
     private CrawlerModel crawlerModel;
+    private BaseSeimiCrawler crawler;
     private Logger logger = LoggerFactory.getLogger(getClass());
     public SeimiProcessor(List<SeimiInterceptor> interceptors,CrawlerModel crawlerModel){
         this.queue = crawlerModel.getQueueInstance();
         this.interceptors = interceptors;
         this.crawlerModel = crawlerModel;
+        this.crawler = crawlerModel.getInstance();
     }
     @Override
     public void run() {
@@ -47,16 +51,29 @@ public class SeimiProcessor implements Runnable {
                     continue;
                 }
                 if (crawlerModel==null){
-                    logger.error("no such crawler name:'{}'",request.getCrawlerName());
+                    logger.error("No such crawler name:'{}'",request.getCrawlerName());
                     continue;
                 }
                 if (request.isStop()){
                     logger.info("SeimiProcessor[{}] will stop!",Thread.currentThread().getName());
                     break;
                 }
+                //对请求开始校验
+                if (!StructValidator.validateAnno(request)){
+                    logger.warn("Request={} is illegal",JSON.toJSONString(request));
+                    continue;
+                }
+                if (!StructValidator.validateAllowRules(crawler.allowRules(),request.getUrl())){
+                    logger.warn("Request={} will be dropped by allowRules=[{}]",JSON.toJSONString(request),StringUtils.join(crawler.allowRules(),","));
+                    continue;
+                }
+                if (StructValidator.validateDenyRules(crawler.denyRules(),request.getUrl())){
+                    logger.warn("Request={} will be dropped by denyRules=[{}]",JSON.toJSONString(request),StringUtils.join(crawler.denyRules(),","));
+                    continue;
+                }
                 //判断一个Request是否已经被处理过了
                 if (queue.isProcessed(request)){
-                    logger.info("this request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
+                    logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
                     continue;
                 }
                 HttpClient hc;

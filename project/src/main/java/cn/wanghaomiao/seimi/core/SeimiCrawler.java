@@ -23,6 +23,17 @@ public interface SeimiCrawler {
     public String[] startUrls();
 
     /**
+     * 用于设置允许的请求URL匹配规则
+     * @return 白名单规则正则表达式列表
+     */
+    public String[] allowRules();
+
+    /**
+     * 用于设置要放弃访问的请求URL匹配规则
+     * @return 黑名单规则正则表达式列表
+     */
+    public String[] denyRules();
+    /**
      * 针对startUrl生成首批的response回调这个初始接口
      * @param response
      * @return

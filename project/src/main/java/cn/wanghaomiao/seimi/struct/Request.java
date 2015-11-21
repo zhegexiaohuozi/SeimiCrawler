@@ -1,5 +1,6 @@
 package cn.wanghaomiao.seimi.struct;
 
+import cn.wanghaomiao.seimi.annotation.validate.NotNull;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 
 import java.util.Map;
@@ -35,10 +36,12 @@ public class Request extends CommonObject {
         super();
     }
 
+    @NotNull
     private String crawlerName;
     /**
      * 需要请求的url
      */
+    @NotNull
     private String url;
     /**
      * 要请求的方法类型 get,post,put...
@@ -55,6 +58,7 @@ public class Request extends CommonObject {
     /**
      * 回调函数方法名
      */
+    @NotNull
     private String callBack;
     /**
      * 是否停止的信号，收到该信号的处理线程会退出
