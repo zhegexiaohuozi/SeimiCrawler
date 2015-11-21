@@ -1,9 +1,9 @@
 package cn.wanghaomiao.crawlers;
 
 import cn.wanghaomiao.seimi.annotation.Crawler;
+import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
-import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.xpath.model.JXDocument;
 
 import java.util.List;
@@ -12,8 +12,8 @@ import java.util.List;
  * @author 汪浩淼 [et.tw@163.com]
  * @since 2015/10/21.
  */
-@Crawler(name = "basic")
-public class Basic extends BaseSeimiCrawler {
+@Crawler(name = "delay",delay = 3)
+public class UseDelay extends BaseSeimiCrawler {
     @Override
     public String[] startUrls() {
         //两个是测试去重的
