@@ -12,10 +12,11 @@ import java.util.List;
  * @author 汪浩淼 [et.tw@163.com]
  * @since 2015/10/21.
  */
-@Crawler(name = "basic")
+@Crawler(name = "basic",delay = 3)
 public class Basic extends BaseSeimiCrawler {
     @Override
     public String[] startUrls() {
+        //两个是测试去重的
         return new String[]{"http://www.cnblogs.com/","http://www.cnblogs.com/"};
     }
 
