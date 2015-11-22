@@ -35,27 +35,29 @@ public class StructValidator {
     }
 
     public static boolean validateAllowRules(String[] rules,String target){
-        boolean result = true;
         if (ArrayUtils.isEmpty(rules)){
             return true;
         }
         Assert.notNull(target,"rule target can not be null");
         for (String rule:rules){
-            result = result&(target.matches(rule));
+            if (target.matches(rule)){
+                return true;
+            }
         }
-        return result;
+        return false;
     }
 
     public static boolean validateDenyRules(String[] rules,String target){
-        boolean result = true;
         if (ArrayUtils.isEmpty(rules)){
             return false;
         }
         Assert.notNull(target,"rule target can not be null");
         for (String rule:rules){
-            result = result&(target.matches(rule));
+            if (target.matches(rule)){
+                return true;
+            }
         }
-        return result;
+        return false;
     }
 
 }
