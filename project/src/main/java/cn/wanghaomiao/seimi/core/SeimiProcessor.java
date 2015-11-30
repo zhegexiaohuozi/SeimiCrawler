@@ -9,6 +9,10 @@ import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
 import cn.wanghaomiao.seimi.utils.StructValidator;
+import cn.wanghaomiao.xpath.exception.NoSuchAxisException;
+import cn.wanghaomiao.xpath.exception.NoSuchFunctionException;
+import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
+import cn.wanghaomiao.xpath.model.JXDocument;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -123,6 +127,7 @@ public class SeimiProcessor implements Runnable {
             }
         }
     }
+
     private Response renderResponse(HttpResponse httpResponse,Request request){
         Response seimiResponse = new Response();
         HttpEntity entity = httpResponse.getEntity();
@@ -139,8 +144,20 @@ public class SeimiProcessor implements Runnable {
                 seimiResponse.setBodyType(BodyType.TEXT);
                 try {
                     seimiResponse.setContent(EntityUtils.toString(entity));
-                    seimiResponse.setData(seimiResponse.getContent().getBytes());
+                    String contentType = entity.getContentType().getValue();
+                    String docCharset;
+                    if (StringUtils.isBlank(contentType)||!contentType.toLowerCase().contains("charset")){
+                        docCharset = renderRealCharset(seimiResponse);
+                        seimiResponse.setContent(new String(seimiResponse.getContent().getBytes(docCharset),"utf8"));
+                        seimiResponse.setData(seimiResponse.getContent().getBytes(docCharset));
+                    }else if (StringUtils.isNotBlank(contentType)){
+                        docCharset = contentType.split(";")[1].trim().split("=")[1];
+                        seimiResponse.setData(seimiResponse.getContent().getBytes(docCharset));
+                    }else {
+                        seimiResponse.setData(seimiResponse.getContent().getBytes());
+                    }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     logger.error("no content data");
                 }
             }else {
@@ -154,5 +171,21 @@ public class SeimiProcessor implements Runnable {
             }
         }
         return seimiResponse;
+    }
+
+    public String renderRealCharset(Response response) throws NoSuchFunctionException, XpathSyntaxErrorException, NoSuchAxisException {
+        String charset;
+        JXDocument doc = response.document();
+        charset = StringUtils.join(doc.sel("//meta[@charset]/@charset"),"").trim();
+        if (StringUtils.isBlank(charset)){
+            charset = StringUtils.join(doc.sel("//meta[@http-equiv='charset']/@content"),"").trim();
+        }
+        if (StringUtils.isBlank(charset)){
+            String ct = StringUtils.join(doc.sel("//meta[@http-equiv='Content-Type']/@content|//meta[@http-equiv='content-type']/@content"),"").trim();
+            if (ct.toLowerCase().contains("charset")){
+                charset = ct.split(";")[1].trim().split("=")[1];
+            }
+        }
+        return StringUtils.isNotBlank(charset)?charset:"UTF-8";
     }
 }
