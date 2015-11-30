@@ -150,7 +150,7 @@ public class SeimiProcessor implements Runnable {
                         docCharset = renderRealCharset(seimiResponse);
                         seimiResponse.setContent(new String(seimiResponse.getContent().getBytes(docCharset),"utf8"));
                         seimiResponse.setData(seimiResponse.getContent().getBytes(docCharset));
-                    }else if (StringUtils.isNotBlank(contentType)){
+                    }else if (StringUtils.isNotBlank(contentType)&&contentType.toLowerCase().contains("charset")){
                         docCharset = contentType.split(";")[1].trim().split("=")[1];
                         seimiResponse.setData(seimiResponse.getContent().getBytes(docCharset));
                     }else {
