@@ -21,11 +21,13 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -143,18 +145,15 @@ public class SeimiProcessor implements Runnable {
             if (!entity.getContentType().getValue().contains("image")){
                 seimiResponse.setBodyType(BodyType.TEXT);
                 try {
-                    seimiResponse.setContent(EntityUtils.toString(entity));
-                    String contentType = entity.getContentType().getValue();
-                    String docCharset;
-                    if (StringUtils.isBlank(contentType)||!contentType.toLowerCase().contains("charset")){
-                        docCharset = renderRealCharset(seimiResponse);
-                        seimiResponse.setContent(new String(seimiResponse.getContent().getBytes(docCharset),"utf8"));
-                        seimiResponse.setData(seimiResponse.getContent().getBytes(docCharset));
-                    }else if (StringUtils.isNotBlank(contentType)&&contentType.toLowerCase().contains("charset")){
-                        docCharset = contentType.split(";")[1].trim().split("=")[1];
-                        seimiResponse.setData(seimiResponse.getContent().getBytes(docCharset));
+                    seimiResponse.setData(EntityUtils.toByteArray(entity));
+                    ContentType contentType = ContentType.get(entity);
+                    Charset charset = contentType.getCharset();
+                    if (charset==null){
+                        seimiResponse.setContent(new String(seimiResponse.getData(),"ISO-8859-1"));
+                        String docCharset = renderRealCharset(seimiResponse);
+                        seimiResponse.setContent(new String(seimiResponse.getContent().getBytes("ISO-8859-1"),docCharset));
                     }else {
-                        seimiResponse.setData(seimiResponse.getContent().getBytes());
+                        seimiResponse.setContent(new String(seimiResponse.getData(),charset));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

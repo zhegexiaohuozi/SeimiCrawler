@@ -34,8 +34,6 @@ public class Response extends CommonObject {
     private String url;
     private Map<String,String> params;
 
-    private JXDocument doc;
-
     private Logger logger = LoggerFactory.getLogger(Response.class);
 
     public byte[] getData() {
@@ -142,11 +140,7 @@ public class Response extends CommonObject {
     }
 
     public JXDocument document(){
-        if (doc!=null){
-            return doc;
-        }
-        doc = BodyType.TEXT.equals(bodyType)&&content!=null?new JXDocument(content):null;
-        return doc;
+        return BodyType.TEXT.equals(bodyType)&&content!=null?new JXDocument(content):null;
     }
 
     public void saveTo(File targetFile){
