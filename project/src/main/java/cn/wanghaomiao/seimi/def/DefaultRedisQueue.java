@@ -13,6 +13,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -45,12 +46,19 @@ public class DefaultRedisQueue implements SeimiQueue {
     private String setNamePrefix = "SEIMI_CRAWLER_SET_";
     private JedisPool wpool = null;
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @PostConstruct
+    public void init(){
+        getWritePool();
+    }
+
     public void refresh(){
         if (wpool!=null){
             this.wpool.destroy();
             this.wpool = null;
         }
     }
+
     public JedisPool getWritePool() {
         if (wpool == null) {
             JedisPoolConfig config = new JedisPoolConfig();
