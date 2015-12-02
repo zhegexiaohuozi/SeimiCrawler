@@ -19,7 +19,7 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected String crawlerName;
 
-    protected void push(Request request){
+    protected void push(Request request) {
         request.setCrawlerName(crawlerName);
         queue.push(request);
     }
@@ -28,6 +28,7 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
     public String getUserAgent() {
         return "SeimiCrawler/JsoupXpath";
     }
+
     @Override
     public CookieStore getCookieStore() {
         return cookieStore;
@@ -40,6 +41,11 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
 
     @Override
     public String[] denyRules() {
+        return null;
+    }
+
+    @Override
+    public String proxy() {
         return null;
     }
 

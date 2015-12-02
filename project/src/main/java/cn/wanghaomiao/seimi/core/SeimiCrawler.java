@@ -9,34 +9,40 @@ import org.apache.http.client.CookieStore;
  */
 public interface SeimiCrawler {
 
-    public String getUserAgent();
+    String getUserAgent();
+
+    /**
+     * 可以自定义返回随机的代理
+     * @return
+     */
+    String proxy();
 
     /**
      * 如果开启cookies通过此方法获取cookiesStore
      * @return CookieStore
      */
-    public CookieStore getCookieStore();
+    CookieStore getCookieStore();
     /**
      * 设置起始url
      * @return
      */
-    public String[] startUrls();
+    String[] startUrls();
 
     /**
      * 用于设置允许的请求URL匹配规则
      * @return 白名单规则正则表达式列表
      */
-    public String[] allowRules();
+    String[] allowRules();
 
     /**
      * 用于设置要放弃访问的请求URL匹配规则
      * @return 黑名单规则正则表达式列表
      */
-    public String[] denyRules();
+    String[] denyRules();
     /**
      * 针对startUrl生成首批的response回调这个初始接口
      * @param response
      * @return
      */
-    public void start(Response response);
+    void start(Response response);
 }

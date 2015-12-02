@@ -63,10 +63,10 @@ public class CrawlerModel {
         logger.info("Crawler[{}] init complete.", crawlerName);
     }
 
-    private void resolveProxy(String proxyStr){
+    private HttpHost resolveProxy(String proxyStr){
         HttpHost r = null;
         if (StringUtils.isBlank(proxyStr)){
-            return;
+            return null;
         }
         if (proxyStr.matches("(http|https|socket)://([0-9a-zA-Z]+\\.?)+:\\d+")){
             String[] pies = proxyStr.split(":");
@@ -82,6 +82,7 @@ public class CrawlerModel {
             logger.error("proxy must like ‘http|https|socket://host:port’");
         }
         proxy = r;
+        return r;
     }
 
     public ApplicationContext getContext() {
@@ -137,6 +138,9 @@ public class CrawlerModel {
     }
 
     public HttpHost getProxy() {
+        if (StringUtils.isNotBlank(instance.proxy())){
+            return resolveProxy(instance.proxy());
+        }
         return proxy;
     }
 
