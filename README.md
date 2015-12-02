@@ -77,6 +77,7 @@ public class Boot {
 
 ## v0.2.3 ##
 - 支持自定义动态代理
+开发者可以通过覆盖`BaseSeimiCrawler.proxy()`来自行决定每次请求所使用的代理，覆盖该方法并返回有效代理地址则`@Crawler`中`proxy`属性失效。
 - 添加动态代理，动态User-Agent使用demo
 
 ## v0.2.2 ##
