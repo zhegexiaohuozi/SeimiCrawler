@@ -84,7 +84,7 @@ public class SeimiProcessor implements Runnable {
                 }
                 HttpClient hc;
                 if (crawlerModel.isUseCookie()){
-                    hc = HttpClientFactory.getHttpClient(10000,crawlerModel.getInstance().getCookieStore());
+                    hc = HttpClientFactory.getHttpClient(10000,crawler.getCookieStore());
                 }else {
                     hc = HttpClientFactory.getHttpClient();
                 }
@@ -100,7 +100,7 @@ public class SeimiProcessor implements Runnable {
                         requestBuilder.addParameter(entry.getKey(),entry.getValue());
                     }
                 }
-                requestBuilder.setConfig(config);
+                requestBuilder.setConfig(config).setHeader("User-Agent",crawler.getUserAgent());
                 HttpResponse httpResponse = hc.execute(requestBuilder.build());
                 Response seimiResponse = renderResponse(httpResponse,request);
                 Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
