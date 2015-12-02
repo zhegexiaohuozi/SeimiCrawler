@@ -17,12 +17,12 @@ SeimiCrawler是一个敏捷的，支持分布式的爬虫开发框架，希望�
 
 # 快速开始 #
 
-添加maven依赖(中央maven库最新版本0.2.2)：
+添加maven依赖(中央maven库最新版本0.2.3)：
 ```
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3</version>
 </dependency>
 ```
 
@@ -74,6 +74,10 @@ public class Boot {
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
 
 # Change log #
+
+## v0.2.3 ##
+- 支持自定义动态代理
+- 添加动态代理，动态User-Agent使用demo
 
 ## v0.2.2 ##
 - 增强对不规范网页的编码识别与兼容能力
