@@ -17,11 +17,17 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +37,8 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author 汪浩淼 [et.tw@163.com]
@@ -48,6 +56,7 @@ public class SeimiProcessor implements Runnable {
         this.crawlerModel = crawlerModel;
         this.crawler = crawlerModel.getInstance();
     }
+    private Pattern metaRefresh = Pattern.compile("<(?:META|meta|Meta)\\s+(?:HTTP-EQUIV|http-equiv)\\s*=\\s*\"refresh\".*URL=(.*)\">");
     @Override
     public void run() {
         while (true){
@@ -101,8 +110,24 @@ public class SeimiProcessor implements Runnable {
                     }
                 }
                 requestBuilder.setConfig(config).setHeader("User-Agent",crawler.getUserAgent());
-                HttpResponse httpResponse = hc.execute(requestBuilder.build());
-                Response seimiResponse = renderResponse(httpResponse,request);
+                HttpContext httpContext = new BasicHttpContext();
+
+                HttpResponse httpResponse = hc.execute(requestBuilder.build(),httpContext);
+                Response seimiResponse = renderResponse(httpResponse,request,httpContext);
+                Matcher mm = metaRefresh.matcher(seimiResponse.getContent());
+                while (mm.find()){
+                    String nextUrl = mm.group(1).replaceAll("'","");
+                    if (!nextUrl.startsWith("http")){
+                        String prefix = getRealUrl(httpContext);
+                        nextUrl = prefix + nextUrl;
+                    }
+                    logger.info("Seimi refresh url to={} from={}",nextUrl,requestBuilder.getUri());
+                    requestBuilder.setUri(nextUrl);
+                    httpResponse = hc.execute(requestBuilder.build(),httpContext);
+                    seimiResponse = renderResponse(httpResponse,request,httpContext);
+                    mm = metaRefresh.matcher(seimiResponse.getContent());
+                }
+
                 Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
                 if (requestCallback==null){
                     continue;
@@ -130,11 +155,12 @@ public class SeimiProcessor implements Runnable {
         }
     }
 
-    private Response renderResponse(HttpResponse httpResponse,Request request){
+    private Response renderResponse(HttpResponse httpResponse,Request request,HttpContext httpContext){
         Response seimiResponse = new Response();
         HttpEntity entity = httpResponse.getEntity();
         seimiResponse.setHttpResponse(httpResponse);
         seimiResponse.setReponseEntity(entity);
+        seimiResponse.setRealUrl(getRealUrl(httpContext));
         seimiResponse.setUrl(request.getUrl());
         seimiResponse.setRequest(request);
         if (entity != null) {
@@ -186,5 +212,16 @@ public class SeimiProcessor implements Runnable {
             }
         }
         return StringUtils.isNotBlank(charset)?charset:"UTF-8";
+    }
+
+    public String getRealUrl(HttpContext httpContext){
+        Object target = httpContext.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
+        Object reqUri = httpContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
+        if (target==null||reqUri==null){
+            return null;
+        }
+        HttpHost t = (HttpHost) target;
+        HttpUriRequest r = (HttpUriRequest)reqUri;
+        return r.getURI().isAbsolute()?r.getURI().toString():t.toString()+r.getURI().toString();
     }
 }

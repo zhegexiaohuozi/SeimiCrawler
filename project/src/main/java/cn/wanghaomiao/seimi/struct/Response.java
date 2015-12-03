@@ -33,6 +33,10 @@ public class Response extends CommonObject {
     private Map<String,Object> meta;
     private String url;
     private Map<String,String> params;
+    /**
+     * 网页内容真实源地址
+     */
+    private String realUrl;
 
     private Logger logger = LoggerFactory.getLogger(Response.class);
 
@@ -122,6 +126,14 @@ public class Response extends CommonObject {
 
     public void setReferer(String referer) {
         this.referer = referer;
+    }
+
+    public String getRealUrl() {
+        return realUrl;
+    }
+
+    public void setRealUrl(String realUrl) {
+        this.realUrl = realUrl;
     }
 
     /**
