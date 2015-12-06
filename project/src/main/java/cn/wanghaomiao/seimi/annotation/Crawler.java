@@ -43,4 +43,9 @@ public @interface Crawler {
      * 用来指定消费队列的具体实现
      */
     Class<? extends SeimiQueue> queue() default DefaultLocalQueue.class;
+
+    /**
+     * 是否启用系统级去重机制，默认启用
+     */
+    boolean useUnrepeated() default true;
 }

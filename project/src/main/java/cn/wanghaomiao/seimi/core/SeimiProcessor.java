@@ -25,7 +25,6 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.util.EntityUtils;
@@ -86,8 +85,8 @@ public class SeimiProcessor implements Runnable {
                     logger.warn("Request={} will be dropped by denyRules=[{}]",JSON.toJSONString(request),StringUtils.join(crawler.denyRules(),","));
                     continue;
                 }
-                //判断一个Request是否已经被处理过了
-                if (queue.isProcessed(request)){
+                //如果启用了系统级去重机制则判断一个Request是否已经被处理过了
+                if (crawlerModel.isUseUnrepeated() && queue.isProcessed(request)){
                     logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
                     continue;
                 }
@@ -198,7 +197,7 @@ public class SeimiProcessor implements Runnable {
         return seimiResponse;
     }
 
-    public String renderRealCharset(Response response) throws NoSuchFunctionException, XpathSyntaxErrorException, NoSuchAxisException {
+    private String renderRealCharset(Response response) throws NoSuchFunctionException, XpathSyntaxErrorException, NoSuchAxisException {
         String charset;
         JXDocument doc = response.document();
         charset = StringUtils.join(doc.sel("//meta[@charset]/@charset"),"").trim();
@@ -214,7 +213,7 @@ public class SeimiProcessor implements Runnable {
         return StringUtils.isNotBlank(charset)?charset:"UTF-8";
     }
 
-    public String getRealUrl(HttpContext httpContext){
+    private String getRealUrl(HttpContext httpContext){
         Object target = httpContext.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
         Object reqUri = httpContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
         if (target==null||reqUri==null){

@@ -30,6 +30,7 @@ public class CrawlerModel {
     private String crawlerName;
     private HttpHost proxy;
     private boolean useCookie = false;
+    private boolean useUnrepeated = true;
     private int delay = 0;
     private Logger logger = LoggerFactory.getLogger(CrawlerModel.class);
 
@@ -60,6 +61,7 @@ public class CrawlerModel {
         resolveProxy(c.proxy());
         this.useCookie = c.useCookie();
         this.delay = c.delay();
+        this.useUnrepeated = c.useUnrepeated();
         logger.info("Crawler[{}] init complete.", crawlerName);
     }
 
@@ -150,5 +152,9 @@ public class CrawlerModel {
 
     public int getDelay() {
         return delay;
+    }
+
+    public boolean isUseUnrepeated() {
+        return useUnrepeated;
     }
 }
