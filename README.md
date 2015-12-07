@@ -74,6 +74,10 @@ public class Boot {
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
 
 # Change log #
+## v0.2.4 ##
+- 自动跳转增强除301,302外增加支持识别通过meta refresh方式的页面跳转
+- `Response`对象增加通过`getRealUrl()`获取内容对应重定向以及跳转后的真实连接
+- 通过注解@Crawler中'useUnrepeated'属性控制是否启用系统级去重机制，默认开启
 
 ## v0.2.3 ##
 - 支持自定义动态代理

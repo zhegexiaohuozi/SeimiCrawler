@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false" scan="true" scanPeriod="5 seconds">
+	<timestamp key="byMon" datePattern="yyyy-MM"/>
 	<timestamp key="byDay" datePattern="yyyy-MM-dd"/>
 	<timestamp key="byHour" datePattern="yyyy-MM-dd-HH"/>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -10,7 +11,7 @@
 		</encoder>
 	</appender>
     <appender name="logfile" class="ch.qos.logback.core.FileAppender">
-        <file>logfile-${byDay}.log</file>
+        <file>logfile-${byMon}.log</file>
         <append>false</append>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
