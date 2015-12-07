@@ -17,12 +17,12 @@ SeimiCrawler是一个敏捷的，支持分布式的爬虫开发框架，希望�
 
 # 快速开始 #
 
-添加maven依赖(中央maven库最新版本0.2.3)：
+添加maven依赖(中央maven库最新版本0.2.4)：
 ```
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
 </dependency>
 ```
 
