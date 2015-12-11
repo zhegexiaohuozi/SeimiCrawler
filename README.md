@@ -101,6 +101,15 @@ public class Boot {
 > **BTW:**
 > 如果您觉着这个项目不错，到github上`star`一下，我是不介意的 ^_^
 
+# 社区讨论 #
+大家有什么问题或建议现在都可以选择通过下面的邮件列表讨论
+
+订阅:请发邮件到 `seimicrawler+subscribe@googlegroups.com`
+
+发言:请发邮件到 `seimicrawler@googlegroups.com`
+
+退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
+
 # 联系我 #
 - site: [www.wanghaomiao.cn](http://www.wanghaomiao.cn)
 - email：`et.tw#163.com`
