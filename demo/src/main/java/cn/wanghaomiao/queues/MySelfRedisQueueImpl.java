@@ -108,6 +108,11 @@ public class MySelfRedisQueueImpl implements SeimiQueue {
     }
 
     @Override
+    public void addProcessed(Request req) {
+        logger.info("{}",req);
+    }
+
+    @Override
     public long totalCrawled(String crawlerName) {
         return -1;
     }
