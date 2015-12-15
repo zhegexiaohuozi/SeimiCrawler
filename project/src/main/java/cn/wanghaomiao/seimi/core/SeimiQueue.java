@@ -33,6 +33,12 @@ public interface SeimiQueue {
     boolean isProcessed(Request req);
 
     /**
+     * 记录一个处理过的请求
+     * @param req
+     */
+    void addProcessed(Request req);
+
+    /**
      * 目前总共的抓取数量
      * @return
      */

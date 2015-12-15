@@ -142,9 +142,6 @@ public class DefaultRedisQueue implements SeimiQueue {
             jedis = getWClient();
             String sign = DigestUtils.md5Hex(req.getUrl());
             res = jedis.sismember(setNamePrefix +req.getCrawlerName(),sign);
-            if (!res){
-                jedis.sadd(setNamePrefix +req.getCrawlerName(),sign);
-            }
         }catch (Exception e){
             logger.warn(e.getMessage());
             refresh();
@@ -154,6 +151,23 @@ public class DefaultRedisQueue implements SeimiQueue {
             }
         }
         return res;
+    }
+
+    @Override
+    public void addProcessed(Request req) {
+        Jedis jedis = null;
+        try {
+            jedis = getWClient();
+            String sign = DigestUtils.md5Hex(req.getUrl());
+            jedis.sadd(setNamePrefix +req.getCrawlerName(),sign);
+        }catch (Exception e){
+            logger.warn(e.getMessage());
+            refresh();
+        }finally {
+            if (jedis!=null){
+                jedis.close();
+            }
+        }
     }
 
     @Override

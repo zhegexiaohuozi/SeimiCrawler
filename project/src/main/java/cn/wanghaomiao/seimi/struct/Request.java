@@ -86,7 +86,7 @@ public class Request extends CommonObject {
     /**
      * 最大可被重新请求次数
      */
-    private int maxReqCount = 0;
+    private int maxReqCount = 3;
 
     /**
      * 用来记录当前请求被执行过的次数

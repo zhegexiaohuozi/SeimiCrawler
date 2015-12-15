@@ -54,12 +54,14 @@ public class DefaultLocalQueue implements SeimiQueue {
     public boolean isProcessed(Request req) {
         ConcurrentSkipListSet<String> set = getProcessedSet(req.getCrawlerName());
         String sign = DigestUtils.md5Hex(req.getUrl());
-        if (set.contains(sign)){
-            return true;
-        }else {
-            set.add(sign);
-        }
-        return false;
+        return set.contains(sign);
+    }
+
+    @Override
+    public void addProcessed(Request req) {
+        ConcurrentSkipListSet<String> set = getProcessedSet(req.getCrawlerName());
+        String sign = DigestUtils.md5Hex(req.getUrl());
+        set.add(sign);
     }
 
     @Override

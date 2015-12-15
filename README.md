@@ -83,6 +83,11 @@ public class Boot {
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
 
 # Change log #
+
+## v0.2.5-SNAPSHOT doing ##
+- 增加请求遭遇严重异常时重新打回队列处理机制
+当一个请求在经历网络请求异常的重试机制后依然出现非预期异常，那么这个请求会在不超过开发者设置的或是默认的最大重新处理次数的情况下被打回队列重新等待被处理，如果被打回次数达到了最大限制，那么seimi会调用开发者自行覆盖实现的`BaseSeimiCrawler.handleErrorRequest(Request request)`来处理记录这个异常的请求。重新打回等待处理机制配合delay功能使用可以在很大程度上避免因访问站点的反爬虫策略引起的请求处理异常，并丢失请求的记录的情况。
+
 ## v0.2.4 ##
 - 自动跳转增强，除301,302外增加支持识别通过meta refresh方式的页面跳转
 - `Response`对象增加通过`getRealUrl()`获取内容对应重定向以及跳转后的真实连接

@@ -125,6 +125,7 @@ public class SeimiProcessor implements Runnable {
                     seimiResponse = renderResponse(httpResponse,request,httpContext);
                     mm = metaRefresh.matcher(seimiResponse.getContent());
                 }
+                queue.addProcessed(request);
                 Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
                 if (requestCallback==null){
                     continue;
