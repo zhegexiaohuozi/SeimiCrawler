@@ -49,6 +49,11 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
         return null;
     }
 
+    @Override
+    public void handleErrorRequest(Request request) {
+        logger.info("Seimi got a error request={}",request);
+    }
+
     public void setQueue(SeimiQueue queue) {
         this.queue = queue;
     }
@@ -60,4 +65,5 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
     public String getCrawlerName() {
         return crawlerName;
     }
+
 }

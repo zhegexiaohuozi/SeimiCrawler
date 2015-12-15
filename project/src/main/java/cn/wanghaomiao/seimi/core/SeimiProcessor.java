@@ -59,8 +59,8 @@ public class SeimiProcessor implements Runnable {
     @Override
     public void run() {
         while (true){
+            Request request = queue.bPop(crawlerModel.getCrawlerName());
             try {
-                Request request = queue.bPop(crawlerModel.getCrawlerName());
                 if (request==null){
                     continue;
                 }
@@ -86,7 +86,7 @@ public class SeimiProcessor implements Runnable {
                     continue;
                 }
                 //如果启用了系统级去重机制则判断一个Request是否已经被处理过了
-                if (crawlerModel.isUseUnrepeated() && queue.isProcessed(request)){
+                if (crawlerModel.isUseUnrepeated() && request.getCurrentReqCount()>=request.getMaxReqCount() && queue.isProcessed(request)){
                     logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
                     continue;
                 }
@@ -110,7 +110,6 @@ public class SeimiProcessor implements Runnable {
                 }
                 requestBuilder.setConfig(config).setHeader("User-Agent",crawler.getUserAgent());
                 HttpContext httpContext = new BasicHttpContext();
-
                 HttpResponse httpResponse = hc.execute(requestBuilder.build(),httpContext);
                 Response seimiResponse = renderResponse(httpResponse,request,httpContext);
                 Matcher mm = metaRefresh.matcher(seimiResponse.getContent());
@@ -126,7 +125,6 @@ public class SeimiProcessor implements Runnable {
                     seimiResponse = renderResponse(httpResponse,request,httpContext);
                     mm = metaRefresh.matcher(seimiResponse.getContent());
                 }
-
                 Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
                 if (requestCallback==null){
                     continue;
@@ -149,6 +147,13 @@ public class SeimiProcessor implements Runnable {
                 }
                 logger.debug("Crawler[{}] ,url={} ,responseStatus={}",crawlerModel.getCrawlerName(),request.getUrl(),httpResponse.getStatusLine().getStatusCode());
             }catch (Exception e){
+                if (request.getCurrentReqCount()<request.getMaxReqCount()){
+                    request.incrReqCount();
+                    queue.push(request);
+                    logger.info("Request process error,req will go into queue again,url={},maxReqCount={],currentReqCount={}",request.getUrl(),request.getMaxReqCount(),request.getCurrentReqCount());
+                }else if (request.getCurrentReqCount()>= request.getMaxReqCount()&& request.getMaxReqCount()>0){
+                    crawler.handleErrorRequest(request);
+                }
                 logger.error(e.getMessage(),e);
             }
         }

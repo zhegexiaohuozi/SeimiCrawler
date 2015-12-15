@@ -1,5 +1,6 @@
 package cn.wanghaomiao.seimi.core;
 
+import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
 import org.apache.http.client.CookieStore;
 
@@ -45,4 +46,10 @@ public interface SeimiCrawler {
      * @return
      */
     void start(Response response);
+
+    /**
+     * 当一个请求处理异常次数超过开发者所设置或是默认设置的最大重新处理次数时会调用该方法记录异常请求
+     * @param request
+     */
+    void handleErrorRequest(Request request);
 }

@@ -11,6 +11,14 @@ import java.util.Map;
  *         Date:  14-7-7.
  */
 public class Request extends CommonObject {
+    public Request(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta,int maxReqCount) {
+        this.url = url;
+        this.httpMethod = httpMethod;
+        this.params = params;
+        this.meta = meta;
+        this.callBack = callBack;
+        this.maxReqCount = maxReqCount;
+    }
     public Request(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta) {
         this.url = url;
         this.httpMethod = httpMethod;
@@ -23,13 +31,24 @@ public class Request extends CommonObject {
         this.url = url;
         this.callBack = callBack;
     }
+    public Request(String url, String callBack,int maxReqCount) {
+        this.url = url;
+        this.callBack = callBack;
+        this.maxReqCount = this.maxReqCount;
+    }
 
     public static Request build(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta){
         return new Request(url, callBack, httpMethod, params, meta);
     }
+    public static Request build(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta,int maxReqcount){
+        return new Request(url, callBack, httpMethod, params, meta, maxReqcount);
+    }
 
     public static Request build(String url, String callBack){
         return new Request(url, callBack);
+    }
+    public static Request build(String url, String callBack, int maxReqCount){
+        return new Request(url, callBack, maxReqCount);
     }
 
     public Request(){
@@ -64,6 +83,19 @@ public class Request extends CommonObject {
      * 是否停止的信号，收到该信号的处理线程会退出
      */
     private boolean stop = false;
+    /**
+     * 最大可被重新请求次数
+     */
+    private int maxReqCount = 0;
+
+    /**
+     * 用来记录当前请求被执行过的次数
+     */
+    private int currentReqCount = 0;
+
+    public void incrReqCount(){
+        this.currentReqCount +=1;
+    }
 
     public String getUrl() {
         return url;
@@ -119,5 +151,21 @@ public class Request extends CommonObject {
 
     public void setStop(boolean stop) {
         this.stop = stop;
+    }
+
+    public int getMaxReqCount() {
+        return maxReqCount;
+    }
+
+    public void setMaxReqCount(int maxReqCount) {
+        this.maxReqCount = maxReqCount;
+    }
+
+    public int getCurrentReqCount() {
+        return currentReqCount;
+    }
+
+    public void setCurrentReqCount(int currentReqCount) {
+        this.currentReqCount = currentReqCount;
     }
 }

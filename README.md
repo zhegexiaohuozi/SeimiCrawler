@@ -8,6 +8,15 @@ SeimiCrawler的目标是成为Java世界最好用最实用的爬虫框架。
 
 SeimiCrawler是一个敏捷的，支持分布式的爬虫开发框架，希望能在最大程度上降低新手开发一个可用性高且性能不差的爬虫系统的门槛，以及提升开发爬虫系统的开发效率。在SeimiCrawler的世界里，绝大多数人只需关心去写抓取的业务逻辑就够了，其余的Seimi帮你搞定。设计思想上SeimiCrawler受Python的爬虫框架Scrapy启发很大，同时融合了Java语言本身特点与Spring的特性，并希望在国内更方便且普遍的使用更有效率的XPath解析HTML，所以SeimiCrawler默认的HTML解析器是[JsoupXpath](http://jsoupxpath.wanghaomiao.cn)(独立扩展项目，非jsoup自带),默认解析提取HTML数据工作均使用XPath来完成（当然，数据处理亦可以自行选择其他解析器）。
 
+# 社区讨论 #
+大家有什么问题或建议现在都可以选择通过下面的邮件列表讨论
+
+订阅:请发邮件到 `seimicrawler+subscribe@googlegroups.com`
+
+发言:请发邮件到 `seimicrawler@googlegroups.com`
+
+退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
+
 # 原理示例 #
 ## 基本原理 ##
 ![SeimiCrawler原理图](http://77g8ty.com1.z0.glb.clouddn.com/v2_Seimi.png)
@@ -100,15 +109,6 @@ public class Boot {
 [Github](https://github.com/zhegexiaohuozi/SeimiCrawler)
 > **BTW:**
 > 如果您觉着这个项目不错，到github上`star`一下，我是不介意的 ^_^
-
-# 社区讨论 #
-大家有什么问题或建议现在都可以选择通过下面的邮件列表讨论
-
-订阅:请发邮件到 `seimicrawler+subscribe@googlegroups.com`
-
-发言:请发邮件到 `seimicrawler@googlegroups.com`
-
-退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
 
 # 联系我 #
 - site: [www.wanghaomiao.cn](http://www.wanghaomiao.cn)
