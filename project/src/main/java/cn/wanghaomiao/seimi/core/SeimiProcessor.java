@@ -86,7 +86,7 @@ public class SeimiProcessor implements Runnable {
                     continue;
                 }
                 //如果启用了系统级去重机制则判断一个Request是否已经被处理过了
-                if (crawlerModel.isUseUnrepeated() && request.getCurrentReqCount()>=request.getMaxReqCount() && queue.isProcessed(request)){
+                if (crawlerModel.isUseUnrepeated() && (request.getCurrentReqCount()==0||request.getCurrentReqCount()>=request.getMaxReqCount()) && queue.isProcessed(request)){
                     logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
                     continue;
                 }
