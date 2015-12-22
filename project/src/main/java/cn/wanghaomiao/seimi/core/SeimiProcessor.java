@@ -8,6 +8,7 @@ import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
+import cn.wanghaomiao.seimi.utils.StrFormatUtil;
 import cn.wanghaomiao.seimi.utils.StructValidator;
 import cn.wanghaomiao.xpath.exception.NoSuchAxisException;
 import cn.wanghaomiao.xpath.exception.NoSuchFunctionException;
@@ -206,15 +207,13 @@ public class SeimiProcessor implements Runnable {
     private String renderRealCharset(Response response) throws NoSuchFunctionException, XpathSyntaxErrorException, NoSuchAxisException {
         String charset;
         JXDocument doc = response.document();
-        charset = StringUtils.join(doc.sel("//meta[@charset]/@charset"),"").trim();
+        charset = StrFormatUtil.getFirstEmStr(doc.sel("//meta[@charset]/@charset"),"").trim();
         if (StringUtils.isBlank(charset)){
-            charset = StringUtils.join(doc.sel("//meta[@http-equiv='charset']/@content"),"").trim();
+            charset = StrFormatUtil.getFirstEmStr(doc.sel("//meta[@http-equiv='charset']/@content"),"").trim();
         }
         if (StringUtils.isBlank(charset)){
-            String ct = StringUtils.join(doc.sel("//meta[@http-equiv='Content-Type']/@content|//meta[@http-equiv='content-type']/@content"),"").trim();
-            if (ct.toLowerCase().contains("charset")){
-                charset = ct.split(";")[1].trim().split("=")[1];
-            }
+            String ct = StringUtils.join(doc.sel("//meta[@http-equiv='Content-Type']/@content|//meta[@http-equiv='content-type']/@content"),";").trim();
+            charset = StrFormatUtil.parseCharset(ct.toLowerCase());
         }
         return StringUtils.isNotBlank(charset)?charset:"UTF-8";
     }
