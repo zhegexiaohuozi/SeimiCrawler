@@ -113,7 +113,3 @@ public class Boot {
 [Github](https://github.com/zhegexiaohuozi/SeimiCrawler)
 > **BTW:**
 > 如果您觉着这个项目不错，到github上`star`一下，我是不介意的 ^_^
-
-# 联系我 #
-- site: [www.wanghaomiao.cn](http://www.wanghaomiao.cn)
-- email：`et.tw#163.com`
