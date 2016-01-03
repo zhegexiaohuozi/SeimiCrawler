@@ -114,7 +114,8 @@ public class SeimiProcessor implements Runnable {
                 HttpResponse httpResponse = hc.execute(requestBuilder.build(),httpContext);
                 Response seimiResponse = renderResponse(httpResponse,request,httpContext);
                 Matcher mm = metaRefresh.matcher(seimiResponse.getContent());
-                while (mm.find()){
+                int refreshCount = 0;
+                while (mm.find()&&refreshCount<3){
                     String nextUrl = mm.group(1).replaceAll("'","");
                     if (!nextUrl.startsWith("http")){
                         String prefix = getRealUrl(httpContext);
@@ -125,6 +126,7 @@ public class SeimiProcessor implements Runnable {
                     httpResponse = hc.execute(requestBuilder.build(),httpContext);
                     seimiResponse = renderResponse(httpResponse,request,httpContext);
                     mm = metaRefresh.matcher(seimiResponse.getContent());
+                    refreshCount+=1;
                 }
                 queue.addProcessed(request);
                 Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
