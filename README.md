@@ -75,6 +75,8 @@ public class Boot {
 ```
 以上便是一个最简单的爬虫系统开发流程。
 
+> 工程化的打包与启动可以使用`maven-seimicrawler-plugin`插件来进行，详细请参阅[maven-seimicrawler-plugin](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)
+
 # 更多文档 #
 
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
