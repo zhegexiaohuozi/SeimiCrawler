@@ -14,6 +14,9 @@ SeimiCrawler是一个敏捷的，支持分布式的爬虫开发框架，希望�
 - 发言:请发邮件到 `seimicrawler@googlegroups.com`
 - 退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
 
+# 号外 #
+2016.01.05：专门为SeimiCrawler工程打包部署的`maven-seimicrawler-plugin`已经发布可用，详细请继续参阅[maven-seimicrawler-plugin](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)或是下文`工程化打包部署`章节。
+
 # 原理示例 #
 ## 基本原理 ##
 ![SeimiCrawler原理图](http://77g8ty.com1.z0.glb.clouddn.com/v2_Seimi.png)
@@ -117,6 +120,7 @@ pom中添加添加plugin
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
 
 # Change log #
+
 
 ## v0.2.6 ##
 - 增加统一的启动入口类，配合未来SeimiCrawler的maven构建plugin一起使用
