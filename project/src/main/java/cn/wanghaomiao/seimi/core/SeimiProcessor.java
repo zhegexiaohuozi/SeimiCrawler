@@ -100,11 +100,15 @@ public class SeimiProcessor implements Runnable {
                     logger.warn("Request={} will be dropped by denyRules=[{}]",JSON.toJSONString(request),StringUtils.join(crawler.denyRules(),","));
                     continue;
                 }
-                //如果启用了系统级去重机制则判断一个Request是否已经被处理过了
-                if (crawlerModel.isUseUnrepeated() && (request.getCurrentReqCount()==0||request.getCurrentReqCount()>=request.getMaxReqCount()) && queue.isProcessed(request)){
+                //如果启用了系统级去重机制并且为首次处理则判断一个Request是否已经被处理过了
+                if (request.getCurrentReqCount()>=request.getMaxReqCount()){
+                    continue;
+                }
+                if (crawlerModel.isUseUnrepeated() && queue.isProcessed(request)&& request.getCurrentReqCount()==0){
                     logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
                     continue;
                 }
+                queue.addProcessed(request);
                 HttpClient hc;
                 if (crawlerModel.isUseCookie()){
                     hc = HttpClientFactory.getHttpClient(10000,crawler.getCookieStore());
@@ -142,7 +146,7 @@ public class SeimiProcessor implements Runnable {
                     mm = metaRefresh.matcher(seimiResponse.getContent());
                     refreshCount+=1;
                 }
-                queue.addProcessed(request);
+
                 Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
                 if (requestCallback==null){
                     continue;
@@ -185,6 +189,8 @@ public class SeimiProcessor implements Runnable {
         seimiResponse.setRealUrl(getRealUrl(httpContext));
         seimiResponse.setUrl(request.getUrl());
         seimiResponse.setRequest(request);
+        seimiResponse.setMeta(request.getMeta());
+
         if (entity != null) {
             Header referer = httpResponse.getFirstHeader("Referer");
             if (referer!=null){
@@ -200,8 +206,10 @@ public class SeimiProcessor implements Runnable {
                         seimiResponse.setContent(new String(seimiResponse.getData(),"ISO-8859-1"));
                         String docCharset = renderRealCharset(seimiResponse);
                         seimiResponse.setContent(new String(seimiResponse.getContent().getBytes("ISO-8859-1"),docCharset));
+                        seimiResponse.setCharset(docCharset);
                     }else {
                         seimiResponse.setContent(new String(seimiResponse.getData(),charset));
+                        seimiResponse.setCharset(charset.name());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

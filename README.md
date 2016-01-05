@@ -75,7 +75,42 @@ public class Boot {
 ```
 以上便是一个最简单的爬虫系统开发流程。
 
-> 工程化的打包与启动可以使用`maven-seimicrawler-plugin`插件来进行，详细请参阅[maven-seimicrawler-plugin](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)
+## 工程化打包部署 ##
+上面可以方便的用来开发或是调试，当然也可以成为生产环境下一种启动方式。但是，为了便于工程化部署与分发，SeimiCrawler提供了专门的打包插件用来对SeimiCrawler工程进行打包，打好的包可以直接分发部署运行了。
+
+pom中添加添加plugin
+```
+<plugin>
+    <groupId>cn.wanghaomiao</groupId>
+    <artifactId>maven-seimicrawler-plugin</artifactId>
+    <version>1.0.0</version>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>build</goal>
+            </goals>
+        </execution>
+    </executions>
+    <!--<configuration>-->
+        <!-- 默认target目录 -->
+        <!--<outputDirectory>/some/path</outputDirectory>-->
+    <!--</configuration>-->
+</plugin>
+```
+执行`mvn clean package`即可，打好包目录结构如下：
+```
+.
+├── bin             # 相应的脚本中也有具体启动参数说明介绍，在此不再敖述
+│   ├── run.bat    #windows下启动脚本
+│   └── run.sh     #Linux下启动脚本
+└── seimi
+    ├── classes     #Crawler工程业务类及相关配置文件目录
+    └── lib         #工程依赖包目录
+```
+接下来就可以直接用来分发与部署了。
+
+> 详细请继续参阅[maven-seimicrawler-plugin](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)
 
 # 更多文档 #
 
@@ -83,9 +118,10 @@ public class Boot {
 
 # Change log #
 
-## v0.2.6-SNAPSHOT DOING ##
+## v0.2.6 ##
 - 增加统一的启动入口类，配合未来SeimiCrawler的maven构建plugin一起使用
 - meta refresh方式跳转优化，设置最多上限为3次，防止遇到持续刷新页面无法跳出
+- bug fix:修复在Request中自定义数据无法传向Response的问题
 
 ## v0.2.5 ##
 - 增加请求遭遇严重异常时重新打回队列处理机制
