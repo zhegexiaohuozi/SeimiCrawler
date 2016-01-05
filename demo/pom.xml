@@ -7,9 +7,9 @@
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
-    <artifactId>crawler-test</artifactId>
+    <artifactId>SeimiCrawler-demo</artifactId>
 	<packaging>jar</packaging>
-	<name>crawler-test</name>
+	<name>SeimiCrawler-demo</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>cn.wanghaomiao</groupId>
             <artifactId>SeimiCrawler</artifactId>
-            <version>0.2.5</version>
+            <version>0.2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>net.paoding</groupId>
@@ -80,6 +80,22 @@
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>cn.wanghaomiao</groupId>
+				<artifactId>maven-seimicrawler-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
+				<!--<configuration>-->
+				<!--<outputDirectory>/some/path</outputDirectory>-->
+				<!--</configuration>-->
 			</plugin>
         </plugins>
 		<resources>
