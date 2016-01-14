@@ -121,6 +121,9 @@ pom中添加添加plugin
 
 # Change log #
 
+## v0.2.7-SNAPSHOT ##
+- 内嵌http接口在可以接收单个Json形式Request基础上增加支持接收Json数组形式的多个Request
+- Fix:修复一个打日志的bug
 
 ## v0.2.6 ##
 - 增加统一的启动入口类，配合未来SeimiCrawler的maven构建plugin一起使用
