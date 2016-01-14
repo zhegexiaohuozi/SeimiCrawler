@@ -48,6 +48,7 @@ public class PushRequestHttpProcessor extends HttpRequestProcessor {
         response.setContentType("application/json; charset=utf-8");
         String seimiReq = request.getParameter(HTTP_API_REQ_DATA_PARAM_KEY);
         Map<String,String> body = new HashMap<>();
+        int processCount = 0;
         try {
             Object json = JSON.parse(seimiReq);
             if (JSONArray.class.equals(json.getClass())){
@@ -56,16 +57,19 @@ public class PushRequestHttpProcessor extends HttpRequestProcessor {
                     Request srq = ja.getObject(i,Request.class);
                     pushRequest(srq);
                 }
+                processCount = ja.size();
             }else if (JSONObject.class.equals(json.getClass())){
                 Request srq = JSON.parseObject(seimiReq,Request.class);
                 pushRequest(srq);
+                processCount = 1;
             }
 
-            body.put("data","ok");
+            body.put("msg","ok");
+            body.put("total",String.valueOf(processCount));
             body.put("code","0");
         }catch (Exception e){
             logger.error("parse Seimi request error,receive data={}",seimiReq,e);
-            body.put("data","err:"+e.getMessage());
+            body.put("msg","err:"+e.getMessage());
             body.put("code","1");
         }
         PrintWriter out = response.getWriter();

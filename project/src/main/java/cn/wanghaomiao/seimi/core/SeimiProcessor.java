@@ -104,7 +104,7 @@ public class SeimiProcessor implements Runnable {
                 if (request.getCurrentReqCount()>=request.getMaxReqCount()){
                     continue;
                 }
-                if (crawlerModel.isUseUnrepeated() && queue.isProcessed(request)&& request.getCurrentReqCount()==0){
+                if (!request.isSkipDuplicateFilter()&&crawlerModel.isUseUnrepeated() && queue.isProcessed(request)&& request.getCurrentReqCount()==0){
                     logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
                     continue;
                 }

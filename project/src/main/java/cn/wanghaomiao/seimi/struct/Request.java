@@ -109,6 +109,11 @@ public class Request extends CommonObject {
      */
     private int currentReqCount = 0;
 
+    /**
+     * 用来指定一个请求是否要经过去重机制
+     */
+    private boolean skipDuplicateFilter = false;
+
     public void incrReqCount(){
         this.currentReqCount +=1;
     }
@@ -183,5 +188,13 @@ public class Request extends CommonObject {
 
     public void setCurrentReqCount(int currentReqCount) {
         this.currentReqCount = currentReqCount;
+    }
+
+    public boolean isSkipDuplicateFilter() {
+        return skipDuplicateFilter;
+    }
+
+    public void setSkipDuplicateFilter(boolean skipDuplicateFilter) {
+        this.skipDuplicateFilter = skipDuplicateFilter;
     }
 }
