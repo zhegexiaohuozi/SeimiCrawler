@@ -19,6 +19,8 @@ import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.utils.StructValidator;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,14 +49,18 @@ public class PushRequestHttpProcessor extends HttpRequestProcessor {
         String seimiReq = request.getParameter(HTTP_API_REQ_DATA_PARAM_KEY);
         Map<String,String> body = new HashMap<>();
         try {
-            Request seimiRequest = JSON.parseObject(seimiReq,Request.class);
-            seimiRequest.setCrawlerName(crawlerName);
-            if (StructValidator.validateAnno(seimiRequest)){
-                seimiQueue.push(seimiRequest);
-                logger.info("Receive an request from http api,request={}",JSON.toJSONString(seimiReq));
-            }else {
-                logger.warn("SeimiRequest={} is illegal",JSON.toJSONString(seimiRequest));
+            Object json = JSON.parse(seimiReq);
+            if (JSONArray.class.equals(json.getClass())){
+                JSONArray ja = (JSONArray) json;
+                for (int i=0;i<ja.size();i++){
+                    Request srq = ja.getObject(i,Request.class);
+                    pushRequest(srq);
+                }
+            }else if (JSONObject.class.equals(json.getClass())){
+                Request srq = JSON.parseObject(seimiReq,Request.class);
+                pushRequest(srq);
             }
+
             body.put("data","ok");
             body.put("code","0");
         }catch (Exception e){
@@ -64,5 +70,15 @@ public class PushRequestHttpProcessor extends HttpRequestProcessor {
         }
         PrintWriter out = response.getWriter();
         out.println(JSON.toJSONString(body));
+    }
+
+    private void pushRequest(Request seimiRequest){
+        seimiRequest.setCrawlerName(crawlerName);
+        if (StructValidator.validateAnno(seimiRequest)){
+            seimiQueue.push(seimiRequest);
+            logger.info("Receive an request from http api,request={}",JSON.toJSONString(seimiRequest));
+        }else {
+            logger.warn("SeimiRequest={} is illegal",JSON.toJSONString(seimiRequest));
+        }
     }
 }

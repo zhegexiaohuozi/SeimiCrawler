@@ -172,7 +172,7 @@ public class SeimiProcessor implements Runnable {
                 if (request.getCurrentReqCount()<request.getMaxReqCount()){
                     request.incrReqCount();
                     queue.push(request);
-                    logger.info("Request process error,req will go into queue again,url={},maxReqCount={],currentReqCount={}",request.getUrl(),request.getMaxReqCount(),request.getCurrentReqCount());
+                    logger.info("Request process error,req will go into queue again,url={},maxReqCount={},currentReqCount={}",request.getUrl(),request.getMaxReqCount(),request.getCurrentReqCount());
                 }else if (request.getCurrentReqCount()>= request.getMaxReqCount()&& request.getMaxReqCount()>0){
                     crawler.handleErrorRequest(request);
                 }
