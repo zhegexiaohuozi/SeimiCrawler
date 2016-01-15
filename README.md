@@ -2,7 +2,7 @@ SeimiCrawler
 ==========
 An agile,powerful,standalone,distributed crawler framework.
 
-SeimiCrawler的目标是成为Java世界最好用最实用的爬虫框架。
+SeimiCrawler的目标是成为Java世界最实用的爬虫框架，欢迎大家一起努力。
 
 # 简介 #
 
@@ -124,6 +124,7 @@ pom中添加添加plugin
 ## v0.2.7-SNAPSHOT ##
 - 内嵌http接口在可以接收单个Json形式Request基础上增加支持接收Json数组形式的多个Request
 - `Request`对象支持设置`skipDuplicateFilter`用来告诉seimi处理器跳过去重机制，默认不跳过
+- 增加定时调度使用Demo
 - Fix:修复一个打日志的bug
 
 ## v0.2.6 ##
