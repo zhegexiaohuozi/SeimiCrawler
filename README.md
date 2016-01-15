@@ -26,12 +26,12 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 # 快速开始 #
 
-添加maven依赖(中央maven库最新版本0.2.6)：
+添加maven依赖(中央maven库最新版本0.2.7)：
 ```
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>0.2.6</version>
+    <version>0.2.7</version>
 </dependency>
 ```
 
