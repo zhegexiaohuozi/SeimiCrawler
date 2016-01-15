@@ -26,6 +26,7 @@ import cn.wanghaomiao.seimi.utils.StrFormatUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
@@ -45,7 +46,7 @@ import java.util.concurrent.Executors;
  * @author 汪浩淼 [et.tw@163.com]
  *         Date: 2015/6/26.
  */
-public class SeimiContext {
+public class SeimiContext  extends AnnotationConfigApplicationContext {
     private int BASE_THREAD_NUM = 16;
     protected ApplicationContext applicationContext;
     protected SeimiScanner seimiScanner;
@@ -55,6 +56,7 @@ public class SeimiContext {
     protected ExecutorService workersPool;
     protected Logger logger = LoggerFactory.getLogger(getClass());
     public SeimiContext(){
+        register(ScanConfig.class);
         init();
         if(!CollectionUtils.isEmpty(crawlers)){
             prepareCrawlerModels();
@@ -67,9 +69,9 @@ public class SeimiContext {
 
     private void init(){
         String[] targetPkgs = {"crawlers","queues","interceptors","cn.wanghaomiao.seimi"};
-        seimiScanner = new SeimiScanner();
+        seimiScanner = new SeimiScanner(this);
         Set<Class<?>> aladdin = seimiScanner.scan(targetPkgs, Crawler.class, Queue.class, Interceptor.class);
-        applicationContext = seimiScanner.getContext();
+        applicationContext = this;
         crawlers = new HashSet<>();
         interceptors = new LinkedList<>();
         crawlerModelContext = new HashMap<>();

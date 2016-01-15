@@ -48,7 +48,11 @@ public class SeimiScanner {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final String RESOURCE_PATTERN = "**/%s/**/*.class";
     private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-    private AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ScanConfig.class);
+    private AnnotationConfigApplicationContext context;
+
+    public SeimiScanner(AnnotationConfigApplicationContext context){
+        this.context = context;
+    }
 
     @SafeVarargs
     public final Set<Class<?>> scan(String[] confPkgs, Class<? extends Annotation>... annotationTags){
@@ -106,9 +110,5 @@ public class SeimiScanner {
             }
         }
         return false;
-    }
-
-    public ApplicationContext getContext(){
-        return this.context;
     }
 }

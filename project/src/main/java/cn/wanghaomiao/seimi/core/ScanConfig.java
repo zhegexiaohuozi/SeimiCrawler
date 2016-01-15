@@ -17,6 +17,7 @@ package cn.wanghaomiao.seimi.core;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author 汪浩淼 [et.tw@163.com]
@@ -24,5 +25,6 @@ import org.springframework.context.annotation.ImportResource;
  */
 @Configuration
 @ImportResource("classpath*:**/seimi*.xml")
+@EnableScheduling
 public class ScanConfig {
 }
