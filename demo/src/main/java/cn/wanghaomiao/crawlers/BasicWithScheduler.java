@@ -51,5 +51,7 @@ public class BasicWithScheduler extends BaseSeimiCrawler {
     @Scheduled(cron = "0/5 * * * * ?")
     public void callByCron(){
         logger.info("我是一个根据cron表达式执行的调度器，5秒一次");
+        // 可定时发送一个Request
+        // push(Request.build(startUrls()[0],"start").setSkipDuplicateFilter(true));
     }
 }
