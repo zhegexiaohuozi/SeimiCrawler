@@ -74,8 +74,9 @@ public class SeimiProcessor implements Runnable {
     @Override
     public void run() {
         while (true){
-            Request request = queue.bPop(crawlerModel.getCrawlerName());
+            Request request = null;
             try {
+                request = queue.bPop(crawlerModel.getCrawlerName());
                 if (request==null){
                     continue;
                 }
@@ -169,6 +170,10 @@ public class SeimiProcessor implements Runnable {
                 }
                 logger.debug("Crawler[{}] ,url={} ,responseStatus={}",crawlerModel.getCrawlerName(),request.getUrl(),httpResponse.getStatusLine().getStatusCode());
             }catch (Exception e){
+                logger.error(e.getMessage(),e);
+                if (request == null){
+                    continue;
+                }
                 if (request.getCurrentReqCount()<request.getMaxReqCount()){
                     request.incrReqCount();
                     queue.push(request);
@@ -176,7 +181,7 @@ public class SeimiProcessor implements Runnable {
                 }else if (request.getCurrentReqCount()>= request.getMaxReqCount()&& request.getMaxReqCount()>0){
                     crawler.handleErrorRequest(request);
                 }
-                logger.error(e.getMessage(),e);
+
             }
         }
     }
