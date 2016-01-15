@@ -122,79 +122,89 @@ public class Request extends CommonObject {
         return url;
     }
 
-    public void setUrl(String url) {
+    public Request setUrl(String url) {
         this.url = url;
+        return this;
     }
 
     public HttpMethod getHttpMethod() {
         return httpMethod;
     }
 
-    public void setHttpMethod(HttpMethod httpMethod) {
+    public Request setHttpMethod(HttpMethod httpMethod) {
         this.httpMethod = httpMethod;
+        return this;
     }
 
     public Map<String, String> getParams() {
         return params;
     }
 
-    public void setParams(Map<String, String> params) {
+    public Request setParams(Map<String, String> params) {
         this.params = params;
+        return this;
     }
 
     public Map<String, Object> getMeta() {
         return meta;
     }
 
-    public void setMeta(Map<String, Object> meta) {
+    public Request setMeta(Map<String, Object> meta) {
         this.meta = meta;
+        return this;
     }
 
     public String getCallBack() {
         return callBack;
     }
 
-    public void setCallBack(String callBack) {
+    public Request setCallBack(String callBack) {
         this.callBack = callBack;
-    }
-
-    public String getCrawlerName() {
-        return crawlerName;
-    }
-
-    public void setCrawlerName(String crawlerName) {
-        this.crawlerName = crawlerName;
+        return this;
     }
 
     public boolean isStop() {
         return stop;
     }
 
-    public void setStop(boolean stop) {
+    public Request setStop(boolean stop) {
         this.stop = stop;
+        return this;
     }
 
     public int getMaxReqCount() {
         return maxReqCount;
     }
 
-    public void setMaxReqCount(int maxReqCount) {
+    public Request setMaxReqCount(int maxReqCount) {
         this.maxReqCount = maxReqCount;
+        return this;
     }
 
     public int getCurrentReqCount() {
         return currentReqCount;
     }
 
-    public void setCurrentReqCount(int currentReqCount) {
+    public Request setCurrentReqCount(int currentReqCount) {
         this.currentReqCount = currentReqCount;
+        return this;
     }
 
     public boolean isSkipDuplicateFilter() {
         return skipDuplicateFilter;
     }
 
-    public void setSkipDuplicateFilter(boolean skipDuplicateFilter) {
+    public Request setSkipDuplicateFilter(boolean skipDuplicateFilter) {
         this.skipDuplicateFilter = skipDuplicateFilter;
+        return this;
+    }
+
+    public String getCrawlerName() {
+        return crawlerName;
+    }
+
+    public Request setCrawlerName(String crawlerName) {
+        this.crawlerName = crawlerName;
+        return this;
     }
 }
