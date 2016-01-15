@@ -125,6 +125,7 @@ pom中添加添加plugin
 - 内嵌http接口在可以接收单个Json形式Request基础上增加支持接收Json数组形式的多个Request
 - `Request`对象支持设置`skipDuplicateFilter`用来告诉seimi处理器跳过去重机制，默认不跳过
 - 增加定时调度使用Demo
+- 回调函数通过Request传递自定义参数值类型由Object改为String，方便明确处理
 - Fix:修复一个打日志的bug
 
 ## v0.2.6 ##

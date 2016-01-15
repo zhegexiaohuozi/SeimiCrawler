@@ -27,7 +27,7 @@ import java.util.Map;
  *         Date:  14-7-7.
  */
 public class Request extends CommonObject {
-    public Request(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta,int maxReqCount) {
+    public Request(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, String> meta,int maxReqCount) {
         this.url = url;
         this.httpMethod = httpMethod;
         this.params = params;
@@ -35,7 +35,7 @@ public class Request extends CommonObject {
         this.callBack = callBack;
         this.maxReqCount = maxReqCount;
     }
-    public Request(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta) {
+    public Request(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, String> meta) {
         this.url = url;
         this.httpMethod = httpMethod;
         this.params = params;
@@ -53,10 +53,10 @@ public class Request extends CommonObject {
         this.maxReqCount = this.maxReqCount;
     }
 
-    public static Request build(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta){
+    public static Request build(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, String> meta){
         return new Request(url, callBack, httpMethod, params, meta);
     }
-    public static Request build(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta,int maxReqcount){
+    public static Request build(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, String> meta,int maxReqcount){
         return new Request(url, callBack, httpMethod, params, meta, maxReqcount);
     }
 
@@ -89,7 +89,7 @@ public class Request extends CommonObject {
     /**
      * 这个主要用于存储向下级回调函数传递的一些自定义数据
      */
-    private Map<String,Object> meta;
+    private Map<String,String> meta;
     /**
      * 回调函数方法名
      */
@@ -145,11 +145,11 @@ public class Request extends CommonObject {
         return this;
     }
 
-    public Map<String, Object> getMeta() {
+    public Map<String, String> getMeta() {
         return meta;
     }
 
-    public Request setMeta(Map<String, Object> meta) {
+    public Request setMeta(Map<String, String> meta) {
         this.meta = meta;
         return this;
     }
