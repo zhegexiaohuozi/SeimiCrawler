@@ -1,7 +1,7 @@
 package cn.wanghaomiao.seimi.core;
 
 /*
-   Copyright 2015 - now original author
+   Copyright 2015 Wang Haomiao<et.tw@163.com>
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
