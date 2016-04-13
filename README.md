@@ -15,10 +15,13 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 - 退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
 
 # 号外 #
-2016.01.05：专门为SeimiCrawler工程打包部署的`maven-seimicrawler-plugin`已经发布可用，详细请继续参阅[maven-seimicrawler-plugin](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)或是下文`工程化打包部署`章节。
+- 2016.04.14
 
-# 开发预告 #
-正在开发解决动态页面（ajax/js渲染等）抓取问题。
+用于实现浏览器级动态页面渲染以及抓取的[SeimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)已经发布。SeimiAgent基于Qtwebkit开发，主流浏览器内核(chrome，safari等)，后台运行于服务器端，并通过http协议暴漏对外调用API，具体可以参考SeimiAgent主页。SeimiCrawler会在下一个版本中内置支持SeimiAgent的使用，目前正在紧张开发中。
+
+- 2016.01.05
+
+专门为SeimiCrawler工程打包部署的`maven-seimicrawler-plugin`已经发布可用，详细请继续参阅[maven-seimicrawler-plugin](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)或是下文`工程化打包部署`章节。
 
 # 原理示例 #
 ## 基本原理 ##
