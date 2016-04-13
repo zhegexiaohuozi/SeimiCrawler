@@ -68,4 +68,16 @@ public interface SeimiCrawler {
      * @param request
      */
     void handleErrorRequest(Request request);
+
+    /**
+     * 设置SeimiAgent的主机地址，如 seimi.wanghaomiao.cn or 10.10.15.211
+     * @return
+     */
+    String seiAgentHost();
+
+    /**
+     * seimiAgent监听端口
+     * @return
+     */
+    int seimiAgentPort();
 }

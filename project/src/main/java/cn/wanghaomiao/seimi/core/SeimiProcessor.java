@@ -116,25 +116,14 @@ public class SeimiProcessor implements Runnable {
                 }else {
                     hc = HttpClientFactory.getHttpClient();
                 }
-                RequestConfig config = RequestConfig.custom().setProxy(crawlerModel.getProxy()).build();
-                RequestBuilder requestBuilder;
-                if (HttpMethod.POST.equals(request.getHttpMethod())){
-                    requestBuilder = RequestBuilder.post().setUri(request.getUrl());
-                }else {
-                    requestBuilder = RequestBuilder.get().setUri(request.getUrl());
-                }
-                if (request.getParams()!=null){
-                    for (Map.Entry<String,String> entry:request.getParams().entrySet()){
-                        requestBuilder.addParameter(entry.getKey(),entry.getValue());
-                    }
-                }
-                requestBuilder.setConfig(config).setHeader("User-Agent",crawler.getUserAgent());
+                RequestBuilder requestBuilder = RequestGenerator.getHttpRequestBuilder(request,crawlerModel);
+
                 HttpContext httpContext = new BasicHttpContext();
                 HttpResponse httpResponse = hc.execute(requestBuilder.build(),httpContext);
                 Response seimiResponse = renderResponse(httpResponse,request,httpContext);
                 Matcher mm = metaRefresh.matcher(seimiResponse.getContent());
                 int refreshCount = 0;
-                while (mm.find()&&refreshCount<3){
+                while (!request.isUseSeimiAgent()&&mm.find()&&refreshCount<3){
                     String nextUrl = mm.group(1).replaceAll("'","");
                     if (!nextUrl.startsWith("http")){
                         String prefix = getRealUrl(httpContext);

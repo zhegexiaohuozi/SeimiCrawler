@@ -114,6 +114,8 @@ public class Request extends CommonObject {
      */
     private boolean skipDuplicateFilter = false;
 
+    private boolean useSeimiAgent = false;
+
     public void incrReqCount(){
         this.currentReqCount +=1;
     }
@@ -206,5 +208,14 @@ public class Request extends CommonObject {
     public Request setCrawlerName(String crawlerName) {
         this.crawlerName = crawlerName;
         return this;
+    }
+
+    public Request useSeimiAgent(){
+        this.useSeimiAgent = true;
+        return this;
+    }
+
+    public boolean isUseSeimiAgent(){
+        return useSeimiAgent;
     }
 }

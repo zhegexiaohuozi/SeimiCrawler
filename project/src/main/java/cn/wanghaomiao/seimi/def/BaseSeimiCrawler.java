@@ -69,6 +69,16 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
         logger.info("Seimi got a error request={}", request);
     }
 
+    @Override
+    public String seiAgentHost() {
+        return null;
+    }
+
+    @Override
+    public int seimiAgentPort() {
+        return 80;
+    }
+
     public void setQueue(SeimiQueue queue) {
         this.queue = queue;
     }
