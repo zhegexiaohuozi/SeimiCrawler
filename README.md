@@ -17,6 +17,9 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 # 号外 #
 2016.01.05：专门为SeimiCrawler工程打包部署的`maven-seimicrawler-plugin`已经发布可用，详细请继续参阅[maven-seimicrawler-plugin](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)或是下文`工程化打包部署`章节。
 
+# 开发预告 #
+正在开发解决动态页面（ajax/js渲染等）抓取问题。
+
 # 原理示例 #
 ## 基本原理 ##
 ![SeimiCrawler原理图](http://77g8ty.com1.z0.glb.clouddn.com/v2_Seimi.png)
