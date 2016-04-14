@@ -114,7 +114,25 @@ public class Request extends CommonObject {
      */
     private boolean skipDuplicateFilter = false;
 
+    /**
+     * 针对该请求是否启用SeimiAgent
+     */
     private boolean useSeimiAgent = false;
+
+    /**
+     * 定义SeimiAgent的渲染时间，单位毫秒
+     */
+    private long seimiAgentRenderTime = 0;
+
+    /**
+     * 用于支持在SeimiAgent上执行指定的js脚本
+     */
+    private String seimiAgentScript;
+
+    /**
+     * 指定提交到SeimiAgent的请求是否使用cookie
+     */
+    private Boolean seimiAgentUseCookie;
 
     public void incrReqCount(){
         this.currentReqCount +=1;
@@ -217,5 +235,32 @@ public class Request extends CommonObject {
 
     public boolean isUseSeimiAgent(){
         return useSeimiAgent;
+    }
+
+    public long getSeimiAgentRenderTime() {
+        return seimiAgentRenderTime;
+    }
+
+    public Request setSeimiAgentRenderTime(long seimiAgentRenderTime) {
+        this.seimiAgentRenderTime = seimiAgentRenderTime;
+        return this;
+    }
+
+    public String getSeimiAgentScript() {
+        return seimiAgentScript;
+    }
+
+    public Request setSeimiAgentScript(String seimiAgentScript) {
+        this.seimiAgentScript = seimiAgentScript;
+        return this;
+    }
+
+    public Boolean isSeimiAgentUseCookie() {
+        return seimiAgentUseCookie;
+    }
+
+    public Request setSeimiAgentUseCookie(Boolean seimiAgentUseCookie) {
+        this.seimiAgentUseCookie = seimiAgentUseCookie;
+        return this;
     }
 }

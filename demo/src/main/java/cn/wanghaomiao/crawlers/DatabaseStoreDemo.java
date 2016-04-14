@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2015/10/21.
  */
 @Crawler(name = "storedb")
-public class StoreInDB extends BaseSeimiCrawler {
+public class DatabaseStoreDemo extends BaseSeimiCrawler {
     @Autowired
     private StoreToDbDAO storeToDbDAO;
 

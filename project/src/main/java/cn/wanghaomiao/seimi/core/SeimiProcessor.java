@@ -70,7 +70,7 @@ public class SeimiProcessor implements Runnable {
         this.crawlerModel = crawlerModel;
         this.crawler = crawlerModel.getInstance();
     }
-    private Pattern metaRefresh = Pattern.compile("<(?:META|meta|Meta)\\s+(?:HTTP-EQUIV|http-equiv)\\s*=\\s*\"refresh\".*(?:url|URL)=(.*)\".*/?>");
+    private Pattern metaRefresh = Pattern.compile("<(?:META|meta|Meta)\\s+(?:HTTP-EQUIV|http-equiv)\\s*=\\s*\"refresh\".*(?:url|URL)=(\\S*)\".*/?>");
     @Override
     public void run() {
         while (true){

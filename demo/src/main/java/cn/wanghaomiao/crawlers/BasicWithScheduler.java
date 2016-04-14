@@ -43,12 +43,12 @@ public class BasicWithScheduler extends BaseSeimiCrawler {
         }
     }
 
-    @Scheduled(fixedDelay = 1000)
+//    @Scheduled(fixedDelay = 1000)
     public void callByFixedTime(){
         logger.info("我是一个固定间隔调度器,1秒一次");
     }
 
-    @Scheduled(cron = "0/5 * * * * ?")
+//    @Scheduled(cron = "0/5 * * * * ?")
     public void callByCron(){
         logger.info("我是一个根据cron表达式执行的调度器，5秒一次");
         // 可定时发送一个Request
