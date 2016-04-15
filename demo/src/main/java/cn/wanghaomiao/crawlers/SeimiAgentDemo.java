@@ -4,9 +4,6 @@ import cn.wanghaomiao.seimi.annotation.Crawler;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
-import cn.wanghaomiao.xpath.exception.NoSuchAxisException;
-import cn.wanghaomiao.xpath.exception.NoSuchFunctionException;
-import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
 import cn.wanghaomiao.xpath.model.JXDocument;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,12 +44,16 @@ public class SeimiAgentDemo extends BaseSeimiCrawler{
     public void start(Response response) {
         Request seimiAgentReq = Request.build("https://www.souyidai.com","getTotalTransactions")
                 .useSeimiAgent()
+                //设置全部load完成后给SeimiAgent多少时间用于执行js并渲染页面，单位为毫秒
                 .setSeimiAgentRenderTime(5000);
         push(seimiAgentReq);
     }
 
+    /**
+     * 获取搜易贷首页总成交额
+     * @param response
+     */
     public void getTotalTransactions(Response response){
-//        System.out.println(response.getContent());
         JXDocument doc = response.document();
         try {
             String trans = StringUtils.join(doc.sel("//div[@class='homepage-amount']/div[@class='number font-arial']/div/span/text()"),"");
