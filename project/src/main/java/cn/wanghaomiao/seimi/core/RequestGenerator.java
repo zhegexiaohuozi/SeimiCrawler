@@ -22,10 +22,10 @@ public class RequestGenerator {
         RequestBuilder requestBuilder;
         BaseSeimiCrawler crawler = crawlerModel.getInstance();
         if (request.isUseSeimiAgent()){
-            if (StringUtils.isBlank(crawler.seiAgentHost())){
+            if (StringUtils.isBlank(crawler.seimiAgentHost())){
                 throw new SeimiProcessExcepiton("SeimiAgentHost is blank.");
             }
-            String seimiAgentUrl = "http://"+crawler.seiAgentHost()+(crawler.seimiAgentPort()!=80?(":"+crawler.seimiAgentPort()):"")+"/doload";
+            String seimiAgentUrl = "http://"+crawler.seimiAgentHost()+(crawler.seimiAgentPort()!=80?(":"+crawler.seimiAgentPort()):"")+"/doload";
             requestBuilder = RequestBuilder.post().setUri(seimiAgentUrl);
             requestBuilder.addParameter("url",request.getUrl());
             if (StringUtils.isNotBlank(crawler.proxy())){
