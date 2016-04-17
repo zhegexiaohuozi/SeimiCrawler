@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
- * 这个例子演示如何使用SeimiAgent进行复制动态页面信息抓取
+ * 这个例子演示如何使用SeimiAgent进行复杂动态页面信息抓取
  * @author 汪浩淼 et.tw@163.com
  * @since 2016/4/14.
  */
@@ -31,7 +31,7 @@ public class SeimiAgentDemo extends BaseSeimiCrawler{
     }
 
     @Override
-    public String seiAgentHost() {
+    public String seimiAgentHost() {
         return this.seimiAgentHost;
     }
 
@@ -44,6 +44,8 @@ public class SeimiAgentDemo extends BaseSeimiCrawler{
     public void start(Response response) {
         Request seimiAgentReq = Request.build("https://www.souyidai.com","getTotalTransactions")
                 .useSeimiAgent()
+//                告诉SeimiAgent针对这个请求是否使用cookie，如果没有设置使用当前Crawler关于cookie使用条件作为默认值。
+//                .setSeimiAgentUseCookie(true)
                 //设置全部load完成后给SeimiAgent多少时间用于执行js并渲染页面，单位为毫秒
                 .setSeimiAgentRenderTime(5000);
         push(seimiAgentReq);
