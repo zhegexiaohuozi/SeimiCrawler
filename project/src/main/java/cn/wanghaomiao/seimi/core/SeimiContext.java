@@ -47,7 +47,7 @@ import java.util.concurrent.Executors;
  *         Date: 2015/6/26.
  */
 public class SeimiContext  extends AnnotationConfigApplicationContext {
-    private int BASE_THREAD_NUM = 16;
+    private int BASE_THREAD_NUM = 2;
     protected ApplicationContext applicationContext;
     protected SeimiScanner seimiScanner;
     protected Set<Class<? extends BaseSeimiCrawler>> crawlers;
