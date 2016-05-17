@@ -127,6 +127,10 @@ pom中添加添加plugin
 
 # Change log #
 
+## v0.3.2 ##
+- 优化分布式模式下与redis的连接
+- bug fix
+
 ## v0.3.0 ##
 - 内置支持[SeimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)，完美解决动态页面渲染抓取问题
 - 修复自动跳转在某些情况存在的bug
