@@ -128,7 +128,7 @@ pom中添加添加plugin
 # Change log #
 
 ## v0.3.2 ##
-- 优化分布式模式下与redis的连接
+- 优化分布式模式下与redis的连接,增强分布式可靠性
 - bug fix
 
 ## v0.3.0 ##
