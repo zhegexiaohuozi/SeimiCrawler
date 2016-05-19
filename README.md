@@ -18,10 +18,12 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 - 退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
 
 - QQ群:557410934
+
 ![QQ群](http://wjcdn.u.qiniudn.com/seimiqq.png)
 这个就是给大家自由沟通啦
 
 - 微信订阅号
+
 ![weixin](http://wjcdn.u.qiniudn.com/seimiweixin.jpg)
 里面会发布一些使用案例等文章，也欢迎大家转载
 
