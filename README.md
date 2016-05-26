@@ -27,7 +27,7 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 ![weixin](http://wjcdn.u.qiniudn.com/seimiweixin.jpg)
 
-里面会发布一些使用案例等文章，也欢迎大家转载
+里面会发布一些使用案例等文章，以及seimi体系相关项目的最新更新动态等。
 
 # 号外 #
 - 2016.04.14
