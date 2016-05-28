@@ -74,13 +74,13 @@ public class DefaultRedisQueue implements SeimiQueue {
         }
     }
 
-    public JedisPool getWritePool() {
+    public synchronized JedisPool getWritePool() {
         if (wpool == null) {
             JedisPoolConfig config = new JedisPoolConfig();
-            config.setMaxTotal(500);
-            config.setMaxIdle(200);
-            config.setMinIdle(100);
-            config.setMaxWaitMillis(1000 * 100);
+            config.setMaxTotal(50);
+            config.setMaxIdle(20);
+            config.setMinIdle(10);
+            config.setMaxWaitMillis(1000 * 20);
             logger.info("create redisPool host={},port={}",this.host,this.port);
             if (StringUtils.isNotBlank(password)){
                 wpool = new JedisPool(config, this.host, this.port, 0, password);

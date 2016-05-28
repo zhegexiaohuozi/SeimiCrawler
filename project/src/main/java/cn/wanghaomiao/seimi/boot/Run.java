@@ -30,13 +30,13 @@ public class Run {
                 if (args.length>1){
                     s.startWithHttpd(port,ArrayUtils.subarray(args,1,args.length));
                 }else {
-                    s.startAllWithHttpd(port);
+                    s.startAllWorkersWithHttpd(port);
                 }
             }else {
                 s.start(args);
             }
         } else {
-            s.startAll();
+            s.startWorkers();
         }
     }
 }

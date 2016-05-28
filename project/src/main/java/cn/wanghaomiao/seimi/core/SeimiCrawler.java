@@ -73,7 +73,7 @@ public interface SeimiCrawler {
      * 设置SeimiAgent的主机地址，如 seimi.wanghaomiao.cn or 10.10.15.211
      * @return
      */
-    String seiAgentHost();
+    String seimiAgentHost();
 
     /**
      * seimiAgent监听端口

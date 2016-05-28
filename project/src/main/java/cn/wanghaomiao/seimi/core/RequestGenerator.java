@@ -1,6 +1,8 @@
 package cn.wanghaomiao.seimi.core;
 
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
+import cn.wanghaomiao.seimi.exception.SeimiInitExcepiton;
+import cn.wanghaomiao.seimi.exception.SeimiProcessExcepiton;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
@@ -20,7 +22,10 @@ public class RequestGenerator {
         RequestBuilder requestBuilder;
         BaseSeimiCrawler crawler = crawlerModel.getInstance();
         if (request.isUseSeimiAgent()){
-            String seimiAgentUrl = "http://"+crawler.seiAgentHost()+(crawler.seimiAgentPort()!=80?(":"+crawler.seimiAgentPort()):"")+"/doload";
+            if (StringUtils.isBlank(crawler.seimiAgentHost())){
+                throw new SeimiProcessExcepiton("SeimiAgentHost is blank.");
+            }
+            String seimiAgentUrl = "http://"+crawler.seimiAgentHost()+(crawler.seimiAgentPort()!=80?(":"+crawler.seimiAgentPort()):"")+"/doload";
             requestBuilder = RequestBuilder.post().setUri(seimiAgentUrl);
             requestBuilder.addParameter("url",request.getUrl());
             if (StringUtils.isNotBlank(crawler.proxy())){

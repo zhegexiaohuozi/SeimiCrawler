@@ -10,9 +10,24 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 # 社区讨论 #
 大家有什么问题或建议现在都可以选择通过下面的邮件列表讨论，首次发言前需先订阅并等待审核通过（主要用来屏蔽广告宣传等）
+
 - 订阅:请发邮件到 `seimicrawler+subscribe@googlegroups.com`
+
 - 发言:请发邮件到 `seimicrawler@googlegroups.com`
+
 - 退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
+
+- QQ群:`557410934`
+
+![QQ群](http://wjcdn.u.qiniudn.com/seimiqq.png)
+
+这个就是给大家自由沟通啦
+
+- 微信订阅号
+
+![weixin](http://wjcdn.u.qiniudn.com/seimiweixin.jpg)
+
+里面会发布一些使用案例等文章，以及seimi体系相关项目的最新更新动态等。
 
 # 号外 #
 - 2016.04.14
@@ -32,12 +47,12 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 # 快速开始 #
 
-添加maven依赖(中央maven库最新版本0.3.0)：
+添加maven依赖(中央maven库最新版本0.3.2)：
 ```
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.2</version>
 </dependency>
 ```
 
@@ -92,7 +107,7 @@ pom中添加添加plugin
 <plugin>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>maven-seimicrawler-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <executions>
         <execution>
             <phase>package</phase>
@@ -126,6 +141,10 @@ pom中添加添加plugin
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
 
 # Change log #
+
+## v0.3.2 ##
+- 优化分布式模式下与redis的连接,增强分布式可靠性
+- bug fix
 
 ## v0.3.0 ##
 - 内置支持[SeimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)，完美解决动态页面渲染抓取问题

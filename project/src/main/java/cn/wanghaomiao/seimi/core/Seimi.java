@@ -40,9 +40,7 @@ public class Seimi extends SeimiContext {
      */
     public void start(String... crawlerNames){
         if (crawlerNames==null||crawlerNames.length==0){
-            for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
-                sendRequest(entry.getKey(),entry.getValue().getQueueInstance(),entry.getValue().getInstance().startUrls());
-            }
+            startWorkers();
         }else {
             for (String name:crawlerNames){
                 CrawlerModel crawlerModel = crawlerModelContext.get(name);
@@ -80,9 +78,11 @@ public class Seimi extends SeimiContext {
     }
 
     public void startAll(){
-        start();
+        for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
+            sendRequest(entry.getKey(),entry.getValue().getQueueInstance(),entry.getValue().getInstance().startUrls());
+        }
     }
-    public void startAllWithHttpd(int port){
+    public void startAllWorkersWithHttpd(int port){
         startWithHttpd(port);
     }
     public void startWorkers(){

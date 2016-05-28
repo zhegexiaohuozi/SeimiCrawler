@@ -70,7 +70,7 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
     }
 
     @Override
-    public String seiAgentHost() {
+    public String seimiAgentHost() {
         return null;
     }
 
