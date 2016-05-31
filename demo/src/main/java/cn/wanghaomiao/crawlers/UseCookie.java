@@ -1,6 +1,7 @@
 package cn.wanghaomiao.crawlers;
 
 import cn.wanghaomiao.seimi.annotation.Crawler;
+import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
@@ -35,6 +36,7 @@ public class UseCookie extends BaseSeimiCrawler {
         params.put("form_email","xx");
         params.put("form_password","xx");
         params.put("login","登录");
+        login.setHttpMethod(HttpMethod.POST);
         login.setParams(params);
         push(login);
     }
