@@ -50,7 +50,8 @@ public class RequestGenerator {
             }else {
                 requestBuilder = RequestBuilder.get().setUri(request.getUrl());
             }
-            RequestConfig config = RequestConfig.custom().setProxy(crawlerModel.getProxy()).build();
+            RequestConfig config = RequestConfig.custom().setProxy(crawlerModel.getProxy()).setCircularRedirectsAllowed(true).build();
+            config.isRelativeRedirectsAllowed();
             if (request.getParams()!=null){
                 for (Map.Entry<String,String> entry:request.getParams().entrySet()){
                     requestBuilder.addParameter(entry.getKey(),entry.getValue());

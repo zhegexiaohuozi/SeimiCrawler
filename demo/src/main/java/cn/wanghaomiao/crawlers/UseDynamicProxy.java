@@ -17,7 +17,7 @@ import java.util.List;
  * @author 汪浩淼 [et.tw@163.com]
  * @since 2015/10/21.
  */
-@Crawler(name = "dyProxy",proxy = "socket://127.0.0.1:8888")
+@Crawler(name = "dyProxy")
 public class UseDynamicProxy extends BaseSeimiCrawler {
     @Override
     public String[] startUrls() {
