@@ -46,6 +46,7 @@ public class CrawlerModel {
     private String crawlerName;
     private HttpHost proxy;
     private boolean useCookie = false;
+    private String currentUA;
     private boolean useUnrepeated = true;
     private int delay = 0;
     private Logger logger = LoggerFactory.getLogger(CrawlerModel.class);
@@ -76,6 +77,7 @@ public class CrawlerModel {
         instance.setCrawlerName(this.crawlerName);
         resolveProxy(c.proxy());
         this.useCookie = c.useCookie();
+        this.currentUA = instance.getUserAgent();
         this.delay = c.delay();
         this.useUnrepeated = c.useUnrepeated();
         logger.info("Crawler[{}] init complete.", crawlerName);
@@ -172,5 +174,9 @@ public class CrawlerModel {
 
     public boolean isUseUnrepeated() {
         return useUnrepeated;
+    }
+
+    public String getCurrentUA() {
+        return currentUA;
     }
 }
