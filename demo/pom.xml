@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>cn.wanghaomiao</groupId>
             <artifactId>SeimiCrawler</artifactId>
-            <version>0.3.2</version>
+            <version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.paoding</groupId>
