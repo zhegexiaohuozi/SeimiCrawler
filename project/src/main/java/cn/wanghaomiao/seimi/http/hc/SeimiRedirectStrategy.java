@@ -1,4 +1,4 @@
-package cn.wanghaomiao.seimi.http;
+package cn.wanghaomiao.seimi.http.hc;
 /*
    Copyright 2015 Wang Haomiao<et.tw@163.com>
 

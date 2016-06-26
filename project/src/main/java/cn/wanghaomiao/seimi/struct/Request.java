@@ -19,6 +19,7 @@ package cn.wanghaomiao.seimi.struct;
 import cn.wanghaomiao.seimi.annotation.validate.NotNull;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -166,6 +167,10 @@ public class Request extends CommonObject {
     }
 
     public Map<String, String> getMeta() {
+        //保证用起来时可定不为空，方便使用
+        if (meta == null){
+            meta = new HashMap<>();
+        }
         return meta;
     }
 

@@ -16,6 +16,7 @@ package cn.wanghaomiao.seimi.annotation;
  */
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.def.DefaultLocalQueue;
+import cn.wanghaomiao.seimi.http.SeimiHttpType;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -62,4 +63,10 @@ public @interface Crawler {
      * 是否启用系统级去重机制，默认启用
      */
     boolean useUnrepeated() default true;
+
+    /**
+     * 默认的Downloader实现为OkHttp3
+     * @return
+     */
+    SeimiHttpType httpType() default SeimiHttpType.OK_HTTP3;
 }

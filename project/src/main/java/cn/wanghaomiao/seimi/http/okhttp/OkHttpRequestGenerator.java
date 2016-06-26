@@ -1,0 +1,73 @@
+package cn.wanghaomiao.seimi.http.okhttp;
+
+import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
+import cn.wanghaomiao.seimi.exception.SeimiProcessExcepiton;
+import cn.wanghaomiao.seimi.http.HttpMethod;
+import cn.wanghaomiao.seimi.struct.CrawlerModel;
+import com.alibaba.fastjson.JSON;
+import okhttp3.FormBody;
+import okhttp3.Request;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Map;
+
+/**
+ * @author 汪浩淼 et.tw@163.com
+ * @since 2016/6/26.
+ */
+public class OkHttpRequestGenerator {
+    public static Request.Builder getOkHttpRequesBuilder(cn.wanghaomiao.seimi.struct.Request seimiReq, CrawlerModel crawlerModel){
+        BaseSeimiCrawler crawler = crawlerModel.getInstance();
+        Request.Builder requestBuilder = new Request.Builder();
+        if (seimiReq.isUseSeimiAgent()){
+            if (StringUtils.isBlank(crawler.seimiAgentHost())) {
+                throw new SeimiProcessExcepiton("SeimiAgentHost is blank.");
+            }
+            String seimiAgentUrl = "http://" + crawler.seimiAgentHost() + (crawler.seimiAgentPort() != 80 ? (":" + crawler.seimiAgentPort()) : "") + "/doload";
+            FormBody.Builder formBodyBuilder = new FormBody.Builder()
+                    .add("url", seimiReq.getUrl());
+            if (StringUtils.isNotBlank(crawler.proxy())){
+                formBodyBuilder.add("proxy", crawler.proxy());
+            }
+            if (seimiReq.getSeimiAgentRenderTime() > 0){
+                formBodyBuilder.add("renderTime", String.valueOf(seimiReq.getSeimiAgentRenderTime()));
+            }
+            if (StringUtils.isNotBlank(seimiReq.getSeimiAgentScript())){
+                formBodyBuilder.add("script", seimiReq.getSeimiAgentScript());
+            }
+            //如果针对SeimiAgent的请求设置是否使用cookie，以针对请求的设置为准，默认使用全局设置
+            if ((seimiReq.isSeimiAgentUseCookie() == null && crawlerModel.isUseCookie()) || (seimiReq.isSeimiAgentUseCookie() != null && seimiReq.isSeimiAgentUseCookie())) {
+                formBodyBuilder.add("useCookie", "1");
+            }
+            if (seimiReq.getParams() != null && seimiReq.getParams().size() > 0) {
+                formBodyBuilder.add("postParam", JSON.toJSONString(seimiReq.getParams()));
+            }
+            requestBuilder.url(seimiAgentUrl).post(formBodyBuilder.build()).build();
+        }else {
+            requestBuilder.url(seimiReq.getUrl());
+            requestBuilder.header("User-Agent", crawlerModel.isUseCookie() ? crawlerModel.getCurrentUA() : crawler.getUserAgent())
+                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                    .header("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
+            if (HttpMethod.POST.equals(seimiReq.getHttpMethod())) {
+                FormBody.Builder formBodyBuilder = new FormBody.Builder();
+                if (seimiReq.getParams() != null) {
+                    for (Map.Entry<String, String> entry : seimiReq.getParams().entrySet()) {
+                        formBodyBuilder.add(entry.getKey(), entry.getValue());
+                    }
+                }
+                requestBuilder.post(formBodyBuilder.build());
+            } else {
+                String queryStr = "";
+                if (seimiReq.getParams()!=null&&!seimiReq.getParams().isEmpty()){
+                    queryStr += "?";
+                    for (Map.Entry<String, String> entry : seimiReq.getParams().entrySet()) {
+                        queryStr= queryStr+entry.getKey()+"="+entry.getValue()+"&";
+                    }
+                    requestBuilder.url(seimiReq.getUrl()+queryStr);
+                }
+                requestBuilder.get();
+            }
+        }
+        return requestBuilder;
+    }
+}
