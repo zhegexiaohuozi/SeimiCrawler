@@ -2,7 +2,7 @@ SeimiCrawler
 ==========
 An agile,powerful,standalone,distributed crawler framework.
 
-SeimiCrawler的目标是成为Java里最实用的爬虫框架，欢迎大家一起努力。
+SeimiCrawler的目标是成为Java里最实用的爬虫框架，大家一起加油。
 
 # 简介 #
 
