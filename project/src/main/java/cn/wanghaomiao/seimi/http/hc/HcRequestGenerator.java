@@ -18,6 +18,7 @@ package cn.wanghaomiao.seimi.http.hc;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.exception.SeimiProcessExcepiton;
 import cn.wanghaomiao.seimi.http.HttpMethod;
+import cn.wanghaomiao.seimi.http.SeimiAgentContentType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import com.alibaba.fastjson.JSON;
@@ -57,6 +58,9 @@ public class HcRequestGenerator {
             }
             if (request.getParams() != null && request.getParams().size() > 0) {
                 requestBuilder.addParameter("postParam", JSON.toJSONString(request.getParams()));
+            }
+            if (request.getSeimiAgentContentType().val()> SeimiAgentContentType.HTML.val()){
+                requestBuilder.addParameter("contentType",request.getSeimiAgentContentType().typeVal());
             }
         } else {
             if (HttpMethod.POST.equals(request.getHttpMethod())) {

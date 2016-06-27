@@ -3,6 +3,7 @@ package cn.wanghaomiao.seimi.http.okhttp;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.exception.SeimiProcessExcepiton;
 import cn.wanghaomiao.seimi.http.HttpMethod;
+import cn.wanghaomiao.seimi.http.SeimiAgentContentType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import com.alibaba.fastjson.JSON;
 import okhttp3.FormBody;
@@ -41,6 +42,9 @@ public class OkHttpRequestGenerator {
             }
             if (seimiReq.getParams() != null && seimiReq.getParams().size() > 0) {
                 formBodyBuilder.add("postParam", JSON.toJSONString(seimiReq.getParams()));
+            }
+            if (seimiReq.getSeimiAgentContentType().val()> SeimiAgentContentType.HTML.val()){
+                formBodyBuilder.add("contentType",seimiReq.getSeimiAgentContentType().typeVal());
             }
             requestBuilder.url(seimiAgentUrl).post(formBodyBuilder.build()).build();
         }else {
