@@ -146,6 +146,7 @@ pom中添加添加plugin
 - http请求处理器重构，并默认改由`okhttp3`实现，且支持通过`@Crawler`注解中的`httpType`自由切换为apache httpclient
 - 部分代码优化
 - 支持通过[seimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)获取页面快照（png/pdf）
+- 升级[JsoupXpath](https://github.com/zhegexiaohuozi/JsoupXpath)版本至`v0.3.1`
 
 > 这一版是SeimiCrawler比较重大的一次更新，伴之而来的亦是更强悍的抓取体验。
 
