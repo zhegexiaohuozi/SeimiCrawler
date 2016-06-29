@@ -65,8 +65,7 @@ public @interface Crawler {
     boolean useUnrepeated() default true;
 
     /**
-     * 默认的Downloader实现为OkHttp3
-     * @return
+     * Downloader实现类型，默认的Downloader实现为OkHttp3
      */
     SeimiHttpType httpType() default SeimiHttpType.OK_HTTP3;
 }
