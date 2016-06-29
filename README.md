@@ -2,32 +2,11 @@ SeimiCrawler
 ==========
 An agile,powerful,standalone,distributed crawler framework.
 
-SeimiCrawler的目标是成为Java世界最实用的爬虫框架，欢迎大家一起努力。
+SeimiCrawler的目标是成为Java里最实用的爬虫框架，大家一起加油。
 
 # 简介 #
 
 SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫框架，希望能在最大程度上降低新手开发一个可用性高且性能不差的爬虫系统的门槛，以及提升开发爬虫系统的开发效率。在SeimiCrawler的世界里，绝大多数人只需关心去写抓取的业务逻辑就够了，其余的Seimi帮你搞定。设计思想上SeimiCrawler受Python的爬虫框架Scrapy启发很大，同时融合了Java语言本身特点与Spring的特性，并希望在国内更方便且普遍的使用更有效率的XPath解析HTML，所以SeimiCrawler默认的HTML解析器是[JsoupXpath](http://jsoupxpath.wanghaomiao.cn)(独立扩展项目，非jsoup自带),默认解析提取HTML数据工作均使用XPath来完成（当然，数据处理亦可以自行选择其他解析器）。
-
-# 社区讨论 #
-大家有什么问题或建议现在都可以选择通过下面的邮件列表讨论，首次发言前需先订阅并等待审核通过（主要用来屏蔽广告宣传等）
-
-- 订阅:请发邮件到 `seimicrawler+subscribe@googlegroups.com`
-
-- 发言:请发邮件到 `seimicrawler@googlegroups.com`
-
-- 退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
-
-- QQ群:`557410934`
-
-![QQ群](http://wjcdn.u.qiniudn.com/seimiqq.png)
-
-这个就是给大家自由沟通啦
-
-- 微信订阅号
-
-![weixin](http://wjcdn.u.qiniudn.com/seimiweixin.jpg)
-
-里面会发布一些使用案例等文章，以及seimi体系相关项目的最新更新动态等。
 
 # 号外 #
 - 2016.04.14
@@ -47,12 +26,12 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 # 快速开始 #
 
-添加maven依赖(中央maven库最新版本0.3.2)：
+添加maven依赖(中央maven库最新版本1.0.0)：
 ```
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>0.3.2</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -140,7 +119,35 @@ pom中添加添加plugin
 
 目前可以参考demo工程中的样例，基本包含了主要的特性用法。更为细致的文档移步[SeimiCrawler主页](http://seimi.wanghaomiao.cn)中进一步查看
 
+# 社区讨论 #
+大家有什么问题或建议现在都可以选择通过下面的邮件列表讨论，首次发言前需先订阅并等待审核通过（主要用来屏蔽广告宣传等）
+
+- 订阅:请发邮件到 `seimicrawler+subscribe@googlegroups.com`
+
+- 发言:请发邮件到 `seimicrawler@googlegroups.com`
+
+- 退订:请发邮件至 `seimicrawler+unsubscribe@googlegroups.com`
+
+- QQ群:`557410934`
+
+![QQ群](http://wjcdn.u.qiniudn.com/seimiqq.png)
+
+这个就是给大家自由沟通啦
+
+- 微信订阅号
+
+![weixin](http://wjcdn.u.qiniudn.com/seimiweixin.jpg)
+
+里面会发布一些使用案例等文章，以及seimi体系相关项目的最新更新动态等。
+
 # Change log #
+
+## v1.0.0 ##
+- http请求处理器重构，并默认改由`okhttp3`实现，且支持通过`@Crawler`注解中的`httpType`自由切换为apache httpclient
+- 部分代码优化
+- 支持通过[seimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)获取页面快照（png/pdf）
+
+> 这一版是SeimiCrawler比较重大的一次更新，伴之而来的亦是更强悍的抓取体验。
 
 ## v0.3.2 ##
 - 优化分布式模式下与redis的连接,增强分布式可靠性

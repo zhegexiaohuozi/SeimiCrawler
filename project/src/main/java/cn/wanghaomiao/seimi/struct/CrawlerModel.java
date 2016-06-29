@@ -19,6 +19,7 @@ package cn.wanghaomiao.seimi.struct;
 import cn.wanghaomiao.seimi.annotation.Crawler;
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
+import cn.wanghaomiao.seimi.http.SeimiHttpType;
 import cn.wanghaomiao.seimi.utils.StrFormatUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
@@ -29,6 +30,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +52,7 @@ public class CrawlerModel {
     private String currentUA;
     private boolean useUnrepeated = true;
     private int delay = 0;
+    private SeimiHttpType seimiHttpType;
     private Logger logger = LoggerFactory.getLogger(CrawlerModel.class);
 
     public CrawlerModel(Class<? extends BaseSeimiCrawler> cls,ApplicationContext applicationContext){
@@ -80,6 +84,7 @@ public class CrawlerModel {
         this.currentUA = instance.getUserAgent();
         this.delay = c.delay();
         this.useUnrepeated = c.useUnrepeated();
+        this.seimiHttpType = c.httpType();
         logger.info("Crawler[{}] init complete.", crawlerName);
     }
 
@@ -105,52 +110,49 @@ public class CrawlerModel {
         return r;
     }
 
-    public ApplicationContext getContext() {
-        return context;
+    public Proxy getStdProxy(String proxyStr){
+        Proxy proxy = null;
+        if (StringUtils.isBlank(proxyStr)){
+            return null;
+        }
+        if (proxyStr.matches("(http|https|socket)://([0-9a-zA-Z]+\\.?)+:\\d+")){
+            String[] pies = proxyStr.split(":");
+            String scheme = pies[0];
+            int port = Integer.parseInt(pies[2]);
+            String host = pies[1].substring(2);
+            if (scheme.equals("socket")){
+                proxy = new Proxy(Proxy.Type.SOCKS,new InetSocketAddress(host,port));
+            }else {
+                proxy = new Proxy(Proxy.Type.HTTP,new InetSocketAddress(host,port));
+            }
+        }else {
+            logger.error("proxy must like ‘http|https|socket://host:port’");
+        }
+        return proxy;
     }
 
-    public void setContext(ApplicationContext context) {
-        this.context = context;
+    public ApplicationContext getContext() {
+        return context;
     }
 
     public BaseSeimiCrawler getInstance() {
         return instance;
     }
 
-    public void setInstance(BaseSeimiCrawler instance) {
-        this.instance = instance;
-    }
-
     public Class<? extends BaseSeimiCrawler> getClazz() {
         return clazz;
-    }
-
-    public void setClazz(Class<? extends BaseSeimiCrawler> clazz) {
-        this.clazz = clazz;
     }
 
     public SeimiQueue getQueueInstance() {
         return queueInstance;
     }
 
-    public void setqueueImpl(SeimiQueue queueImpl) {
-        this.queueInstance = queueImpl;
-    }
-
     public Class<? extends SeimiQueue> getqueueClass() {
         return queueClass;
     }
 
-    public void setqueueClass(Class<? extends SeimiQueue> queueClass) {
-        this.queueClass = queueClass;
-    }
-
     public Map<String, Method> getMemberMethods() {
         return memberMethods;
-    }
-
-    public void setMemberMethods(Map<String, Method> memberMethods) {
-        this.memberMethods = memberMethods;
     }
 
     public String getCrawlerName() {
@@ -162,6 +164,13 @@ public class CrawlerModel {
             return resolveProxy(instance.proxy());
         }
         return proxy;
+    }
+
+    public Proxy getStdProxy(){
+        if (StringUtils.isNotBlank(instance.proxy())){
+            return getStdProxy(instance.proxy());
+        }
+        return null;
     }
 
     public boolean isUseCookie() {
@@ -178,5 +187,9 @@ public class CrawlerModel {
 
     public String getCurrentUA() {
         return currentUA;
+    }
+
+    public SeimiHttpType getSeimiHttpType() {
+        return seimiHttpType;
     }
 }

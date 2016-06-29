@@ -16,40 +16,20 @@ package cn.wanghaomiao.seimi.core;
  */
 import cn.wanghaomiao.seimi.annotation.Interceptor;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
-import cn.wanghaomiao.seimi.http.HttpClientFactory;
-import cn.wanghaomiao.seimi.http.HttpMethod;
-import cn.wanghaomiao.seimi.struct.BodyType;
+import cn.wanghaomiao.seimi.http.SeimiHttpType;
+import cn.wanghaomiao.seimi.http.hc.HcDownloader;
+import cn.wanghaomiao.seimi.http.okhttp.OkHttpDownloader;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
-import cn.wanghaomiao.seimi.utils.StrFormatUtil;
 import cn.wanghaomiao.seimi.utils.StructValidator;
-import cn.wanghaomiao.xpath.exception.NoSuchAxisException;
-import cn.wanghaomiao.xpath.exception.NoSuchFunctionException;
-import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
-import cn.wanghaomiao.xpath.model.JXDocument;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.entity.ContentType;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.protocol.HttpCoreContext;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,29 +90,20 @@ public class SeimiProcessor implements Runnable {
                     continue;
                 }
                 queue.addProcessed(request);
-                HttpClient hc;
-                if (crawlerModel.isUseCookie()){
-                    hc = HttpClientFactory.getHttpClient(10000,crawler.getCookieStore());
-                }else {
-                    hc = HttpClientFactory.getHttpClient();
-                }
-                RequestBuilder requestBuilder = RequestGenerator.getHttpRequestBuilder(request,crawlerModel);
 
-                HttpContext httpContext = new BasicHttpContext();
-                HttpResponse httpResponse = hc.execute(requestBuilder.build(),httpContext);
-                Response seimiResponse = renderResponse(httpResponse,request,httpContext);
+                SeimiDownloader downloader;
+                if (SeimiHttpType.APACHE_HC.val() == crawlerModel.getSeimiHttpType().val()){
+                    downloader = new HcDownloader(crawlerModel);
+                }else {
+                    downloader = new OkHttpDownloader(crawlerModel);
+                }
+
+                Response seimiResponse = downloader.process(request);
                 Matcher mm = metaRefresh.matcher(seimiResponse.getContent());
                 int refreshCount = 0;
                 while (!request.isUseSeimiAgent()&&mm.find()&&refreshCount<3){
                     String nextUrl = mm.group(1).replaceAll("'","");
-                    if (!nextUrl.startsWith("http")){
-                        String prefix = getRealUrl(httpContext);
-                        nextUrl = prefix + nextUrl;
-                    }
-                    logger.info("Seimi refresh url to={} from={}",nextUrl,requestBuilder.getUri());
-                    requestBuilder.setUri(nextUrl);
-                    httpResponse = hc.execute(requestBuilder.build(),httpContext);
-                    seimiResponse = renderResponse(httpResponse,request,httpContext);
+                    seimiResponse = downloader.metaRefresh(nextUrl);
                     mm = metaRefresh.matcher(seimiResponse.getContent());
                     refreshCount+=1;
                 }
@@ -157,7 +128,7 @@ public class SeimiProcessor implements Runnable {
                         interceptor.after(requestCallback, seimiResponse);
                     }
                 }
-                logger.debug("Crawler[{}] ,url={} ,responseStatus={}",crawlerModel.getCrawlerName(),request.getUrl(),httpResponse.getStatusLine().getStatusCode());
+                logger.debug("Crawler[{}] ,url={} ,responseStatus={}",crawlerModel.getCrawlerName(),request.getUrl(),downloader.statusCode());
             }catch (Exception e){
                 logger.error(e.getMessage(),e);
                 if (request == null){
@@ -173,77 +144,5 @@ public class SeimiProcessor implements Runnable {
 
             }
         }
-    }
-
-    private Response renderResponse(HttpResponse httpResponse,Request request,HttpContext httpContext){
-        Response seimiResponse = new Response();
-        HttpEntity entity = httpResponse.getEntity();
-        seimiResponse.setHttpResponse(httpResponse);
-        seimiResponse.setReponseEntity(entity);
-        seimiResponse.setRealUrl(getRealUrl(httpContext));
-        seimiResponse.setUrl(request.getUrl());
-        seimiResponse.setRequest(request);
-        seimiResponse.setMeta(request.getMeta());
-
-        if (entity != null) {
-            Header referer = httpResponse.getFirstHeader("Referer");
-            if (referer!=null){
-                seimiResponse.setReferer(referer.getValue());
-            }
-            if (!entity.getContentType().getValue().contains("image")){
-                seimiResponse.setBodyType(BodyType.TEXT);
-                try {
-                    seimiResponse.setData(EntityUtils.toByteArray(entity));
-                    ContentType contentType = ContentType.get(entity);
-                    Charset charset = contentType.getCharset();
-                    if (charset==null){
-                        seimiResponse.setContent(new String(seimiResponse.getData(),"ISO-8859-1"));
-                        String docCharset = renderRealCharset(seimiResponse);
-                        seimiResponse.setContent(new String(seimiResponse.getContent().getBytes("ISO-8859-1"),docCharset));
-                        seimiResponse.setCharset(docCharset);
-                    }else {
-                        seimiResponse.setContent(new String(seimiResponse.getData(),charset));
-                        seimiResponse.setCharset(charset.name());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    logger.error("no content data");
-                }
-            }else {
-                seimiResponse.setBodyType(BodyType.BINARY);
-                try {
-                    seimiResponse.setData(EntityUtils.toByteArray(entity));
-                    seimiResponse.setContent(StringUtils.substringAfterLast(request.getUrl(),"/"));
-                } catch (Exception e) {
-                    logger.error("no data can be read from httpResponse");
-                }
-            }
-        }
-        return seimiResponse;
-    }
-
-    private String renderRealCharset(Response response) throws NoSuchFunctionException, XpathSyntaxErrorException, NoSuchAxisException {
-        String charset;
-        JXDocument doc = response.document();
-        charset = StrFormatUtil.getFirstEmStr(doc.sel("//meta[@charset]/@charset"),"").trim();
-        if (StringUtils.isBlank(charset)){
-            charset = StrFormatUtil.getFirstEmStr(doc.sel("//meta[@http-equiv='charset']/@content"),"").trim();
-        }
-        if (StringUtils.isBlank(charset)){
-            String ct = StringUtils.join(doc.sel("//meta[@http-equiv='Content-Type']/@content|//meta[@http-equiv='content-type']/@content"),";").trim();
-            charset = StrFormatUtil.parseCharset(ct.toLowerCase());
-        }
-        return StringUtils.isNotBlank(charset)?charset:"UTF-8";
-    }
-
-    private String getRealUrl(HttpContext httpContext){
-        Object target = httpContext.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
-        Object reqUri = httpContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
-        if (target==null||reqUri==null){
-            return null;
-        }
-        HttpHost t = (HttpHost) target;
-        HttpUriRequest r = (HttpUriRequest)reqUri;
-        return r.getURI().isAbsolute()?r.getURI().toString():t.toString()+r.getURI().toString();
     }
 }

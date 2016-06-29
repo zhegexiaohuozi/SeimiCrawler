@@ -17,9 +17,8 @@ package cn.wanghaomiao.seimi.struct;
 
 
 import cn.wanghaomiao.seimi.core.SeimiBeanResolver;
+import cn.wanghaomiao.seimi.http.SeimiHttpType;
 import cn.wanghaomiao.xpath.model.JXDocument;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,13 +30,12 @@ import java.nio.channels.FileChannel;
 import java.util.Map;
 
 /**
+ * 抓取请求的返回结果
  * @author 汪浩淼 [et.tw@163.com]
  *         Date: 2015/05/12.
  */
 public class Response extends CommonObject {
     private BodyType bodyType;
-    private HttpResponse httpResponse;
-    private HttpEntity reponseEntity;
     private Request request;
     private String charset;
     private String referer;
@@ -53,6 +51,11 @@ public class Response extends CommonObject {
      * 网页内容真实源地址
      */
     private String realUrl;
+    /**
+     * 此次请求结果的http处理器类型
+     */
+    private SeimiHttpType seimiHttpType;
+
 
     private Logger logger = LoggerFactory.getLogger(Response.class);
 
@@ -112,22 +115,6 @@ public class Response extends CommonObject {
         this.params = params;
     }
 
-    public HttpResponse getHttpResponse() {
-        return httpResponse;
-    }
-
-    public void setHttpResponse(HttpResponse httpResponse) {
-        this.httpResponse = httpResponse;
-    }
-
-    public HttpEntity getReponseEntity() {
-        return reponseEntity;
-    }
-
-    public void setReponseEntity(HttpEntity reponseEntity) {
-        this.reponseEntity = reponseEntity;
-    }
-
     public Request getRequest() {
         return request;
     }
@@ -150,6 +137,14 @@ public class Response extends CommonObject {
 
     public void setRealUrl(String realUrl) {
         this.realUrl = realUrl;
+    }
+
+    public SeimiHttpType getSeimiHttpType() {
+        return seimiHttpType;
+    }
+
+    public void setSeimiHttpType(SeimiHttpType seimiHttpType) {
+        this.seimiHttpType = seimiHttpType;
     }
 
     /**
