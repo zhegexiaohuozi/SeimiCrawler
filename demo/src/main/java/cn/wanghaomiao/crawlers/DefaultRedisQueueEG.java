@@ -1,10 +1,8 @@
 package cn.wanghaomiao.crawlers;
 
-import cn.wanghaomiao.seimi.annotation.Crawler;
+import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
-import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
-import cn.wanghaomiao.seimi.def.DefaultRedisQueue;
 import cn.wanghaomiao.xpath.model.JXDocument;
 
 import java.util.List;
