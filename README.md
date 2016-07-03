@@ -86,7 +86,7 @@ pom中添加添加plugin
 <plugin>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>maven-seimicrawler-plugin</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <executions>
         <execution>
             <phase>package</phase>
