@@ -51,6 +51,7 @@ public class SeimiContext  extends AnnotationConfigApplicationContext {
     protected ApplicationContext applicationContext;
     protected SeimiScanner seimiScanner;
     protected Set<Class<? extends BaseSeimiCrawler>> crawlers;
+    protected Set<Class<? extends SeimiQueue>> hasUsedQuene;
     protected List<SeimiInterceptor> interceptors;
     protected Map<String,CrawlerModel> crawlerModelContext;
     protected ExecutorService workersPool;
@@ -73,12 +74,31 @@ public class SeimiContext  extends AnnotationConfigApplicationContext {
         Set<Class<?>> aladdin = seimiScanner.scan(targetPkgs, Crawler.class, Queue.class, Interceptor.class);
         applicationContext = this;
         crawlers = new HashSet<>();
+        hasUsedQuene = new HashSet<>();
         interceptors = new LinkedList<>();
         crawlerModelContext = new HashMap<>();
+        List<Class<?>> registList = new LinkedList<>();
         for (Class cls:aladdin){
             if (BaseSeimiCrawler.class.isAssignableFrom(cls)){
+                Crawler c = (Crawler) cls.getAnnotation(Crawler.class);
+                hasUsedQuene.add(c.queue());
                 crawlers.add(cls);
+                registList.add(cls);
             }else if (SeimiInterceptor.class.isAssignableFrom(cls)){
+                registList.add(cls);
+            }
+        }
+        //收集会使用到的seimiQueue并注册到context
+        for (Class cls:aladdin){
+            if (SeimiQueue.class.isAssignableFrom(cls)&&hasUsedQuene.contains(cls)){
+                registList.add(cls);
+            }
+        }
+        //统一注册需要用到的类
+        seimiScanner.regist(registList);
+        //获取注册后的拦截器实例
+        for (Class cls:aladdin){
+            if (SeimiInterceptor.class.isAssignableFrom(cls)){
                 interceptors.add((SeimiInterceptor)applicationContext.getBean(cls));
             }
         }

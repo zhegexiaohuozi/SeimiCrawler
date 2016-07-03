@@ -19,7 +19,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -75,7 +74,6 @@ public class SeimiScanner {
                             String className = reader.getClassMetadata().getClassName();
                             if (ifMatchesEntityType(reader, readerFactory,typeFilters)) {
                                 Class<?> curClass = Thread.currentThread().getContextClassLoader().loadClass(className);
-                                context.register(curClass);
                                 resClazzSet.add(curClass);
                             }
                         }
@@ -85,10 +83,16 @@ public class SeimiScanner {
                 }
             }
         }
+        return resClazzSet;
+    }
+
+    public void regist(List<Class<?>> classList){
+        for (Class cls:classList){
+            context.register(cls);
+        }
         if (!context.isActive()){
             context.refresh();
         }
-        return resClazzSet;
     }
 
     /**
