@@ -93,6 +93,7 @@ public class Seimi extends SeimiContext {
 
     private void sendRequest(String crawlerName, SeimiQueue queue, BaseSeimiCrawler instance){
         String[] startUrls = instance.startUrls();
+        boolean trigger = false;
         if (ArrayUtils.isNotEmpty(startUrls)){
             for (String url:startUrls){
                 Request request = new Request();
@@ -106,12 +107,20 @@ public class Seimi extends SeimiContext {
                 queue.push(request);
                 logger.info("{} url={} started",crawlerName,url);
             }
-        }else if (!CollectionUtils.isEmpty(instance.startRequests())){
+            trigger = true;
+        }
+        if (!CollectionUtils.isEmpty(instance.startRequests())){
             for (Request request:instance.startRequests()){
+                request.setCrawlerName(crawlerName);
+                if (StringUtils.isBlank(request.getCallBack())){
+                    request.setCallBack("start");
+                }
                 queue.push(request);
                 logger.info("{} url={} started",crawlerName,request.getUrl());
             }
-        }else {
+            trigger = true;
+        }
+        if (!trigger){
             logger.error("crawler:{} can not find start urls!",crawlerName);
         }
     }
