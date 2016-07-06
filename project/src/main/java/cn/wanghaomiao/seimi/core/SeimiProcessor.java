@@ -19,6 +19,7 @@ import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.http.SeimiHttpType;
 import cn.wanghaomiao.seimi.http.hc.HcDownloader;
 import cn.wanghaomiao.seimi.http.okhttp.OkHttpDownloader;
+import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
@@ -99,13 +100,15 @@ public class SeimiProcessor implements Runnable {
                 }
 
                 Response seimiResponse = downloader.process(request);
-                Matcher mm = metaRefresh.matcher(seimiResponse.getContent());
-                int refreshCount = 0;
-                while (!request.isUseSeimiAgent()&&mm.find()&&refreshCount<3){
-                    String nextUrl = mm.group(1).replaceAll("'","");
-                    seimiResponse = downloader.metaRefresh(nextUrl);
-                    mm = metaRefresh.matcher(seimiResponse.getContent());
-                    refreshCount+=1;
+                if (BodyType.TEXT.equals(seimiResponse.getBodyType())){
+                    Matcher mm = metaRefresh.matcher(seimiResponse.getContent());
+                    int refreshCount = 0;
+                    while (!request.isUseSeimiAgent()&&mm.find()&&refreshCount<3){
+                        String nextUrl = mm.group(1).replaceAll("'","");
+                        seimiResponse = downloader.metaRefresh(nextUrl);
+                        mm = metaRefresh.matcher(seimiResponse.getContent());
+                        refreshCount+=1;
+                    }
                 }
 
                 Method requestCallback = crawlerModel.getMemberMethods().get(request.getCallBack());
