@@ -144,7 +144,7 @@ pom中添加添加plugin
 
 ## v1.1.0 ##
 - 可通过实现`SeimiCrawler`的`List<Request> startRequests();`来实现更复杂的起始触发请求
-- SemiQueue按需加载
+- SemiQueue实现按需加载
 - 修复抓取文件类型数据返回时尝试匹配`meta refresh`时产生的问题
 
 ## v1.0.0 ##
