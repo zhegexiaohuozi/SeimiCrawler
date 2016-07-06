@@ -6,7 +6,7 @@ SeimiCrawler的目标是成为Java里最实用的爬虫框架，大家一起加�
 
 # 简介 #
 
-SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫框架，希望能在最大程度上降低新手开发一个可用性高且性能不差的爬虫系统的门槛，以及提升开发爬虫系统的开发效率。在SeimiCrawler的世界里，绝大多数人只需关心去写抓取的业务逻辑就够了，其余的Seimi帮你搞定。设计思想上SeimiCrawler受Python的爬虫框架Scrapy启发很大，同时融合了Java语言本身特点与Spring的特性，并希望在国内更方便且普遍的使用更有效率的XPath解析HTML，所以SeimiCrawler默认的HTML解析器是[JsoupXpath](http://jsoupxpath.wanghaomiao.cn)(独立扩展项目，非jsoup自带),默认解析提取HTML数据工作均使用XPath来完成（当然，数据处理亦可以自行选择其他解析器）。
+SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫框架，希望能在最大程度上降低新手开发一个可用性高且性能不差的爬虫系统的门槛，以及提升开发爬虫系统的开发效率。在SeimiCrawler的世界里，绝大多数人只需关心去写抓取的业务逻辑就够了，其余的Seimi帮你搞定。设计思想上SeimiCrawler受Python的爬虫框架Scrapy启发很大，同时融合了Java语言本身特点与Spring的特性，并希望在国内更方便且普遍的使用更有效率的XPath解析HTML，所以SeimiCrawler默认的HTML解析器是[JsoupXpath](http://jsoupxpath.wanghaomiao.cn)(独立扩展项目，非jsoup自带),默认解析提取HTML数据工作均使用XPath来完成（当然，数据处理亦可以自行选择其他解析器）。并结合[SeimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)彻底完美解决复杂动态页面渲染抓取问题。
 
 # 号外 #
 - 2016.04.14
@@ -26,12 +26,12 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 # 快速开始 #
 
-添加maven依赖(中央maven库最新版本1.0.0)：
+添加maven依赖(中央maven库最新版本1.1.0)：
 ```
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -141,6 +141,10 @@ pom中添加添加plugin
 里面会发布一些使用案例等文章，以及seimi体系相关项目的最新更新动态等。
 
 # Change log #
+
+## v1.1.0 ##
+- SemiQueue按需加载
+- 修复抓取文件类型数据返回时尝试匹配`meta refresh`时产生的问题
 
 ## v1.0.0 ##
 - http请求处理器重构，并默认改由`okhttp3`实现，且支持通过`@Crawler`注解中的`httpType`自由切换为apache httpclient
