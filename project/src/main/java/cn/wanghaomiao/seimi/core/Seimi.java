@@ -1,5 +1,3 @@
-package cn.wanghaomiao.seimi.core;
-
 /*
    Copyright 2015 Wang Haomiao<et.tw@163.com>
 
@@ -15,7 +13,9 @@ package cn.wanghaomiao.seimi.core;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+package cn.wanghaomiao.seimi.core;
 
+import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.httpd.CrawlerStatusHttpProcessor;
 import cn.wanghaomiao.seimi.httpd.PushRequestHttpProcessor;
@@ -25,6 +25,7 @@ import cn.wanghaomiao.seimi.struct.Request;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Server;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
 
@@ -45,7 +46,7 @@ public class Seimi extends SeimiContext {
             for (String name:crawlerNames){
                 CrawlerModel crawlerModel = crawlerModelContext.get(name);
                 if (crawlerModel!=null){
-                    sendRequest(crawlerModel.getCrawlerName(),crawlerModel.getQueueInstance(),crawlerModel.getInstance().startUrls());
+                    sendRequest(crawlerModel.getCrawlerName(),crawlerModel.getQueueInstance(),crawlerModel.getInstance());
                 }else {
                     logger.error("error crawler name '{}',can not find it!",name);
                 }
@@ -79,7 +80,7 @@ public class Seimi extends SeimiContext {
 
     public void startAll(){
         for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
-            sendRequest(entry.getKey(),entry.getValue().getQueueInstance(),entry.getValue().getInstance().startUrls());
+            sendRequest(entry.getKey(),entry.getValue().getQueueInstance(),entry.getValue().getInstance());
         }
     }
     public void startAllWorkersWithHttpd(int port){
@@ -90,7 +91,8 @@ public class Seimi extends SeimiContext {
         logger.info("workers started!");
     }
 
-    private void sendRequest(String crawlerName,SeimiQueue queue,String[] startUrls){
+    private void sendRequest(String crawlerName, SeimiQueue queue, BaseSeimiCrawler instance){
+        String[] startUrls = instance.startUrls();
         if (ArrayUtils.isNotEmpty(startUrls)){
             for (String url:startUrls){
                 Request request = new Request();
@@ -103,6 +105,11 @@ public class Seimi extends SeimiContext {
                 request.setCallBack("start");
                 queue.push(request);
                 logger.info("{} url={} started",crawlerName,url);
+            }
+        }else if (!CollectionUtils.isEmpty(instance.startRequests())){
+            for (Request request:instance.startRequests()){
+                queue.push(request);
+                logger.info("{} url={} started",crawlerName,request.getUrl());
             }
         }else {
             logger.error("crawler:{} can not find start urls!",crawlerName);

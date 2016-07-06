@@ -20,6 +20,8 @@ import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
 import org.apache.http.client.CookieStore;
 
+import java.util.List;
+
 /**
  * @author 汪浩淼 [et.tw@163.com]
  *         Date: 2015/5/28.
@@ -44,6 +46,12 @@ public interface SeimiCrawler {
      * @return
      */
     String[] startUrls();
+
+    /**
+     * 起始的Request，可以应对更复杂的情况，当<code>String[] startUrls();</code>无法满足需求的情况下推荐使用
+     * @return
+     */
+    List<Request> startRequests();
 
     /**
      * 用于设置允许的请求URL匹配规则

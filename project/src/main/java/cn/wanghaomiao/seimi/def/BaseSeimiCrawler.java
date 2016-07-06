@@ -24,6 +24,8 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * @author 汪浩淼 et.tw@163.com
  * @since 2015/8/17.
@@ -98,6 +100,11 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
     @Override
     public int seimiAgentPort() {
         return 80;
+    }
+
+    @Override
+    public List<Request> startRequests() {
+        return null;
     }
 
     public void setQueue(SeimiQueue queue) {
