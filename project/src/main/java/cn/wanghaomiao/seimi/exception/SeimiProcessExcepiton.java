@@ -22,6 +22,9 @@ package cn.wanghaomiao.seimi.exception;
  * @since 2015/10/26.
  */
 public class SeimiProcessExcepiton extends RuntimeException {
+    public SeimiProcessExcepiton(Exception e){
+        super(e);
+    }
     public SeimiProcessExcepiton(String msg){
         super(msg);
     }

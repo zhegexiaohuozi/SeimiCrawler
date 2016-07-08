@@ -16,20 +16,19 @@
 package cn.wanghaomiao.seimi.struct;
 
 import cn.wanghaomiao.seimi.core.SeimiBeanResolver;
+import cn.wanghaomiao.seimi.exception.SeimiProcessExcepiton;
 import cn.wanghaomiao.seimi.http.SeimiHttpType;
 import cn.wanghaomiao.xpath.model.JXDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Map;
 
 /**
  * 抓取请求的返回结果
+ *
  * @author 汪浩淼 [et.tw@163.com]
  *         Date: 2015/05/12.
  */
@@ -43,9 +42,9 @@ public class Response extends CommonObject {
     /**
      * 这个主要用于存储上游传递的一些自定义数据
      */
-    private Map<String,String> meta;
+    private Map<String, String> meta;
     private String url;
-    private Map<String,String> params;
+    private Map<String, String> params;
     /**
      * 网页内容真实源地址
      */
@@ -55,8 +54,6 @@ public class Response extends CommonObject {
      */
     private SeimiHttpType seimiHttpType;
 
-
-    private Logger logger = LoggerFactory.getLogger(Response.class);
 
     public byte[] getData() {
         return data;
@@ -148,46 +145,41 @@ public class Response extends CommonObject {
 
     /**
      * 通过bean中定义的Xpath注解进行自动填充
+     *
      * @param bean
      * @param <T>
      * @return
      * @throws Exception
      */
     public <T> T render(Class<T> bean) throws Exception {
-        if (bodyType.equals(BodyType.TEXT)){
-            return SeimiBeanResolver.parse(bean,this.content);
-        }else {
-            throw new RuntimeException("can not parse struct from binary");
+        if (bodyType.equals(BodyType.TEXT)) {
+            return SeimiBeanResolver.parse(bean, this.content);
+        } else {
+            throw new SeimiProcessExcepiton("can not parse struct from binary");
         }
     }
 
-    public JXDocument document(){
-        return BodyType.TEXT.equals(bodyType)&&content!=null?new JXDocument(content):null;
+    public JXDocument document() {
+        return BodyType.TEXT.equals(bodyType) && content != null ? new JXDocument(content) : null;
     }
 
-    public void saveTo(File targetFile){
-        FileChannel fo = null;
-        try {
+    public void saveTo(File targetFile) {
+
+        try (
+                FileOutputStream fileOutputStream = new FileOutputStream(targetFile);
+                FileChannel fo = fileOutputStream.getChannel();
+        ) {
             File pf = targetFile.getParentFile();
-            if (!pf.exists()){
+            if (!pf.exists()) {
                 pf.mkdirs();
             }
-            fo = new FileOutputStream(targetFile).getChannel();
-            if (BodyType.TEXT.equals(bodyType)){
+            if (BodyType.TEXT.equals(bodyType)) {
                 fo.write(ByteBuffer.wrap(getContent().getBytes()));
-            }else {
+            } else {
                 fo.write(ByteBuffer.wrap(getData()));
             }
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }finally {
-            if (fo!=null){
-                try {
-                    fo.close();
-                } catch (IOException ignore) {
-                    logger.error(ignore.getMessage(),ignore);
-                }
-            }
+        } catch (Exception e) {
+            throw new SeimiProcessExcepiton(e);
         }
     }
 }

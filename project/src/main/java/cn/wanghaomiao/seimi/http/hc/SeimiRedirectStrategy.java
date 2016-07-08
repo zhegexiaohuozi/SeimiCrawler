@@ -1,4 +1,3 @@
-package cn.wanghaomiao.seimi.http.hc;
 /*
    Copyright 2015 Wang Haomiao<et.tw@163.com>
 
@@ -14,6 +13,7 @@ package cn.wanghaomiao.seimi.http.hc;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+package cn.wanghaomiao.seimi.http.hc;
 
 
 import org.apache.http.HttpRequest;
@@ -33,25 +33,27 @@ import java.net.URI;
 /**
  * 之所以要自行覆盖默认实现，是因为默认实现在post/redirect/post这种情况下不会传递原有请求的数据信息，只会传递一个uri其他的都丢了，
  * 这显然是非常不理想的，所以必须重写覆盖。结果还是很不错的。
+ *
  * @author 汪浩淼 [et.tw@163.com]
  */
 public class SeimiRedirectStrategy extends LaxRedirectStrategy {
     private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
         URI uri = getLocationURI(request, response, context);
         String method = request.getRequestLine().getMethod();
-        if (HttpPost.METHOD_NAME.equalsIgnoreCase(method)){
+        if (HttpPost.METHOD_NAME.equalsIgnoreCase(method)) {
             try {
                 HttpRequestWrapper httpRequestWrapper = (HttpRequestWrapper) request;
                 httpRequestWrapper.setURI(uri);
                 httpRequestWrapper.removeHeaders("Content-Length");
                 return httpRequestWrapper;
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.error("强转为HttpRequestWrapper出错");
             }
             return new HttpPost(uri);
-        }else {
+        } else {
             return new HttpGet(uri);
         }
     }
