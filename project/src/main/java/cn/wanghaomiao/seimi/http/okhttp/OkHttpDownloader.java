@@ -66,7 +66,7 @@ public class OkHttpDownloader implements SeimiDownloader {
     public Response metaRefresh(String nextUrl) throws Exception {
         HttpUrl lastUrl = lastResponse.request().url();
         if (!nextUrl.startsWith("http")){
-            String prefix = lastUrl.host()+lastUrl.encodedPath();
+            String prefix = lastUrl.scheme()+"://"+lastUrl.host()+lastUrl.encodedPath();
             nextUrl = prefix + nextUrl;
         }
         logger.info("Seimi refresh url to={} from={}",nextUrl,lastUrl.toString());
