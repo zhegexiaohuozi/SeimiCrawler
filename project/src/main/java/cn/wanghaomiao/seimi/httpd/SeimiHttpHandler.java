@@ -1,4 +1,3 @@
-package cn.wanghaomiao.seimi.httpd;
 /*
    Copyright 2015 Wang Haomiao<et.tw@163.com>
 
@@ -14,6 +13,7 @@ package cn.wanghaomiao.seimi.httpd;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+package cn.wanghaomiao.seimi.httpd;
 
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import org.eclipse.jetty.server.Request;

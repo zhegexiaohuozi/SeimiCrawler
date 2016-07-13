@@ -1,4 +1,3 @@
-package cn.wanghaomiao.seimi.http.hc;
 /*
    Copyright 2015 Wang Haomiao<et.tw@163.com>
 
@@ -14,7 +13,7 @@ package cn.wanghaomiao.seimi.http.hc;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-
+package cn.wanghaomiao.seimi.http.hc;
 
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
@@ -39,17 +38,19 @@ import java.net.UnknownHostException;
  *         Date: 2014/11/13.
  */
 public class HttpClientFactory {
-    public static HttpClient getHttpClient(){
+    public static HttpClient getHttpClient() {
         return cliBuilder(10000).build();
     }
-    public static HttpClient getHttpClient(int timeout){
+
+    public static HttpClient getHttpClient(int timeout) {
         return cliBuilder(timeout).build();
     }
-    public static HttpClient getHttpClient(int timeout,CookieStore cookieStore){
+
+    public static HttpClient getHttpClient(int timeout, CookieStore cookieStore) {
         return cliBuilder(timeout).setDefaultCookieStore(cookieStore).build();
     }
 
-    public static HttpClientBuilder cliBuilder(int timeout){
+    public static HttpClientBuilder cliBuilder(int timeout) {
         HttpRequestRetryHandler retryHander = new HttpRequestRetryHandler() {
             @Override
             public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {

@@ -1,4 +1,3 @@
-package cn.wanghaomiao.seimi.exception;
 /*
    Copyright 2015 Wang Haomiao<et.tw@163.com>
 
@@ -14,6 +13,7 @@ package cn.wanghaomiao.seimi.exception;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+package cn.wanghaomiao.seimi.exception;
 
 
 /**
@@ -22,6 +22,9 @@ package cn.wanghaomiao.seimi.exception;
  * @since 2015/10/26.
  */
 public class SeimiProcessExcepiton extends RuntimeException {
+    public SeimiProcessExcepiton(Exception e){
+        super(e);
+    }
     public SeimiProcessExcepiton(String msg){
         super(msg);
     }

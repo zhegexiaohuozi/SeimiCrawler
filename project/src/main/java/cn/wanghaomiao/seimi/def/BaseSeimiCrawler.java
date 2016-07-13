@@ -1,4 +1,3 @@
-package cn.wanghaomiao.seimi.def;
 /*
    Copyright 2015 Wang Haomiao<et.tw@163.com>
 
@@ -14,6 +13,7 @@ package cn.wanghaomiao.seimi.def;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+package cn.wanghaomiao.seimi.def;
 
 import cn.wanghaomiao.seimi.core.SeimiCrawler;
 import cn.wanghaomiao.seimi.core.SeimiQueue;
@@ -23,6 +23,8 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * @author 汪浩淼 et.tw@163.com
@@ -98,6 +100,11 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
     @Override
     public int seimiAgentPort() {
         return 80;
+    }
+
+    @Override
+    public List<Request> startRequests() {
+        return null;
     }
 
     public void setQueue(SeimiQueue queue) {
