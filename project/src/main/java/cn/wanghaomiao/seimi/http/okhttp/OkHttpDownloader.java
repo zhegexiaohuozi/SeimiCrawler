@@ -21,9 +21,15 @@ import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
+import cn.wanghaomiao.seimi.utils.StrFormatUtil;
+import cn.wanghaomiao.xpath.exception.NoSuchAxisException;
+import cn.wanghaomiao.xpath.exception.NoSuchFunctionException;
+import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
+import cn.wanghaomiao.xpath.model.JXDocument;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +104,10 @@ public class OkHttpDownloader implements SeimiDownloader {
                     ||subtype.contains("ajax")){
                 seimiResponse.setBodyType(BodyType.TEXT);
                 try {
-                    seimiResponse.setContent(okResponseBody.string());
+                    byte[] data = okResponseBody.bytes();
+                    String utfContent = new String(data,"utf8");
+                    String charsetFinal = renderRealCharset(utfContent);
+                    seimiResponse.setContent(new String(data,charsetFinal));
                 } catch (Exception e) {
                     logger.error("no content data");
                 }
@@ -112,5 +121,19 @@ public class OkHttpDownloader implements SeimiDownloader {
             }
         }
         return seimiResponse;
+    }
+
+    private String renderRealCharset(String content) throws XpathSyntaxErrorException {
+        String charset;
+        JXDocument doc = new JXDocument(content);
+        charset = StrFormatUtil.getFirstEmStr(doc.sel("//meta[@charset]/@charset"),"").trim();
+        if (StringUtils.isBlank(charset)){
+            charset = StrFormatUtil.getFirstEmStr(doc.sel("//meta[@http-equiv='charset']/@content"),"").trim();
+        }
+        if (StringUtils.isBlank(charset)){
+            String ct = StringUtils.join(doc.sel("//meta[@http-equiv='Content-Type']/@content|//meta[@http-equiv='content-type']/@content"),";").trim();
+            charset = StrFormatUtil.parseCharset(ct.toLowerCase());
+        }
+        return StringUtils.isNotBlank(charset)?charset:"UTF-8";
     }
 }
