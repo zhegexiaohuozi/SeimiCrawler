@@ -73,7 +73,7 @@ public @interface Crawler {
     SeimiHttpType httpType() default SeimiHttpType.OK_HTTP3;
 
     /**
-     * 支持自定义超时间，默认15000ms
+     * 支持自定义超时间，单位毫秒，默认15000ms
      */
     int httpTimeOut() default 15000;
 }
