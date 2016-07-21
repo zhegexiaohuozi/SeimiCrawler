@@ -22,8 +22,6 @@ import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
 import cn.wanghaomiao.seimi.utils.StrFormatUtil;
-import cn.wanghaomiao.xpath.exception.NoSuchAxisException;
-import cn.wanghaomiao.xpath.exception.NoSuchFunctionException;
 import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
 import cn.wanghaomiao.xpath.model.JXDocument;
 import okhttp3.HttpUrl;
@@ -32,6 +30,8 @@ import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 汪浩淼 et.tw@163.com
@@ -61,6 +61,7 @@ public class OkHttpDownloader implements SeimiDownloader {
         if (crawlerModel.getStdProxy()!=null){
             hcBuilder.proxy(crawlerModel.getStdProxy());
         }
+        hcBuilder.readTimeout(crawlerModel.getHttpTimeOut(), TimeUnit.MILLISECONDS);
         okHttpClient = hcBuilder.build();
         currentRequestBuilder = OkHttpRequestGenerator.getOkHttpRequesBuilder(request,crawlerModel);
         lastResponse = okHttpClient.newCall(currentRequestBuilder.build()).execute();
@@ -105,9 +106,13 @@ public class OkHttpDownloader implements SeimiDownloader {
                 seimiResponse.setBodyType(BodyType.TEXT);
                 try {
                     byte[] data = okResponseBody.bytes();
-                    String utfContent = new String(data,"utf8");
+                    String utfContent = new String(data,"UTF-8");
                     String charsetFinal = renderRealCharset(utfContent);
-                    seimiResponse.setContent(new String(data,charsetFinal));
+                    if (charsetFinal.equals("UTF-8")){
+                        seimiResponse.setContent(utfContent);
+                    }else {
+                        seimiResponse.setContent(new String(data,charsetFinal));
+                    }
                 } catch (Exception e) {
                     logger.error("no content data");
                 }

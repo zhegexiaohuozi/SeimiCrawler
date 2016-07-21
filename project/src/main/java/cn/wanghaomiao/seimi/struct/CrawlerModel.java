@@ -53,6 +53,7 @@ public class CrawlerModel {
     private boolean useUnrepeated = true;
     private int delay = 0;
     private SeimiHttpType seimiHttpType;
+    private int httpTimeOut;
     private Logger logger = LoggerFactory.getLogger(CrawlerModel.class);
 
     public CrawlerModel(Class<? extends BaseSeimiCrawler> cls,ApplicationContext applicationContext){
@@ -85,6 +86,7 @@ public class CrawlerModel {
         this.delay = c.delay();
         this.useUnrepeated = c.useUnrepeated();
         this.seimiHttpType = c.httpType();
+        this.httpTimeOut = c.httpTimeOut();
         logger.info("Crawler[{}] init complete.", crawlerName);
     }
 
@@ -191,5 +193,9 @@ public class CrawlerModel {
 
     public SeimiHttpType getSeimiHttpType() {
         return seimiHttpType;
+    }
+
+    public int getHttpTimeOut() {
+        return httpTimeOut;
     }
 }

@@ -54,9 +54,9 @@ public class HcDownloader implements SeimiDownloader {
         this.crawlerModel = crawlerModel;
         BaseSeimiCrawler crawler = crawlerModel.getInstance();
         if (crawlerModel.isUseCookie()){
-            hc = HttpClientFactory.getHttpClient(10000,crawler.getCookieStore());
+            hc = HttpClientFactory.getHttpClient(crawlerModel.getHttpTimeOut(),crawler.getCookieStore());
         }else {
-            hc = HttpClientFactory.getHttpClient();
+            hc = HttpClientFactory.getHttpClient(crawlerModel.getHttpTimeOut());
         }
     }
 

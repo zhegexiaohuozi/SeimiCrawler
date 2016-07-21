@@ -71,4 +71,9 @@ public @interface Crawler {
      * Downloader实现类型，默认的Downloader实现为OkHttp3
      */
     SeimiHttpType httpType() default SeimiHttpType.OK_HTTP3;
+
+    /**
+     * 支持自定义超时间，默认15000ms
+     */
+    int httpTimeOut() default 15000;
 }
