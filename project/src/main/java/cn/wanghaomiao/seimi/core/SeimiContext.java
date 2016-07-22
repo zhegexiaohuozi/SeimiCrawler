@@ -117,6 +117,10 @@ public class SeimiContext  extends AnnotationConfigApplicationContext {
     }
     
     private boolean isNeededInit(String crawlerName, String... crawlerNames) {
+    	if (crawlerNames == null && crawlerName.length() == 0) {
+			return true;
+		}
+    	
     	for (String name : crawlerNames) {
 			if (crawlerName.equals(name)) {
 				return true;
