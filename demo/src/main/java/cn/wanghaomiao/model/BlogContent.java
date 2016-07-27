@@ -10,11 +10,22 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @since 2015/10/27.
  */
 public class BlogContent {
+    private Integer id;
+
     @Xpath("//h1[@class='postTitle']/a/text()|//a[@id='cb_post_title_url']/text()")
     private String title;
+
     //也可以这么写 @Xpath("//div[@id='cnblogs_post_body']//text()")
     @Xpath("//div[@id='cnblogs_post_body']/allText()")
     private String content;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
