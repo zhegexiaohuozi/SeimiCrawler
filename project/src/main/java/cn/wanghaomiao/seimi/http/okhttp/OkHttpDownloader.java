@@ -30,6 +30,7 @@ import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -64,6 +65,11 @@ public class OkHttpDownloader implements SeimiDownloader {
         hcBuilder.readTimeout(crawlerModel.getHttpTimeOut(), TimeUnit.MILLISECONDS);
         okHttpClient = hcBuilder.build();
         currentRequestBuilder = OkHttpRequestGenerator.getOkHttpRequesBuilder(request,crawlerModel);
+        if (!CollectionUtils.isEmpty(currentRequest.getHeader())) {
+            for (String headerName : currentRequest.getHeader().keySet()) {
+                currentRequestBuilder.addHeader(headerName, currentRequest.getHeader().get(headerName));
+            }
+        }
         lastResponse = okHttpClient.newCall(currentRequestBuilder.build()).execute();
 
         return renderResponse(lastResponse,request);
