@@ -18,9 +18,11 @@ package cn.wanghaomiao.seimi.http.okhttp;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * okhttp cookie管理
@@ -28,14 +30,14 @@ import java.util.List;
  * @since 2016/6/8.
  */
 public class CookiesManager implements CookieJar {
-    private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+    private final Map<String, List<Cookie>> cookieStore = new ConcurrentHashMap<>();
     @Override
-    public synchronized void saveFromResponse(HttpUrl httpUrl, List<Cookie> cookies) {
+    public void saveFromResponse(HttpUrl httpUrl, List<Cookie> cookies) {
         cookieStore.put(httpUrl.host(),cookies);
     }
 
     @Override
-    public synchronized List<Cookie> loadForRequest(HttpUrl httpUrl) {
+    public List<Cookie> loadForRequest(HttpUrl httpUrl) {
         List<Cookie> cookies = cookieStore.get(httpUrl.host());
         return cookies != null ? cookies : new ArrayList<Cookie>();
     }
