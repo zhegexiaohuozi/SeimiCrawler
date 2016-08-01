@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSON;
 import okhttp3.FormBody;
 import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
 
@@ -52,6 +53,12 @@ public class OkHttpRequestGenerator {
             requestBuilder.header("User-Agent", crawlerModel.isUseCookie() ? crawlerModel.getCurrentUA() : crawler.getUserAgent())
                     .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
                     .header("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
+            //自定义header
+            if (!CollectionUtils.isEmpty(seimiReq.getHeader())) {
+                for (Map.Entry<String,String> entry:seimiReq.getHeader().entrySet()) {
+                    requestBuilder.addHeader(entry.getKey(), entry.getValue());
+                }
+            }
             if (HttpMethod.POST.equals(seimiReq.getHttpMethod())) {
                 FormBody.Builder formBodyBuilder = new FormBody.Builder();
                 if (seimiReq.getParams() != null) {

@@ -60,8 +60,8 @@ public class HcRequestGenerator {
             if (request.getParams() != null && request.getParams().size() > 0) {
                 requestBuilder.addParameter("postParam", JSON.toJSONString(request.getParams()));
             }
-            if (request.getSeimiAgentContentType().val()> SeimiAgentContentType.HTML.val()){
-                requestBuilder.addParameter("contentType",request.getSeimiAgentContentType().typeVal());
+            if (request.getSeimiAgentContentType().val() > SeimiAgentContentType.HTML.val()) {
+                requestBuilder.addParameter("contentType", request.getSeimiAgentContentType().typeVal());
             }
         } else {
             if (HttpMethod.POST.equals(request.getHttpMethod())) {
@@ -81,8 +81,8 @@ public class HcRequestGenerator {
             requestBuilder.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
         }
         if (!CollectionUtils.isEmpty(request.getHeader())) {
-            for (String headerName : request.getHeader().keySet()) {
-                requestBuilder.setHeader(headerName, request.getHeader().get(headerName));
+            for (Map.Entry<String, String> entry : request.getHeader().entrySet()) {
+                requestBuilder.setHeader(entry.getKey(), entry.getValue());
             }
         }
         return requestBuilder;
