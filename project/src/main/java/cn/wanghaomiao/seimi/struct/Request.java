@@ -120,6 +120,10 @@ public class Request extends CommonObject {
      * 针对该请求是否启用SeimiAgent
      */
     private boolean useSeimiAgent = false;
+	/**
+     * 消息头
+     */
+    private Map<String,String> header;
 
     /**
      * 定义SeimiAgent的渲染时间，单位毫秒
@@ -281,6 +285,15 @@ public class Request extends CommonObject {
 
     public Request setSeimiAgentContentType(SeimiAgentContentType seimiAgentContentType) {
         this.seimiAgentContentType = seimiAgentContentType;
+        return this;
+    }
+
+    public Map<String, String> getHeader() {
+        return header;
+    }
+
+    public Request setHeader(Map<String, String> header) {
+        this.header = header;
         return this;
     }
 }

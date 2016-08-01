@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.RequestBuilder;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
 
@@ -78,6 +79,11 @@ public class HcRequestGenerator {
             requestBuilder.setConfig(config).setHeader("User-Agent", crawlerModel.isUseCookie() ? crawlerModel.getCurrentUA() : crawler.getUserAgent());
             requestBuilder.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
             requestBuilder.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
+        }
+        if (!CollectionUtils.isEmpty(request.getHeader())) {
+            for (String headerName : request.getHeader().keySet()) {
+                requestBuilder.setHeader(headerName, request.getHeader().get(headerName));
+            }
         }
         return requestBuilder;
     }
