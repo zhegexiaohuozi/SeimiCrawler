@@ -121,7 +121,7 @@ public class Request extends CommonObject {
      */
     private boolean useSeimiAgent = false;
 	/**
-     * Http请求协议头
+     * 自定义Http请求协议头
      */
     private Map<String,String> header;
 
