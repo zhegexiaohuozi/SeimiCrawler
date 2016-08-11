@@ -16,28 +16,115 @@
 package cn.wanghaomiao.seimi.boot;
 
 import cn.wanghaomiao.seimi.core.Seimi;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.cli.*;
 
 /**
  * @author 汪浩淼 et.tw@163.com
  * @since 2015/12/30.
  */
 public class Run {
-    public static void main(String[] args) {
-        Seimi s = new Seimi();
-        if (ArrayUtils.isNotEmpty(args)) {
-            if (args[0].matches("\\d+")) {
-                int port = Integer.parseInt(args[0]);
-                if (args.length>1){
-                    s.startWithHttpd(port,ArrayUtils.subarray(args,1,args.length));
-                }else {
-                    s.startAllWorkersWithHttpd(port);
-                }
-            }else {
-                s.start(args);
-            }
-        } else {
-            s.startWorkers();
-        }
-    }
+
+	static final Option HTTPD_PORT = new Option("p", "port", true, "Port number of API server");
+	static final Option CRAWLER_NAMES = new Option("c", "crawler_names", true, "which crawler will start interface " +
+			"and split with comma.");
+	static final Option HELP_OPT = new Option("h", "help", false, "Show this help and quit");
+
+	private String[] crawlers;
+	private Integer port;
+
+	public int run(String[] args) {
+		try {
+			parseOptions(args);
+		} catch (IllegalStateException e) {
+			printHelpAndExit(e.getMessage(), getOptions());
+		}
+		return startHttpd();
+	}
+
+	private int startHttpd() {
+		try {
+			Seimi s = new Seimi();
+			if (port != null && crawlers != null) {
+				if (port != null) {
+					if (crawlers.length > 1) {
+						s.startWithHttpd(port, crawlers);
+					} else {
+						s.startAllWorkersWithHttpd(port);
+					}
+				} else {
+					s.start(crawlers);
+				}
+			} else {
+				s.startWorkers();
+			}
+		} catch (Exception e) {
+			return -1;
+		}
+		return 1;
+	}
+
+	private void parseOptions(String[] args) {
+		Options options = getOptions();
+
+		CommandLineParser parser = new PosixParser();
+		CommandLine cmdLine = null;
+		try {
+			cmdLine = parser.parse(options, args);
+		} catch (ParseException e) {
+			printHelpAndExit("Error parsing command line options: " + e.getMessage(), options);
+		}
+
+		if (cmdLine.hasOption(HELP_OPT.getOpt())) {
+			printHelpAndExit(options, 0);
+		}
+
+		if (cmdLine.hasOption(HTTPD_PORT.getOpt())) {
+			String portValue = cmdLine.getOptionValue(HTTPD_PORT.getOpt());
+			if (portValue.matches("\\d+")) {
+				port = Integer.parseInt(portValue);
+			} else {
+				throw new IllegalArgumentException("port must be number: "
+						+ portValue);
+			}
+		}
+
+		if (!cmdLine.getArgList().isEmpty()) {
+			throw new IllegalStateException("Got unexpected extra parameters: "
+					+ cmdLine.getArgList());
+		}
+
+		if (cmdLine.hasOption(CRAWLER_NAMES.getOpt())) {
+			String crawlerNames = cmdLine.getOptionValue(CRAWLER_NAMES.getOpt());
+			crawlers = crawlerNames.split(",");
+		}
+
+	}
+
+	public static void main(String[] args) {
+		int run = new Run().run(args);
+		System.exit(run);
+	}
+
+	private Options getOptions() {
+		Options options = new Options();
+		options.addOption(HTTPD_PORT);
+		options.addOption(CRAWLER_NAMES);
+		options.addOption(HELP_OPT);
+		return options;
+	}
+
+	private void printHelpAndExit(String errorMessage, Options options) {
+		System.err.println(errorMessage);
+		printHelpAndExit(options, 1);
+	}
+
+	private void printHelpAndExit(Options options, int exitCode) {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("help\n" +
+				"If null of crawlers it will be start all crawlers interface.\n" +
+				"If port of httpd is null,it will be just start all crawler with out API server.\n" +
+				"If both of args are null,it will be just start a agent waiting for queue order.", options);
+		System.exit(exitCode);
+	}
+
 }
