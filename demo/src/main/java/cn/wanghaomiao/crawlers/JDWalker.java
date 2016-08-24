@@ -51,7 +51,7 @@ public class JDWalker extends BaseSeimiCrawler {
                 .setSeimiAgentUseCookie(true)
                 .setSeimiAgentRenderTime(6000)
                 .setSeimiAgentContentType(SeimiAgentContentType.HTML)
-                .setSeimiAgentScript("$(\"#loginname\").val(\"guigacpyx\");$(\"#nloginpwd\").val(\"seimi123\");$(\".login-btn>a\").click();");
+                .setSeimiAgentScript("$(\"#loginname\").val(\"guigacpyx\");$(\"#nloginpwd\").val(\"xxxxx\");$(\".login-btn>a\").click();");
         requests.add(request);
         return requests;
     }
