@@ -103,7 +103,7 @@ public class DefaultRedisQueue implements SeimiQueue {
             List<String> res = jedis.brpop(0, quueNamePrefix +crawlerName);
             request = JSON.parseObject(res.get(1),Request.class);
         }catch (Exception e){
-            logger.warn(e.getMessage());
+            logger.warn(e.getMessage(),e);
             refresh();
         }finally {
             if (jedis!=null){
