@@ -104,7 +104,7 @@ public class SeimiProcessor implements Runnable {
                 }
 
                 Response seimiResponse = downloader.process(request);
-                if (BodyType.TEXT.equals(seimiResponse.getBodyType())) {
+                if (StringUtils.isNotBlank(seimiResponse.getContent()) && BodyType.TEXT.equals(seimiResponse.getBodyType())) {
                     Matcher mm = metaRefresh.matcher(seimiResponse.getContent());
                     int refreshCount = 0;
                     while (!request.isUseSeimiAgent() && mm.find() && refreshCount < 3) {
