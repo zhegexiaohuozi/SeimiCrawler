@@ -16,6 +16,7 @@
 package cn.wanghaomiao.seimi.http.hc;
 
 import cn.wanghaomiao.seimi.core.SeimiDownloader;
+import cn.wanghaomiao.seimi.http.SeimiCookie;
 import cn.wanghaomiao.seimi.http.SeimiHttpType;
 import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
@@ -31,10 +32,12 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
@@ -43,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @author 汪浩淼 et.tw@163.com
@@ -70,6 +74,7 @@ public class HcDownloader implements SeimiDownloader {
     public Response process(Request request) throws Exception {
         currentReqBuilder = HcRequestGenerator.getHttpRequestBuilder(request,crawlerModel);
         currentRequest = request;
+        addCookies(request.getUrl(),request.getSeimiCookies());
         httpResponse = hc.execute(currentReqBuilder.build(),httpContext);
         return renderResponse(httpResponse,request,httpContext);
     }
@@ -89,6 +94,20 @@ public class HcDownloader implements SeimiDownloader {
     @Override
     public int statusCode() {
         return httpResponse.getStatusLine().getStatusCode();
+    }
+
+    @Override
+    public void addCookies(String url, List<SeimiCookie> seimiCookies) {
+        if (seimiCookies==null||seimiCookies.size()<=0){
+            return;
+        }
+        CookieStore cookieStore = crawlerModel.getCookieStore();
+        for (SeimiCookie seimiCookie:seimiCookies){
+            BasicClientCookie cookie = new BasicClientCookie(seimiCookie.getName(), seimiCookie.getValue());
+            cookie.setPath(StringUtils.isNotBlank(seimiCookie.getPath())?seimiCookie.getPath():"/");
+            cookie.setDomain(StringUtils.isNotBlank(seimiCookie.getDomain())?seimiCookie.getDomain():StrFormatUtil.getDodmain(url));
+            cookieStore.addCookie(cookie);
+        }
     }
 
     private Response renderResponse(HttpResponse httpResponse, Request request, HttpContext httpContext){

@@ -19,8 +19,10 @@ package cn.wanghaomiao.seimi.struct;
 import cn.wanghaomiao.seimi.annotation.validate.NotNull;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.http.SeimiAgentContentType;
+import cn.wanghaomiao.seimi.http.SeimiCookie;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -144,6 +146,11 @@ public class Request extends CommonObject {
      * 告诉SeimiAgent将结果渲染成何种格式返回，默认HTML
      */
     private SeimiAgentContentType seimiAgentContentType = SeimiAgentContentType.HTML;
+
+    /**
+     * 支持添加自定义cookie
+     */
+    private List<SeimiCookie> seimiCookies;
 
     public void incrReqCount(){
         this.currentReqCount +=1;
@@ -295,5 +302,13 @@ public class Request extends CommonObject {
     public Request setHeader(Map<String, String> header) {
         this.header = header;
         return this;
+    }
+
+    public List<SeimiCookie> getSeimiCookies() {
+        return seimiCookies;
+    }
+
+    public void setSeimiCookies(List<SeimiCookie> seimiCookies) {
+        this.seimiCookies = seimiCookies;
     }
 }

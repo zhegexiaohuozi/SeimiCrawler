@@ -16,6 +16,7 @@
 package cn.wanghaomiao.seimi.http.okhttp;
 
 import cn.wanghaomiao.seimi.core.SeimiDownloader;
+import cn.wanghaomiao.seimi.http.SeimiCookie;
 import cn.wanghaomiao.seimi.http.SeimiHttpType;
 import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
@@ -24,6 +25,7 @@ import cn.wanghaomiao.seimi.struct.Response;
 import cn.wanghaomiao.seimi.utils.StrFormatUtil;
 import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
 import cn.wanghaomiao.xpath.model.JXDocument;
+import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -31,6 +33,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,6 +62,7 @@ public class OkHttpDownloader implements SeimiDownloader {
         OkHttpClient.Builder hcBuilder = OkHttpClientBuilderProvider.getInstance();
         if (crawlerModel.isUseCookie()){
             hcBuilder.cookieJar(crawlerModel.getOkHttpCookiesManager());
+            addCookies(request.getUrl(),request.getSeimiCookies());
         }
         if (crawlerModel.getStdProxy()!=null){
             hcBuilder.proxy(crawlerModel.getStdProxy());
@@ -86,8 +92,26 @@ public class OkHttpDownloader implements SeimiDownloader {
         return lastResponse.code();
     }
 
+    @Override
+    public void addCookies(String url, List<SeimiCookie> seimiCookies) {
+        if (seimiCookies==null||seimiCookies.size()<=0){
+            return;
+        }
+        for (SeimiCookie seimiCookie:seimiCookies){
+            Cookie.Builder cookieBuilder = new  Cookie.Builder();
+            cookieBuilder.name(seimiCookie.getName()).value(seimiCookie.getValue())
+            .path(StringUtils.isNotBlank(seimiCookie.getPath())?seimiCookie.getPath():"/")
+            .domain(StringUtils.isNotBlank(seimiCookie.getDomain())?seimiCookie.getDomain():StrFormatUtil.getDodmain(url));
+            try {
+                crawlerModel.getOkHttpCookiesManager().addCookie(new URI(url),cookieBuilder.build());
+            } catch (URISyntaxException e) {
+                logger.error(e.getMessage(),e);
+            }
+        }
 
-    private Response renderResponse(okhttp3.Response hcResponse,Request request){
+    }
+
+    private Response renderResponse(okhttp3.Response hcResponse, Request request){
         Response seimiResponse = new Response();
         seimiResponse.setSeimiHttpType(SeimiHttpType.OK_HTTP3);
         seimiResponse.setRealUrl(lastResponse.request().url().toString());
