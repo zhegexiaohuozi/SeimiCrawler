@@ -52,9 +52,8 @@ import java.nio.charset.Charset;
 public class HcDownloader implements SeimiDownloader {
     public HcDownloader(CrawlerModel crawlerModel) {
         this.crawlerModel = crawlerModel;
-        BaseSeimiCrawler crawler = crawlerModel.getInstance();
         if (crawlerModel.isUseCookie()){
-            hc = HttpClientFactory.getHttpClient(crawlerModel.getHttpTimeOut(),crawler.getCookieStore());
+            hc = HttpClientFactory.getHttpClient(crawlerModel.getHttpTimeOut(),crawlerModel.getCookieStore());
         }else {
             hc = HttpClientFactory.getHttpClient(crawlerModel.getHttpTimeOut());
         }

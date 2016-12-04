@@ -19,8 +19,6 @@ import cn.wanghaomiao.seimi.core.SeimiCrawler;
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.struct.Request;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.http.client.CookieStore;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +31,6 @@ import java.util.List;
 public abstract class BaseSeimiCrawler implements SeimiCrawler {
 
     protected SeimiQueue queue;
-    protected CookieStore cookieStore = new BasicCookieStore();
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected String crawlerName;
     protected String[] defUAs = new String[]{
@@ -66,12 +63,6 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
         int index = RandomUtils.nextInt(0,defUAs.length);
         return defUAs[index];
     }
-
-    @Override
-    public CookieStore getCookieStore() {
-        return cookieStore;
-    }
-
     @Override
     public String[] allowRules() {
         return null;

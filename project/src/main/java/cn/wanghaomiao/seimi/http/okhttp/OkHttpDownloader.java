@@ -56,7 +56,7 @@ public class OkHttpDownloader implements SeimiDownloader {
         currentRequest = request;
         OkHttpClient.Builder hcBuilder = OkHttpClientBuilderProvider.getInstance();
         if (crawlerModel.isUseCookie()){
-            hcBuilder.cookieJar(CookiesMgrProvider.getInstance());
+            hcBuilder.cookieJar(crawlerModel.getOkHttpCookiesManager());
         }
         if (crawlerModel.getStdProxy()!=null){
             hcBuilder.proxy(crawlerModel.getStdProxy());
