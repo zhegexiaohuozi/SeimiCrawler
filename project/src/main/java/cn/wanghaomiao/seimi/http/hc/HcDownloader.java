@@ -16,7 +16,6 @@
 package cn.wanghaomiao.seimi.http.hc;
 
 import cn.wanghaomiao.seimi.core.SeimiDownloader;
-import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.http.SeimiHttpType;
 import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
