@@ -34,6 +34,11 @@ import java.util.Map;
  * @since 2015/10/16.
  */
 public class Seimi extends SeimiContext {
+	
+	public Seimi(String... crawlerNames) {
+		super(crawlerNames);
+	}
+	
     /**
      * 主启动
      * start master

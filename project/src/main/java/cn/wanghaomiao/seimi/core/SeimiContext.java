@@ -23,6 +23,8 @@ import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.exception.SeimiInitExcepiton;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.utils.StrFormatUtil;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -56,9 +58,9 @@ public class SeimiContext  extends AnnotationConfigApplicationContext {
     protected Map<String,CrawlerModel> crawlerModelContext;
     protected ExecutorService workersPool;
     protected Logger logger = LoggerFactory.getLogger(getClass());
-    public SeimiContext(){
+    public SeimiContext(String... crawlerNames){
         register(ScanConfig.class);
-        init();
+        init(crawlerNames);
         if(!CollectionUtils.isEmpty(crawlers)){
             prepareCrawlerModels();
             workersPool = Executors.newFixedThreadPool(BASE_THREAD_NUM*Runtime.getRuntime().availableProcessors()*crawlers.size());
@@ -68,7 +70,7 @@ public class SeimiContext  extends AnnotationConfigApplicationContext {
         }
     }
 
-    private void init(){
+    private void init(String... crawlerNames){
         String[] targetPkgs = {"crawlers","queues","interceptors","cn.wanghaomiao.seimi"};
         seimiScanner = new SeimiScanner(this);
         Set<Class<?>> aladdin = seimiScanner.scan(targetPkgs, Crawler.class, Queue.class, Interceptor.class);
@@ -81,9 +83,12 @@ public class SeimiContext  extends AnnotationConfigApplicationContext {
         for (Class cls:aladdin){
             if (BaseSeimiCrawler.class.isAssignableFrom(cls)){
                 Crawler c = (Crawler) cls.getAnnotation(Crawler.class);
-                hasUsedQuene.add(c.queue());
-                crawlers.add(cls);
-                registList.add(cls);
+                String crawlerName = StringUtils.isBlank(c.name()) ? cls.getSimpleName() : c.name();
+                if (isNeededInit(crawlerName, crawlerNames)) {
+                	hasUsedQuene.add(c.queue());
+                	crawlers.add(cls);
+                	registList.add(cls);
+				}
             }else if (SeimiInterceptor.class.isAssignableFrom(cls)){
                 registList.add(cls);
             }
@@ -110,6 +115,20 @@ public class SeimiContext  extends AnnotationConfigApplicationContext {
             }
         });
     }
+    
+    private boolean isNeededInit(String crawlerName, String... crawlerNames) {
+    	if (crawlerNames == null && crawlerName.length() == 0) {
+			return true;
+		}
+    	
+    	for (String name : crawlerNames) {
+			if (crawlerName.equals(name)) {
+				return true;
+			}
+		}
+    	return false;
+    }
+    
 
     private void prepareCrawlerModels(){
         for (Class<? extends BaseSeimiCrawler> a:crawlers){
