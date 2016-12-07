@@ -47,7 +47,7 @@ public class Run {
 			Seimi s = new Seimi();
 			if (crawlers != null) {
 				if (port != null) {
-					if (crawlers.length > 1) {
+					if (crawlers.length >= 1) {
 						s.startWithHttpd(port, crawlers);
 					} else {
 						s.startAllWorkersWithHttpd(port);
