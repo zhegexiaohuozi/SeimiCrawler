@@ -37,7 +37,8 @@ public class Seimi extends SeimiContext {
     /**
      * 主启动
      * start master
-     * @param crawlerNames
+     * @param ifBlock 是否要开始等待线程池结束
+     * @param crawlerNames ~~
      */
     public void goRun(boolean ifBlock,String... crawlerNames){
         if (crawlerNames==null||crawlerNames.length==0){
@@ -56,6 +57,10 @@ public class Seimi extends SeimiContext {
         if (ifBlock){
             waitToEnd();
         }
+    }
+
+    public void goRun(String... crawlerNames){
+        goRun(true,crawlerNames);
     }
 
     @Deprecated

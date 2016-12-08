@@ -9,6 +9,6 @@ import cn.wanghaomiao.seimi.core.Seimi;
 public class StartWorkers {
     public static void main(String[] args){
         Seimi s = new Seimi();
-        s.startWorkers();
+        s.goRun();
     }
 }
