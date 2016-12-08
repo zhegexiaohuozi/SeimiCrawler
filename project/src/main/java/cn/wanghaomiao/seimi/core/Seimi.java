@@ -41,7 +41,7 @@ public class Seimi extends SeimiContext {
      */
     public void start(String... crawlerNames){
         if (crawlerNames==null||crawlerNames.length==0){
-            startWorkers();
+            logger.info("start all crawler as workers.");
         }else {
             for (String name:crawlerNames){
                 CrawlerModel crawlerModel = crawlerModelContext.get(name);
@@ -83,13 +83,7 @@ public class Seimi extends SeimiContext {
         for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
             sendRequest(entry.getKey(),entry.getValue().getQueueInstance(),entry.getValue().getInstance());
         }
-    }
-    public void startAllWorkersWithHttpd(int port){
-        startWithHttpd(port);
-    }
-    public void startWorkers(){
-        //初始化Seimi对象时即完成了workers的创建，故这里仅用作引导说明。
-        logger.info("workers started!");
+        waitToEnd();
     }
 
     private void sendRequest(String crawlerName, SeimiQueue queue, BaseSeimiCrawler instance){
