@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -65,6 +66,15 @@ public class SeimiContext  extends AnnotationConfigApplicationContext {
             prepareWorkerThread();
         }else {
             logger.error("can not find any crawlers,please check!");
+        }
+    }
+
+    protected void waitToEnd(){
+        workersPool.shutdown();
+        try {
+            workersPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage(),e);
         }
     }
 

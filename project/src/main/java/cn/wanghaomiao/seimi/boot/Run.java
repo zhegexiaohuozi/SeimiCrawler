@@ -45,19 +45,11 @@ public class Run {
 	private int startHttpd() {
 		try {
 			Seimi s = new Seimi();
-			if (crawlers != null) {
-				if (port != null) {
-					if (crawlers.length > 1) {
-						s.startWithHttpd(port, crawlers);
-					} else {
-						s.startAllWorkersWithHttpd(port);
-					}
-				} else {
-					s.start(crawlers);
-				}
-			} else {
-				s.startWorkers();
-			}
+            if (port != null) {
+                s.goRunWithHttpd(port, crawlers);
+            } else {
+                s.goRun(true,crawlers);
+            }
 		} catch (Exception e) {
 			return -1;
 		}

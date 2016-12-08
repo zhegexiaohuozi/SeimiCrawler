@@ -37,11 +37,12 @@ public class Seimi extends SeimiContext {
     /**
      * 主启动
      * start master
-     * @param crawlerNames
+     * @param ifBlock 是否要开始等待线程池结束
+     * @param crawlerNames ~~
      */
-    public void start(String... crawlerNames){
+    public void goRun(boolean ifBlock,String... crawlerNames){
         if (crawlerNames==null||crawlerNames.length==0){
-            startWorkers();
+            logger.info("start all crawler as workers.");
         }else {
             for (String name:crawlerNames){
                 CrawlerModel crawlerModel = crawlerModelContext.get(name);
@@ -52,13 +53,26 @@ public class Seimi extends SeimiContext {
                 }
             }
         }
+        //是否开始等待线程池结束
+        if (ifBlock){
+            waitToEnd();
+        }
+    }
+
+    public void goRun(String... crawlerNames){
+        goRun(true,crawlerNames);
+    }
+
+    @Deprecated
+    public void start(String ...crawlerNames){
+        goRun(true,crawlerNames);
     }
 
     /**
      * 按名称启动爬虫并开启http服务接口API
      */
-    public void startWithHttpd(int port,String... crawlerNames){
-        start(crawlerNames);
+    public void goRunWithHttpd(int port, String... crawlerNames){
+        goRun(false,crawlerNames);
         SeimiHttpHandler seimiHttpHandler = new SeimiHttpHandler(crawlerModelContext);
         if (crawlerNames==null||crawlerNames.length==0){
             for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
@@ -82,13 +96,7 @@ public class Seimi extends SeimiContext {
         for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
             sendRequest(entry.getKey(),entry.getValue().getQueueInstance(),entry.getValue().getInstance());
         }
-    }
-    public void startAllWorkersWithHttpd(int port){
-        startWithHttpd(port);
-    }
-    public void startWorkers(){
-        //初始化Seimi对象时即完成了workers的创建，故这里仅用作引导说明。
-        logger.info("workers started!");
+        waitToEnd();
     }
 
     private void sendRequest(String crawlerName, SeimiQueue queue, BaseSeimiCrawler instance){

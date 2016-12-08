@@ -20,9 +20,12 @@ import cn.wanghaomiao.seimi.annotation.Crawler;
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.http.SeimiHttpType;
+import cn.wanghaomiao.seimi.http.okhttp.CookiesManager;
 import cn.wanghaomiao.seimi.utils.StrFormatUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
+import org.apache.http.client.CookieStore;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -54,6 +57,8 @@ public class CrawlerModel {
     private int delay = 0;
     private SeimiHttpType seimiHttpType;
     private int httpTimeOut;
+    private CookieStore aphcCookieStore = new BasicCookieStore();
+    private CookiesManager okHttpCookiesManager = new CookiesManager();
     private Logger logger = LoggerFactory.getLogger(CrawlerModel.class);
 
     public CrawlerModel(Class<? extends BaseSeimiCrawler> cls,ApplicationContext applicationContext){
@@ -197,5 +202,13 @@ public class CrawlerModel {
 
     public int getHttpTimeOut() {
         return httpTimeOut;
+    }
+
+    public CookieStore getCookieStore() {
+        return aphcCookieStore;
+    }
+
+    public CookiesManager getOkHttpCookiesManager() {
+        return okHttpCookiesManager;
     }
 }

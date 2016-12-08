@@ -15,8 +15,11 @@
  */
 package cn.wanghaomiao.seimi.core;
 
+import cn.wanghaomiao.seimi.http.SeimiCookie;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
+
+import java.util.List;
 
 /**
  * @author 汪浩淼 et.tw@163.com
@@ -41,5 +44,12 @@ public interface SeimiDownloader {
      * @return http状态码
      */
     int statusCode();
+
+    /**
+     * 添加自定义cookies
+     * @param url 目标地址
+     * @param seimiCookies cookies
+     */
+    void addCookies(String url, List<SeimiCookie> seimiCookies);
 
 }

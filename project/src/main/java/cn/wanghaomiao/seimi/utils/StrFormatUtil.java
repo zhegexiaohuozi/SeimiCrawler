@@ -15,6 +15,7 @@
  */
 package cn.wanghaomiao.seimi.utils;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -48,5 +49,15 @@ public class StrFormatUtil {
             return matcher.group(1);
         }
         return "";
+    }
+
+    public static String getHost(String url){
+        String[] pies = url.split("/");
+        return StringUtils.join(ArrayUtils.subarray(pies,0,3),"/");
+    }
+
+    public static String getDodmain(String url){
+        String[] pies = url.split("/");
+        return StringUtils.substringAfter(pies[2],".");
     }
 }

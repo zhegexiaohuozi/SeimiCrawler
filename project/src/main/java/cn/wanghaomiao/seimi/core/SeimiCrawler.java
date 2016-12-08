@@ -18,7 +18,6 @@ package cn.wanghaomiao.seimi.core;
 
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
-import org.apache.http.client.CookieStore;
 
 import java.util.List;
 
@@ -36,11 +35,6 @@ public interface SeimiCrawler {
      */
     String proxy();
 
-    /**
-     * 如果开启cookies通过此方法获取cookiesStore
-     * @return CookieStore
-     */
-    CookieStore getCookieStore();
     /**
      * 设置起始url
      * @return
