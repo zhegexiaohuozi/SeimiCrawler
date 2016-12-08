@@ -52,13 +52,13 @@ public class Seimi extends SeimiContext {
                 }
             }
         }
+        waitToEnd();
     }
 
     /**
      * 按名称启动爬虫并开启http服务接口API
      */
     public void startWithHttpd(int port,String... crawlerNames){
-        start(crawlerNames);
         SeimiHttpHandler seimiHttpHandler = new SeimiHttpHandler(crawlerModelContext);
         if (crawlerNames==null||crawlerNames.length==0){
             for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
@@ -76,6 +76,7 @@ public class Seimi extends SeimiContext {
         }
         logger.info("Http request push service also started on port:{}",port);
         startJetty(port,seimiHttpHandler);
+        start(crawlerNames);
     }
 
     public void startAll(){
