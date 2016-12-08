@@ -39,7 +39,7 @@ public class Seimi extends SeimiContext {
      * start master
      * @param crawlerNames
      */
-    public void start(String... crawlerNames){
+    public void goRun(boolean ifBlock,String... crawlerNames){
         if (crawlerNames==null||crawlerNames.length==0){
             logger.info("start all crawler as workers.");
         }else {
@@ -52,13 +52,22 @@ public class Seimi extends SeimiContext {
                 }
             }
         }
-        waitToEnd();
+        //是否开始等待线程池结束
+        if (ifBlock){
+            waitToEnd();
+        }
+    }
+
+    @Deprecated
+    public void start(String ...crawlerNames){
+        goRun(true,crawlerNames);
     }
 
     /**
      * 按名称启动爬虫并开启http服务接口API
      */
-    public void startWithHttpd(int port,String... crawlerNames){
+    public void goRunWithHttpd(int port, String... crawlerNames){
+        goRun(false,crawlerNames);
         SeimiHttpHandler seimiHttpHandler = new SeimiHttpHandler(crawlerModelContext);
         if (crawlerNames==null||crawlerNames.length==0){
             for (Map.Entry<String,CrawlerModel> entry:crawlerModelContext.entrySet()){
@@ -76,7 +85,6 @@ public class Seimi extends SeimiContext {
         }
         logger.info("Http request push service also started on port:{}",port);
         startJetty(port,seimiHttpHandler);
-        start(crawlerNames);
     }
 
     public void startAll(){
