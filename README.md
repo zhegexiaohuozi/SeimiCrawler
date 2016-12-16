@@ -19,10 +19,10 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 # 原理示例 #
 ## 基本原理 ##
-![SeimiCrawler原理图](http://77g8ty.com1.z0.glb.clouddn.com/v2_Seimi.png)
+![SeimiCrawler原理图](http://img.wanghaomiao.cn/v2_Seimi.png)
 
 ## 集群原理 ##
-![SeimiCrawler集群原理图](http://77g8ty.com1.z0.glb.clouddn.com/v1_distributed.png)
+![SeimiCrawler集群原理图](http://img.wanghaomiao.cn/v1_distributed.png)
 
 # 快速开始 #
 
