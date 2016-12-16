@@ -1,5 +1,19 @@
 # Change log #
 
+## v1.3.0 ##
+- 支持在`Request`对象中，通过`header`(map)来自定义本次请求的header，以及支持通过`seimiCookies`来自定义cookies，自定义cookies会直接进入cookiesStore，对同域下第二次请求依然有效
+
+- 优化默认启动方式，改造`cn.wanghaomiao.seimi.boot.Run`支持`CommandLineParser`，可以使用 `-c` 和`-p`来传参，其中`-c`用来指定crawlernames，多个用','分隔，`-p`指定一个端口，可以选择性的启动一个内嵌的http服务，并开启使用内嵌http接口
+
+- `maven-seimicrawler-plugin`打包插件升级为1.3.0，完善Linux下的脚本，并增加启动配置文件，可以到[maven-seimicrawler-plugin主页详细查看](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)
+
+- 默认下载器改为Apache Httpclient,备用为下载器OkHttp3实现
+
+- 优化部分代码
+
+- demo日志默认全部输出至控制台
+
+
 ## v1.2.0 ##
 - `OkhttpDownloader`支持处理contentType头中没有指定编码的中文页面
 - 支持通过`@Crawler`注解中的`httpTimeOut`属性自定义http请求的超时时间，默认15000ms
