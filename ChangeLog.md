@@ -5,7 +5,7 @@
 
 - 优化默认启动方式，改造`cn.wanghaomiao.seimi.boot.Run`支持`CommandLineParser`，可以使用 `-c` 和`-p`来传参，其中`-c`用来指定crawlernames，多个用','分隔，`-p`指定一个端口，可以选择性的启动一个内嵌的http服务，并开启使用内嵌http接口
 
-- `maven-compiler-plugin`打包插件升级为1.3.0，完善Linux下的脚本，并增加启动配置文件，可以到[maven-compiler-plugin主页详细查看](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)
+- `maven-compiler-plugin`打包插件升级为1.3.0，完善Linux下的脚本，并增加启动配置文件，可以到[maven-seimicrawler-plugin主页详细查看](https://github.com/zhegexiaohuozi/maven-seimicrawler-plugin)
 
 - 默认下载器改为Apache Httpclient,备用为下载器OkHttp3实现
 
