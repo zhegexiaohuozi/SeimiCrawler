@@ -23,10 +23,17 @@ import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.util.CollectionUtils;
 
+import java.nio.charset.Charset;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,16 +73,24 @@ public class HcRequestGenerator {
         } else {
             if (HttpMethod.POST.equals(request.getHttpMethod())) {
                 requestBuilder = RequestBuilder.post().setUri(request.getUrl());
+                if (request.getParams() != null) {
+                    List<NameValuePair> nameValuePairList = new LinkedList<>();
+                    for (Map.Entry<String, String> entry : request.getParams().entrySet()) {
+                        nameValuePairList.add(new BasicNameValuePair(entry.getKey(),entry.getValue()));
+                    }
+                    requestBuilder.setEntity(new UrlEncodedFormEntity(nameValuePairList, Charset.forName("utf8")));
+                }
             } else {
                 requestBuilder = RequestBuilder.get().setUri(request.getUrl());
+                if (request.getParams() != null) {
+                    for (Map.Entry<String, String> entry : request.getParams().entrySet()) {
+                        requestBuilder.addParameter(entry.getKey(), entry.getValue());
+                    }
+                }
             }
             RequestConfig config = RequestConfig.custom().setProxy(crawlerModel.getProxy()).setCircularRedirectsAllowed(true).build();
 
-            if (request.getParams() != null) {
-                for (Map.Entry<String, String> entry : request.getParams().entrySet()) {
-                    requestBuilder.addParameter(entry.getKey(), entry.getValue());
-                }
-            }
+
             requestBuilder.setConfig(config).setHeader("User-Agent", crawlerModel.isUseCookie() ? crawlerModel.getCurrentUA() : crawler.getUserAgent());
             requestBuilder.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
             requestBuilder.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
