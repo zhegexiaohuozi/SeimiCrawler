@@ -16,13 +16,20 @@
 package cn.wanghaomiao.seimi.utils;
 
 import cn.wanghaomiao.seimi.core.CastToNumber;
+import cn.wanghaomiao.seimi.struct.Request;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -136,5 +143,22 @@ public class GenericUtils {
 
     public static Object castToNumber(Class cls,String val){
         return numberClass.get(cls).castTo(val);
+    }
+
+    public static String sortParams(Map<String,String> params){
+        if (params == null){
+            return "";
+        }
+        JSONObject data = new JSONObject(new LinkedHashMap<String,Object>());
+        List<String> keys = new LinkedList<>(params.keySet());
+        Collections.sort(keys);
+        for (String k :keys){
+            data.put(k,params.get(k));
+        }
+        return data.toJSONString();
+    }
+
+    public static String signRequest(Request request){
+        return DigestUtils.md5Hex(request.getUrl()+sortParams(request.getParams()));
     }
 }

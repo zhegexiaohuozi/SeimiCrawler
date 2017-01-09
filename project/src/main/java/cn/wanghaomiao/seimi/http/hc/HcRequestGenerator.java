@@ -27,7 +27,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.util.CollectionUtils;
 
@@ -50,26 +49,28 @@ public class HcRequestGenerator {
             }
             String seimiAgentUrl = "http://" + crawler.seimiAgentHost() + (crawler.seimiAgentPort() != 80 ? (":" + crawler.seimiAgentPort()) : "") + "/doload";
             requestBuilder = RequestBuilder.post().setUri(seimiAgentUrl);
+            List<NameValuePair> nameValuePairList = new LinkedList<>();
             requestBuilder.addParameter("url", request.getUrl());
             if (StringUtils.isNotBlank(crawler.proxy())) {
-                requestBuilder.addParameter("proxy", crawler.proxy());
+                nameValuePairList.add(new BasicNameValuePair("proxy", crawler.proxy()));
             }
             if (request.getSeimiAgentRenderTime() > 0) {
-                requestBuilder.addParameter("renderTime", String.valueOf(request.getSeimiAgentRenderTime()));
+                nameValuePairList.add(new BasicNameValuePair("renderTime", String.valueOf(request.getSeimiAgentRenderTime())));
             }
             if (StringUtils.isNotBlank(request.getSeimiAgentScript())) {
-                requestBuilder.addParameter("script", request.getSeimiAgentScript());
+                nameValuePairList.add(new BasicNameValuePair("script", request.getSeimiAgentScript()));
             }
             //如果针对SeimiAgent的请求设置是否使用cookie，以针对请求的设置为准，默认使用全局设置
             if ((request.isSeimiAgentUseCookie() == null && crawlerModel.isUseCookie()) || (request.isSeimiAgentUseCookie() != null && request.isSeimiAgentUseCookie())) {
-                requestBuilder.addParameter("useCookie", "1");
+                nameValuePairList.add(new BasicNameValuePair("useCookie", "1"));
             }
             if (request.getParams() != null && request.getParams().size() > 0) {
-                requestBuilder.addParameter("postParam", JSON.toJSONString(request.getParams()));
+                nameValuePairList.add(new BasicNameValuePair("postParam", JSON.toJSONString(request.getParams())));
             }
             if (request.getSeimiAgentContentType().val() > SeimiAgentContentType.HTML.val()) {
-                requestBuilder.addParameter("contentType", request.getSeimiAgentContentType().typeVal());
+                nameValuePairList.add(new BasicNameValuePair("contentType", request.getSeimiAgentContentType().typeVal()));
             }
+            requestBuilder.setEntity(new UrlEncodedFormEntity(nameValuePairList, Charset.forName("utf8")));
         } else {
             if (HttpMethod.POST.equals(request.getHttpMethod())) {
                 requestBuilder = RequestBuilder.post().setUri(request.getUrl());
