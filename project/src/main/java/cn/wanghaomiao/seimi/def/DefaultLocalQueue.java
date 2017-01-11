@@ -18,6 +18,7 @@ package cn.wanghaomiao.seimi.def;
 import cn.wanghaomiao.seimi.annotation.Queue;
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.struct.Request;
+import cn.wanghaomiao.seimi.utils.GenericUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,7 @@ public class DefaultLocalQueue implements SeimiQueue {
     @Override
     public boolean isProcessed(Request req) {
         ConcurrentSkipListSet<String> set = getProcessedSet(req.getCrawlerName());
-        String sign = DigestUtils.md5Hex(req.getUrl());
+        String sign = GenericUtils.signRequest(req);
         return set.contains(sign);
     }
 

@@ -18,6 +18,7 @@ package cn.wanghaomiao.seimi.def;
 import cn.wanghaomiao.seimi.annotation.Queue;
 import cn.wanghaomiao.seimi.core.SeimiQueue;
 import cn.wanghaomiao.seimi.struct.Request;
+import cn.wanghaomiao.seimi.utils.GenericUtils;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -155,7 +156,7 @@ public class DefaultRedisQueue implements SeimiQueue {
         boolean res = false;
         try {
             jedis = getWClient();
-            String sign = DigestUtils.md5Hex(req.getUrl());
+            String sign = GenericUtils.signRequest(req);
             res = jedis.sismember(setNamePrefix +req.getCrawlerName(),sign);
         }catch (Exception e){
             logger.warn(e.getMessage());
