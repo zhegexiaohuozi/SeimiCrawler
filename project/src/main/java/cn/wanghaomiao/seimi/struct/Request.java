@@ -308,7 +308,8 @@ public class Request extends CommonObject {
         return seimiCookies;
     }
 
-    public void setSeimiCookies(List<SeimiCookie> seimiCookies) {
+    public Request setSeimiCookies(List<SeimiCookie> seimiCookies) {
         this.seimiCookies = seimiCookies;
+        return this;
     }
 }
