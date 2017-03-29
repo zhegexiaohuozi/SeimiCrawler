@@ -50,7 +50,7 @@ public class HcRequestGenerator {
             String seimiAgentUrl = "http://" + crawler.seimiAgentHost() + (crawler.seimiAgentPort() != 80 ? (":" + crawler.seimiAgentPort()) : "") + "/doload";
             requestBuilder = RequestBuilder.post().setUri(seimiAgentUrl);
             List<NameValuePair> nameValuePairList = new LinkedList<>();
-            requestBuilder.addParameter("url", request.getUrl());
+            nameValuePairList.add(new BasicNameValuePair("url", request.getUrl()));
             if (StringUtils.isNotBlank(crawler.proxy())) {
                 nameValuePairList.add(new BasicNameValuePair("proxy", crawler.proxy()));
             }
