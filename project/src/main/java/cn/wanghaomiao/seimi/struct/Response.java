@@ -42,7 +42,7 @@ public class Response extends CommonObject {
     /**
      * 这个主要用于存储上游传递的一些自定义数据
      */
-    private Map<String, String> meta;
+    private Map<String, Object> meta;
     private String url;
     private Map<String, String> params;
     /**
@@ -87,11 +87,11 @@ public class Response extends CommonObject {
         this.content = content;
     }
 
-    public Map<String, String> getMeta() {
+    public Map<String, Object> getMeta() {
         return meta;
     }
 
-    public void setMeta(Map<String, String> meta) {
+    public void setMeta(Map<String, Object> meta) {
         this.meta = meta;
     }
 
