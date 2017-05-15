@@ -87,7 +87,7 @@ public class SeimiProcessor implements Runnable {
                     continue;
                 }
                 //如果启用了系统级去重机制并且为首次处理则判断一个Request是否已经被处理过了
-                if (request.getCurrentReqCount() >= request.getMaxReqCount()) {
+                if (request.getCurrentReqCount() >= request.getMaxReqCount()+3) {
                     continue;
                 }
                 if (!request.isSkipDuplicateFilter() && crawlerModel.isUseUnrepeated() && queue.isProcessed(request) && request.getCurrentReqCount() == 0) {
