@@ -250,8 +250,8 @@ public class Request extends CommonObject {
         return this;
     }
 
-    public Request useSeimiAgent(){
-        this.useSeimiAgent = true;
+    public Request setUseSeimiAgent(boolean useSeimiAgent){
+        this.useSeimiAgent = useSeimiAgent;
         return this;
     }
 
@@ -308,7 +308,8 @@ public class Request extends CommonObject {
         return seimiCookies;
     }
 
-    public void setSeimiCookies(List<SeimiCookie> seimiCookies) {
+    public Request setSeimiCookies(List<SeimiCookie> seimiCookies) {
         this.seimiCookies = seimiCookies;
+        return this;
     }
 }

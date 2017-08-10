@@ -86,10 +86,11 @@ public class SeimiProcessor implements Runnable {
                     logger.warn("Request={} will be dropped by denyRules=[{}]", JSON.toJSONString(request), StringUtils.join(crawler.denyRules(), ","));
                     continue;
                 }
-                //如果启用了系统级去重机制并且为首次处理则判断一个Request是否已经被处理过了
-                if (request.getCurrentReqCount() >= request.getMaxReqCount()) {
+                //异常请求重试次数超过最大重试次数三次后，直接放弃处理
+                if (request.getCurrentReqCount() >= request.getMaxReqCount()+3) {
                     continue;
                 }
+                //如果启用了系统级去重机制并且为首次处理则判断一个Request是否已经被处理过了
                 if (!request.isSkipDuplicateFilter() && crawlerModel.isUseUnrepeated() && queue.isProcessed(request) && request.getCurrentReqCount() == 0) {
                     logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
                     continue;

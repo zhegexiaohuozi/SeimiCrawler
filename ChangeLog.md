@@ -1,5 +1,9 @@
 # Change log #
 
+## v1.3.1 ##
+- 中文参数在框架层强制统一进行`utf8`编码的urlEncode，最大程度减少乱码请求
+- Request请求在去重处理时，将区分范围扩大到所设定的请求参数
+
 ## v1.3.0 ##
 - 支持在`Request`对象中，通过`header`(map)来自定义本次请求的header，以及支持通过`seimiCookies`来自定义cookies，自定义cookies会直接进入cookiesStore，对同域下第二次请求依然有效
 
