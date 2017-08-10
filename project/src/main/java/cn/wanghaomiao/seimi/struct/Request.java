@@ -250,8 +250,8 @@ public class Request extends CommonObject {
         return this;
     }
 
-    public Request useSeimiAgent(){
-        this.useSeimiAgent = true;
+    public Request setUseSeimiAgent(boolean useSeimiAgent){
+        this.useSeimiAgent = useSeimiAgent;
         return this;
     }
 
