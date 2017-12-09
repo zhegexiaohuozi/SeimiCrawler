@@ -54,7 +54,7 @@ public class Request extends CommonObject {
     public Request(String url, String callBack,int maxReqCount) {
         this.url = url;
         this.callBack = callBack;
-        this.maxReqCount = this.maxReqCount;
+        this.maxReqCount = maxReqCount;
     }
 
     public static Request build(String url, String callBack, HttpMethod httpMethod, Map<String, String> params, Map<String, String> meta){
