@@ -42,19 +42,19 @@ public class Run {
         return startHttpd();
     }
 
-	private int startHttpd() {
-		try {
-			Seimi s = new Seimi();
+    private int startHttpd() {
+        try {
+            Seimi s = new Seimi();
             if (port != null) {
                 s.goRunWithHttpd(port, crawlers);
             } else {
                 s.goRun(true,crawlers);
             }
-		} catch (Exception e) {
-			return -1;
-		}
-		return 1;
-	}
+        } catch (Exception e) {
+            return -1;
+        }
+        return 1;
+    }
 
     private void parseOptions(String[] args) {
         Options options = getOptions();
