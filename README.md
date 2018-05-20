@@ -1,12 +1,15 @@
 SeimiCrawler
-==========
+============
+[![GitHub release](https://img.shields.io/github/release/zhegexiaohuozi/SeimiCrawler.svg)](https://github.com/zhegexiaohuozi/JsoupXpath/releases)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 An agile,powerful,standalone,distributed crawler framework.
 
-SeimiCrawler的目标是成为Java里最实用的爬虫框架，欢迎大家一起努力。
+SeimiCrawler的目标是成为Java里最实用的爬虫框架，大家一起加油。
 
 # 简介 #
 
-SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫框架，希望能在最大程度上降低新手开发一个可用性高且性能不差的爬虫系统的门槛，以及提升开发爬虫系统的开发效率。在SeimiCrawler的世界里，绝大多数人只需关心去写抓取的业务逻辑就够了，其余的Seimi帮你搞定。设计思想上SeimiCrawler受Python的爬虫框架Scrapy启发很大，同时融合了Java语言本身特点与Spring的特性，并希望在国内更方便且普遍的使用更有效率的XPath解析HTML，所以SeimiCrawler默认的HTML解析器是[JsoupXpath](http://jsoupxpath.wanghaomiao.cn)(独立扩展项目，非jsoup自带),默认解析提取HTML数据工作均使用XPath来完成（当然，数据处理亦可以自行选择其他解析器）。
+SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫框架，希望能在最大程度上降低新手开发一个可用性高且性能不差的爬虫系统的门槛，以及提升开发爬虫系统的开发效率。在SeimiCrawler的世界里，绝大多数人只需关心去写抓取的业务逻辑就够了，其余的Seimi帮你搞定。设计思想上SeimiCrawler受Python的爬虫框架Scrapy启发，同时融合了Java语言本身特点与Spring的特性，并希望在国内更方便且普遍的使用更有效率的XPath解析HTML，所以SeimiCrawler默认的HTML解析器是[JsoupXpath](http://jsoupxpath.wanghaomiao.cn)(独立扩展项目，非jsoup自带),默认解析提取HTML数据工作均使用XPath来完成（当然，数据处理亦可以自行选择其他解析器）。并结合[SeimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)彻底完美解决复杂动态页面渲染抓取问题。
 
 # 号外 #
 - 2016.04.14
@@ -19,19 +22,19 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 # 原理示例 #
 ## 基本原理 ##
-![SeimiCrawler原理图](http://77g8ty.com1.z0.glb.clouddn.com/v2_Seimi.png)
+![SeimiCrawler原理图](http://img.wanghaomiao.cn/v2_Seimi.png)
 
 ## 集群原理 ##
-![SeimiCrawler集群原理图](http://77g8ty.com1.z0.glb.clouddn.com/v1_distributed.png)
+![SeimiCrawler集群原理图](http://img.wanghaomiao.cn/v1_distributed.png)
 
 # 快速开始 #
 
-添加maven依赖(中央maven库最新版本0.3.2)：
+添加maven依赖(中央maven库最新版本1.3.5)：
 ```
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>0.3.2</version>
+    <version>1.3.5</version>
 </dependency>
 ```
 
@@ -86,7 +89,7 @@ pom中添加添加plugin
 <plugin>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>maven-seimicrawler-plugin</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <executions>
         <execution>
             <phase>package</phase>
@@ -142,60 +145,7 @@ pom中添加添加plugin
 
 # Change log #
 
-## v1.0.0 ##
-- http请求处理器重构，并默认改由`okhttp3`实现，且支持通过`@Crawler`注解中的`httpType`自由切换为apache httpclient
-- 部分代码优化
-- 支持通过[seimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)获取页面快照（png/pdf）
-
-> 这一版是SeimiCrawler比较重大的一次更新，伴之而来的亦是更强悍的抓取体验。
-
-## v0.3.2 ##
-- 优化分布式模式下与redis的连接,增强分布式可靠性
-- bug fix
-
-## v0.3.0 ##
-- 内置支持[SeimiAgent](https://github.com/zhegexiaohuozi/SeimiAgent)，完美解决动态页面渲染抓取问题
-- 修复自动跳转在某些情况存在的bug
-
-## v0.2.7 ##
-- 内嵌http接口在可以接收单个Json形式Request基础上增加支持接收Json数组形式的多个Request
-- `Request`对象支持设置`skipDuplicateFilter`用来告诉seimi处理器跳过去重机制，默认不跳过
-- 增加定时调度使用Demo
-- 回调函数通过Request传递自定义参数值类型由Object改为String，方便明确处理
-- Fix:修复一个打日志的bug
-
-## v0.2.6 ##
-- 增加统一的启动入口类，配合未来SeimiCrawler的maven构建plugin一起使用
-- meta refresh方式跳转优化，设置最多上限为3次，防止遇到持续刷新页面无法跳出
-- bug fix:修复在Request中自定义数据无法传向Response的问题
-
-## v0.2.5 ##
-- 增加请求遭遇严重异常时重新打回队列处理机制
-当一个请求在经历网络请求异常的重试机制后依然出现非预期异常，那么这个请求会在不超过开发者设置的或是默认的最大重新处理次数的情况下被打回队列重新等待被处理，如果被打回次数达到了最大限制，那么seimi会调用开发者自行覆盖实现的`BaseSeimiCrawler.handleErrorRequest(Request request)`来处理记录这个异常的请求。重新打回等待处理机制配合delay功能使用可以在很大程度上避免因访问站点的反爬虫策略引起的请求处理异常，并丢失请求的记录的情况。
-- 优化去重判断
-- 优化不规范页面的编码获取方式
-
-## v0.2.4 ##
-- 自动跳转增强，除301,302外增加支持识别通过meta refresh方式的页面跳转
-- `Response`对象增加通过`getRealUrl()`获取内容对应重定向以及跳转后的真实连接
-- 通过注解@Crawler中'useUnrepeated'属性控制是否启用系统级去重机制，默认开启
-
-## v0.2.3 ##
-- 支持自定义动态代理
-开发者可以通过覆盖`BaseSeimiCrawler.proxy()`来自行决定每次请求所使用的代理，覆盖该方法并返回有效代理地址则`@Crawler`中`proxy`属性失效。
-- 添加动态代理，动态User-Agent使用demo
-
-## v0.2.2 ##
-- 增强对不规范网页的编码识别与兼容能力
-
-## v0.2.1 ##
-- 优化黑白名单正则过滤机制
-
-## v0.2.0 ##
-- 增加支持内嵌http服务API提交json格式的Request请求
-- 增加针对请求URL进行校验的`allowRules`和`denyRules`的自定义设置，即白名单规则和黑名单规则，格式均为正则表达式。默认为null不进行检查
-- 增加对Request的合法性的统一校验
-- 增加支持请求间的delay时间设置
+请参阅 [ChangeLog.md](https://github.com/zhegexiaohuozi/SeimiCrawler/blob/master/ChangeLog.md)
 
 # 项目源码 #
 [Github](https://github.com/zhegexiaohuozi/SeimiCrawler)
