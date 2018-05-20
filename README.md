@@ -1,5 +1,8 @@
 SeimiCrawler
-==========
+============
+[![GitHub release](https://img.shields.io/github/release/zhegexiaohuozi/SeimiCrawler.svg)](https://github.com/zhegexiaohuozi/JsoupXpath/releases)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 An agile,powerful,standalone,distributed crawler framework.
 
 SeimiCrawler的目标是成为Java里最实用的爬虫框架，大家一起加油。
