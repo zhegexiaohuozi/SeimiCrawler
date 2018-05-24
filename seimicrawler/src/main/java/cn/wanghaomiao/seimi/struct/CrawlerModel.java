@@ -22,6 +22,7 @@ import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.http.SeimiHttpType;
 import cn.wanghaomiao.seimi.http.okhttp.CookiesManager;
+import cn.wanghaomiao.seimi.utils.GenericUtils;
 import cn.wanghaomiao.seimi.utils.StrFormatUtil;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,7 +45,7 @@ import java.util.Map;
 
 /**
  * @author github.com/zhegexiaohuozi seimimaster@gmail.com
- *         Date: 2015/7/17.
+ * Date: 2015/7/17.
  */
 public class CrawlerModel {
     private ApplicationContext context;
@@ -52,7 +53,8 @@ public class CrawlerModel {
     private Class<? extends BaseSeimiCrawler> clazz;
     private SeimiQueue queueInstance;
     private Class<? extends SeimiQueue> queueClass;
-    private Map<String,Method> memberMethods;
+    private Map<String, Method> memberMethods;
+    private Map<Integer, String> referenceToMethod = new HashMap<>();
     private String crawlerName;
     private HttpHost proxy;
     private boolean useCookie = false;
@@ -65,7 +67,7 @@ public class CrawlerModel {
     private CookiesManager okHttpCookiesManager = new CookiesManager();
     private Logger logger = LoggerFactory.getLogger(CrawlerModel.class);
 
-    public CrawlerModel(Class<? extends BaseSeimiCrawler> cls,ApplicationContext applicationContext){
+    public CrawlerModel(Class<? extends BaseSeimiCrawler> cls, ApplicationContext applicationContext) {
         super();
         this.context = applicationContext;
         this.clazz = cls;
@@ -73,15 +75,15 @@ public class CrawlerModel {
         init();
     }
 
-    private void init(){
+    private void init() {
         Crawler c = clazz.getAnnotation(Crawler.class);
-        Assert.notNull(c, StrFormatUtil.info("crawler {} lost annotation @cn.wanghaomiao.seimi.annotation.Crawler!",clazz.getName()));
+        Assert.notNull(c, StrFormatUtil.info("crawler {} lost annotation @cn.wanghaomiao.seimi.annotation.Crawler!", clazz.getName()));
         this.queueClass = c.queue();
         this.queueInstance = context.getBean(queueClass);
         Assert.notNull(queueInstance, StrFormatUtil.info("can not get {} instance,please check scan path", queueClass));
         memberMethods = new HashMap<>();
-        ReflectionUtils.doWithMethods(clazz, method -> memberMethods.put(method.getName(),method));
-        this.crawlerName = StringUtils.isNoneBlank(c.name())?c.name():clazz.getSimpleName();
+        ReflectionUtils.doWithMethods(clazz, method -> memberMethods.put(method.getName(), method));
+        this.crawlerName = StringUtils.isNoneBlank(c.name()) ? c.name() : clazz.getSimpleName();
         instance.setCrawlerName(this.crawlerName);
         resolveProxy(c.proxy());
         this.useCookie = c.useCookie();
@@ -93,44 +95,44 @@ public class CrawlerModel {
         logger.info("Crawler[{}] init complete.", crawlerName);
     }
 
-    private HttpHost resolveProxy(String proxyStr){
+    private HttpHost resolveProxy(String proxyStr) {
         HttpHost r = null;
-        if (StringUtils.isBlank(proxyStr)){
+        if (StringUtils.isBlank(proxyStr)) {
             return null;
         }
-        if (proxyStr.matches("(http|https|socket)://([0-9a-zA-Z]+\\.?)+:\\d+")){
+        if (proxyStr.matches("(http|https|socket)://([0-9a-zA-Z]+\\.?)+:\\d+")) {
             String[] pies = proxyStr.split(":");
             String scheme = pies[0];
             int port = Integer.parseInt(pies[2]);
             String host = pies[1].substring(2);
-            if (scheme.equals("socket")){
-                r = new HttpHost(host,port);
-            }else {
-                r = new HttpHost(host,port,scheme);
+            if (scheme.equals("socket")) {
+                r = new HttpHost(host, port);
+            } else {
+                r = new HttpHost(host, port, scheme);
             }
-        }else {
+        } else {
             logger.error("proxy must like ‘http|https|socket://host:port’");
         }
         proxy = r;
         return r;
     }
 
-    private Proxy getStdProxy(String proxyStr){
+    private Proxy getStdProxy(String proxyStr) {
         Proxy proxy = null;
-        if (StringUtils.isBlank(proxyStr)){
+        if (StringUtils.isBlank(proxyStr)) {
             return null;
         }
-        if (proxyStr.matches("(http|https|socket)://([0-9a-zA-Z]+\\.?)+:\\d+")){
+        if (proxyStr.matches("(http|https|socket)://([0-9a-zA-Z]+\\.?)+:\\d+")) {
             String[] pies = proxyStr.split(":");
             String scheme = pies[0];
             int port = Integer.parseInt(pies[2]);
             String host = pies[1].substring(2);
-            if (scheme.equals("socket")){
-                proxy = new Proxy(Proxy.Type.SOCKS,new InetSocketAddress(host,port));
-            }else {
-                proxy = new Proxy(Proxy.Type.HTTP,new InetSocketAddress(host,port));
+            if (scheme.equals("socket")) {
+                proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(host, port));
+            } else {
+                proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, port));
             }
-        }else {
+        } else {
             logger.error("proxy must like ‘http|https|socket://host:port’");
         }
         return proxy;
@@ -161,14 +163,14 @@ public class CrawlerModel {
     }
 
     public HttpHost getProxy() {
-        if (StringUtils.isNotBlank(instance.proxy())){
+        if (StringUtils.isNotBlank(instance.proxy())) {
             return resolveProxy(instance.proxy());
         }
         return proxy;
     }
 
-    public Proxy getStdProxy(){
-        if (StringUtils.isNotBlank(instance.proxy())){
+    public Proxy getStdProxy() {
+        if (StringUtils.isNotBlank(instance.proxy())) {
             return getStdProxy(instance.proxy());
         }
         return null;
@@ -244,15 +246,29 @@ public class CrawlerModel {
         }
     }
 
-    public void sendRequest(Request request){
+    public void sendRequest(Request request) {
         request.setCrawlerName(crawlerName);
+        if (request.isLambdaCb()) {
+            request.setCallBack(getMethodName(request.getCallBackFunc()));
+        }
         queueInstance.push(request);
     }
 
-    public String queueInfo(){
-        Map<String,Object> data = new HashMap<>();
-        data.put("currentLen",queueInstance.len(getCrawlerName()));
-        data.put("total",queueInstance.totalCrawled(getCrawlerName()));
+    public String queueInfo() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("currentLen", queueInstance.len(getCrawlerName()));
+        data.put("total", queueInstance.totalCrawled(getCrawlerName()));
         return JSON.toJSONString(data);
+    }
+
+    public String getMethodName(Request.SeimiCallbackFunc methodRef) {
+        String methodName = referenceToMethod.get(methodRef.hashCode());
+        if (StringUtils.isNotBlank(methodName)) {
+            return methodName;
+        }
+        Method method = GenericUtils.getReferencedMethod(clazz, methodRef);
+        methodName = method.getName();
+        referenceToMethod.put(methodRef.hashCode(), methodName);
+        return methodName;
     }
 }
