@@ -17,6 +17,7 @@ package cn.wanghaomiao.seimi.struct;
 
 
 import cn.wanghaomiao.seimi.annotation.validate.NotNull;
+import cn.wanghaomiao.seimi.core.SeimiCrawler;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.http.SeimiAgentContentType;
 import cn.wanghaomiao.seimi.http.SeimiCookie;
@@ -32,7 +33,13 @@ import java.util.Map;
  *         Date:  14-7-7.
  */
 public class Request extends CommonObject {
-    public Request(String url, String callBack,SeimiCallbackFunc<Response> cbFunc, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta,int maxReqCount) {
+
+    @FunctionalInterface
+    public static interface SeimiCallbackFunc<T,A1>{
+        void call(T t, A1 a1);
+    }
+
+    public <T,A1> Request(String url, String callBack, SeimiCallbackFunc<T,A1> cbFunc, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta, int maxReqCount) {
         this.url = url;
         this.httpMethod = httpMethod;
         this.params = params;
@@ -50,14 +57,14 @@ public class Request extends CommonObject {
         this.callBack = callBack;
     }
 
-    public Request(String url,SeimiCallbackFunc<Response> callBackFunc){
+    public <T,A1> Request(String url,SeimiCallbackFunc<T,A1> callBackFunc){
         this.url = url;
         this.callBackFunc = callBackFunc;
         this.lambdaCb = true;
     }
 
 
-    public static Request build(String url, String callBack,SeimiCallbackFunc<Response> callBackFunc, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta,int maxReqcount){
+    public static <T,A1> Request build(String url, String callBack,SeimiCallbackFunc<T,A1> callBackFunc, HttpMethod httpMethod, Map<String, String> params, Map<String, Object> meta,int maxReqcount){
         return new Request(url, callBack,callBackFunc, httpMethod, params, meta, maxReqcount);
     }
 
@@ -69,8 +76,8 @@ public class Request extends CommonObject {
         return new Request(url, callBack,null,null,null,null,1);
     }
 
-    public static Request build(String url, SeimiCallbackFunc<Response> callBackFunc){
-        return new Request(url, null,callBackFunc,null,null,null,1);
+    public static <T ,A1> Request build(String url, SeimiCallbackFunc<T,A1> callBackFunc){
+        return new Request(url, null, callBackFunc,null,null,null,1);
     }
 
     public static Request build(String url, String callBack, int maxReqCount){
@@ -109,11 +116,11 @@ public class Request extends CommonObject {
     /**
      * 回调函数是否为Lambda表达式
      */
-    private boolean lambdaCb = false;
+    private transient boolean lambdaCb = false;
     /**
      * 回调函数
      */
-    private SeimiCallbackFunc<Response> callBackFunc;
+    private transient SeimiCallbackFunc callBackFunc;
     /**
      * 是否停止的信号，收到该信号的处理线程会退出
      */
@@ -220,7 +227,7 @@ public class Request extends CommonObject {
         return this;
     }
 
-    public Request setCallBack(SeimiCallbackFunc<Response> cbFunc) {
+    public Request setCallBack(SeimiCallbackFunc<SeimiCrawler, Response> cbFunc) {
         this.callBackFunc = cbFunc;
         this.lambdaCb = true;
         return this;
@@ -339,7 +346,7 @@ public class Request extends CommonObject {
         return this;
     }
 
-    public SeimiCallbackFunc<Response> getCallBackFunc() {
+    public SeimiCallbackFunc getCallBackFunc() {
         return callBackFunc;
     }
 

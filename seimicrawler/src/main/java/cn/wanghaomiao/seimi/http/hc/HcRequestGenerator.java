@@ -15,10 +15,12 @@
  */
 package cn.wanghaomiao.seimi.http.hc;
 
+import cn.wanghaomiao.seimi.config.SeimiConfig;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.exception.SeimiProcessExcepiton;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.http.SeimiAgentContentType;
+import cn.wanghaomiao.seimi.spring.common.CrawlerCache;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import com.alibaba.fastjson.JSON;
@@ -44,10 +46,11 @@ public class HcRequestGenerator {
         RequestBuilder requestBuilder;
         BaseSeimiCrawler crawler = crawlerModel.getInstance();
         if (request.isUseSeimiAgent()) {
-            if (StringUtils.isBlank(crawler.seimiAgentHost())) {
+            SeimiConfig config = CrawlerCache.getConfig();
+            if (config == null||StringUtils.isBlank(config.getSeimiAgentHost())) {
                 throw new SeimiProcessExcepiton("SeimiAgentHost is blank.");
             }
-            String seimiAgentUrl = "http://" + crawler.seimiAgentHost() + (crawler.seimiAgentPort() != 80 ? (":" + crawler.seimiAgentPort()) : "") + "/doload";
+            String seimiAgentUrl = "http://" + config.getSeimiAgentHost() + (config.getSeimiAgentPort() != 80 ? (":" + config.getSeimiAgentPort()) : "") + "/doload";
             requestBuilder = RequestBuilder.post().setUri(seimiAgentUrl);
             List<NameValuePair> nameValuePairList = new LinkedList<>();
             nameValuePairList.add(new BasicNameValuePair("url", request.getUrl()));

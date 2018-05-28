@@ -1,9 +1,11 @@
 package cn.wanghaomiao.seimi.http.okhttp;
 
+import cn.wanghaomiao.seimi.config.SeimiConfig;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.exception.SeimiProcessExcepiton;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.http.SeimiAgentContentType;
+import cn.wanghaomiao.seimi.spring.common.CrawlerCache;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import com.alibaba.fastjson.JSON;
 import okhttp3.FormBody;
@@ -22,10 +24,11 @@ public class OkHttpRequestGenerator {
         BaseSeimiCrawler crawler = crawlerModel.getInstance();
         Request.Builder requestBuilder = new Request.Builder();
         if (seimiReq.isUseSeimiAgent()){
-            if (StringUtils.isBlank(crawler.seimiAgentHost())) {
+            SeimiConfig config = CrawlerCache.getConfig();
+            if (config==null||StringUtils.isBlank(config.getSeimiAgentHost())) {
                 throw new SeimiProcessExcepiton("SeimiAgentHost is blank.");
             }
-            String seimiAgentUrl = "http://" + crawler.seimiAgentHost() + (crawler.seimiAgentPort() != 80 ? (":" + crawler.seimiAgentPort()) : "") + "/doload";
+            String seimiAgentUrl = "http://" + config.getSeimiAgentHost() + (config.getSeimiAgentPort() != 80 ? (":" + config.getSeimiAgentPort()) : "") + "/doload";
             FormBody.Builder formBodyBuilder = new FormBody.Builder()
                     .add("url", seimiReq.getUrl());
             if (StringUtils.isNotBlank(crawler.proxy())){

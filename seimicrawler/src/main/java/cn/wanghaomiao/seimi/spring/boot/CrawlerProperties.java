@@ -16,6 +16,15 @@ public class CrawlerProperties implements Serializable {
     private boolean enableRedissonQueue;
     private long bloomFilterExpectedInsertions;
     private double bloomFilterFalseProbability;
+    /**
+     * SeimiAgent host address,such as seimi.wanghaomiao.cn or 10.10.121.211
+     */
+    private String seimiAgentHost;
+
+    /**
+     * seimiAgent listening port
+     */
+    private int seimiAgentPort;
 
     public boolean isEnabled() {
         return enabled;
@@ -55,6 +64,22 @@ public class CrawlerProperties implements Serializable {
 
     public void setBloomFilterFalseProbability(double bloomFilterFalseProbability) {
         this.bloomFilterFalseProbability = bloomFilterFalseProbability;
+    }
+
+    public String getSeimiAgentHost() {
+        return seimiAgentHost;
+    }
+
+    public void setSeimiAgentHost(String seimiAgentHost) {
+        this.seimiAgentHost = seimiAgentHost;
+    }
+
+    public int getSeimiAgentPort() {
+        return seimiAgentPort;
+    }
+
+    public void setSeimiAgentPort(int seimiAgentPort) {
+        this.seimiAgentPort = seimiAgentPort;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class UseCookie extends BaseSeimiCrawler {
     @Override
     public List<Request> startRequests() {
         List<Request> requests = new LinkedList<>();
-        Request start = Request.build("https://www.oschina.net/action/user/hash_login",this::start);
+        Request start = Request.build("https://www.oschina.net/action/user/hash_login",UseCookie::start);
         Map<String,String> params = new HashMap<>();
         params.put("email","xxx@xx.com");
         params.put("pwd","xxxxxxxxxxxxxxxxxxx");
@@ -45,7 +45,7 @@ public class UseCookie extends BaseSeimiCrawler {
     @Override
     public void start(Response response) {
         logger.info(response.getContent());
-        push(Request.build("http://www.oschina.net/home/go?page=blog",this::minePage));
+        push(Request.build("http://www.oschina.net/home/go?page=blog",UseCookie::minePage));
     }
 
     public void minePage(Response response){

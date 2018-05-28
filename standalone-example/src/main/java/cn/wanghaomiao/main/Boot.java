@@ -1,5 +1,6 @@
 package cn.wanghaomiao.main;
 
+import cn.wanghaomiao.seimi.config.SeimiConfig;
 import cn.wanghaomiao.seimi.core.Seimi;
 
 /**
@@ -8,7 +9,11 @@ import cn.wanghaomiao.seimi.core.Seimi;
  */
 public class Boot {
     public static void main(String[] args){
-        Seimi s = new Seimi();
+        SeimiConfig config = new SeimiConfig();
+        config.setSeimiAgentHost("127.0.0.1");
+//        config.redisSingleServer().setAddress("redis://127.0.0.1:6379");
+
+        Seimi s = new Seimi(config);
         s.goRun("basic");
     }
 }

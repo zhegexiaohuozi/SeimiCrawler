@@ -24,7 +24,6 @@ import cn.wanghaomiao.seimi.struct.BodyType;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
-import cn.wanghaomiao.seimi.struct.SeimiCallbackFunc;
 import cn.wanghaomiao.seimi.utils.StructValidator;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
@@ -167,7 +166,7 @@ public class SeimiProcessor implements Runnable {
     }
 
     private void doLambdaCallback(Request request, Response seimiResponse) throws Exception {
-        SeimiCallbackFunc<Response> requestCallback = request.getCallBackFunc();
+        Request.SeimiCallbackFunc<SeimiCrawler,Response> requestCallback = request.getCallBackFunc();
         if (requestCallback == null) {
             logger.info("can not find callback function");
             return;
@@ -181,7 +180,7 @@ public class SeimiProcessor implements Runnable {
         if (crawlerModel.getDelay() > 0) {
             TimeUnit.SECONDS.sleep(crawlerModel.getDelay());
         }
-        requestCallback.accept(seimiResponse);
+        requestCallback.call(crawler,seimiResponse);
         for (SeimiInterceptor interceptor : interceptors) {
             Interceptor interAnno = interceptor.getClass().getAnnotation(Interceptor.class);
             if (interAnno.everyMethod() ) {

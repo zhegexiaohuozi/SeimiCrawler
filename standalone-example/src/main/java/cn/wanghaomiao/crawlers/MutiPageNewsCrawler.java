@@ -36,7 +36,7 @@ public class MutiPageNewsCrawler extends BaseSeimiCrawler {
             String nextPage = StringUtils.join(document.sel("//div[@class='page1']/a[text()*='下一页']/@href"), "");
             if (nextPage.matches(".*thread_\\d+.*")) {
                 //用这一个回调函数就够了
-                Request req = Request.build(urlPrefix + nextPage, this::start);
+                Request req = Request.build(urlPrefix + nextPage, MutiPageNewsCrawler::start);
                 logger.info("nextPage={}", req.getUrl());
                 //用来向下游回调函数传送数据
                 req.setMeta(meta);

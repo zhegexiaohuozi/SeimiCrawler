@@ -42,7 +42,7 @@ public class DynamicUserAgent extends BaseSeimiCrawler {
             List<Object> urls = doc.sel("//a[@class='titlelnk']/@href");
             logger.info("{}", urls.size());
             for (Object s:urls){
-                push(Request.build(s.toString(),this::getTitle));
+                push(Request.build(s.toString(),DynamicUserAgent::getTitle));
             }
         } catch (Exception e) {
             e.printStackTrace();

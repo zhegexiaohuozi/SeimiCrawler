@@ -1,4 +1,4 @@
-# Change log #
+# Change  log #
 
 ## v1.3.1 ##
 - 中文参数在框架层强制统一进行`utf8`编码的urlEncode，最大程度减少乱码请求

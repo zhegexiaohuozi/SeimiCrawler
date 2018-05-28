@@ -15,6 +15,7 @@
  */
 package cn.wanghaomiao.seimi.core;
 
+import cn.wanghaomiao.seimi.config.SeimiConfig;
 import cn.wanghaomiao.seimi.httpd.CrawlerStatusHttpProcessor;
 import cn.wanghaomiao.seimi.httpd.PushRequestHttpProcessor;
 import cn.wanghaomiao.seimi.httpd.SeimiHttpHandler;
@@ -33,6 +34,16 @@ import java.util.Map;
 public class Seimi {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    private SeimiConfig config;
+
+    public Seimi(SeimiConfig config) {
+        this.config = config;
+    }
+
+    public Seimi(){
+        this.config = null;
+    }
+
     /**
      * 主启动
      * start master
@@ -44,7 +55,7 @@ public class Seimi {
         if (crawlerNames == null || crawlerNames.length == 0) {
             logger.info("start all crawler as workers.");
         } else {
-            SeimiContext.init();
+            SeimiContext.init(config);
             for (String name : crawlerNames) {
                 CrawlerModel crawlerModel = CrawlerCache.getCrawlerModel(name);
                 if (crawlerModel != null) {
@@ -95,7 +106,7 @@ public class Seimi {
     }
 
     public void startAll() {
-        SeimiContext.init();
+        SeimiContext.init(config);
         for (Map.Entry<String, CrawlerModel> entry : CrawlerCache.getCrawlerModelContext().entrySet()) {
             entry.getValue().startRequest();
         }

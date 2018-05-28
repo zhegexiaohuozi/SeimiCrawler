@@ -5,11 +5,10 @@ import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.http.SeimiAgentContentType;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
-import org.seimicrawler.xpath.exception.XpathSyntaxErrorException;
+import org.apache.commons.lang3.StringUtils;
 import org.seimicrawler.xpath.JXDocument;
 import org.seimicrawler.xpath.JXNode;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.seimicrawler.xpath.exception.XpathSyntaxErrorException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,22 +21,6 @@ import java.util.List;
 @Crawler(name = "jdWalker",httpTimeOut = 30000)
 public class JDWalker extends BaseSeimiCrawler {
 
-    @Value("${seimiAgentHost}")
-    private String seimiAgentHost;
-
-    @Value("${seimiAgentPort}")
-    private int seimiAgentPort;
-
-    @Override
-    public String seimiAgentHost() {
-        return this.seimiAgentHost;
-    }
-
-    @Override
-    public int seimiAgentPort() {
-        return this.seimiAgentPort;
-    }
-
     @Override
     public String[] startUrls() {
         return null;
@@ -46,7 +29,7 @@ public class JDWalker extends BaseSeimiCrawler {
     @Override
     public List<Request> startRequests() {
         List<Request> requests = new LinkedList<>();
-        Request request = Request.build("https://passport.jd.com/uc/login",this::start)
+        Request request = Request.build("https://passport.jd.com/uc/login",JDWalker::start)
                 .useSeimiAgent()
                 .setSeimiAgentUseCookie(true)
                 .setSeimiAgentRenderTime(6000)
@@ -60,7 +43,7 @@ public class JDWalker extends BaseSeimiCrawler {
         JXDocument document = response.document();
         try {
             logger.info("login head name = {}", StringUtils.join(document.sel("//li[@id='ttbar-login']/a/text()"),""));
-            Request request = Request.build("https://media.jd.com/gotoadv/goods",this::getProductList)
+            Request request = Request.build("https://media.jd.com/gotoadv/goods",JDWalker::getProductList)
                     .useSeimiAgent()
                     .setSeimiAgentUseCookie(true)
                     .setSeimiAgentRenderTime(5000)

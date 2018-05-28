@@ -1,8 +1,6 @@
 package cn.wanghaomiao.crawlers;
 
-import cn.wanghaomiao.seimi.annotation.Crawler;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
-import cn.wanghaomiao.seimi.def.DefaultRedisQueue;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
 import org.seimicrawler.xpath.JXDocument;
@@ -29,7 +27,7 @@ public class DefaultRedisQueueEG extends BaseSeimiCrawler {
             List<Object> urls = doc.sel("//a[@class='titlelnk']/@href");
             logger.info("{}", urls.size());
             for (Object s:urls){
-                push(Request.build(s.toString(),this::getTitle));
+                push(Request.build(s.toString(),DefaultRedisQueueEG::getTitle));
             }
         } catch (Exception e) {
             e.printStackTrace();
