@@ -85,16 +85,6 @@ public abstract class BaseSeimiCrawler implements SeimiCrawler {
     }
 
     @Override
-    public String seimiAgentHost() {
-        return null;
-    }
-
-    @Override
-    public int seimiAgentPort() {
-        return 80;
-    }
-
-    @Override
     public List<Request> startRequests() {
         return null;
     }

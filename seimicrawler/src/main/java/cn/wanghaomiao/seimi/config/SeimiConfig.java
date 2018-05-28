@@ -38,6 +38,16 @@ public class SeimiConfig {
     private double bloomFilterFalseProbability;
 
     /**
+     * 设置SeimiAgent的主机地址，如 seimi.wanghaomiao.cn or 10.10.121.211
+     */
+    private String seimiAgentHost;
+
+    /**
+     * seimiAgent监听端口
+     */
+    private int seimiAgentPort = 80;
+
+    /**
      * redisson 各种分布式配置可以参考 https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95
      */
     private Config redissonConfig;
@@ -141,5 +151,21 @@ public class SeimiConfig {
 
     public void setBloomFilterFalseProbability(double bloomFilterFalseProbability) {
         this.bloomFilterFalseProbability = bloomFilterFalseProbability;
+    }
+
+    public String getSeimiAgentHost() {
+        return seimiAgentHost;
+    }
+
+    public void setSeimiAgentHost(String seimiAgentHost) {
+        this.seimiAgentHost = seimiAgentHost;
+    }
+
+    public int getSeimiAgentPort() {
+        return seimiAgentPort;
+    }
+
+    public void setSeimiAgentPort(int seimiAgentPort) {
+        this.seimiAgentPort = seimiAgentPort;
     }
 }

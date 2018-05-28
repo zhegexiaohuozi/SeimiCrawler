@@ -37,7 +37,7 @@ public class UseDynamicProxy extends BaseSeimiCrawler {
             List<Object> urls = doc.sel("//a[@class='titlelnk']/@href");
             logger.info("{}", urls.size());
             for (Object s:urls){
-                push(new Request(s.toString(),this::getTitle));
+                push(new Request(s.toString(),UseDynamicProxy::getTitle));
             }
         } catch (Exception e) {
             e.printStackTrace();

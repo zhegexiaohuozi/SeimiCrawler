@@ -27,7 +27,7 @@ public class UseDelay extends BaseSeimiCrawler {
             List<Object> urls = doc.sel("//a[@class='titlelnk']/@href");
             logger.info("{}", urls.size());
             for (Object s:urls){
-                push(new Request(s.toString(),this::getTitle));
+                push(Request.build(s.toString(),UseDelay::getTitle));
             }
         } catch (Exception e) {
             e.printStackTrace();

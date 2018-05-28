@@ -1,6 +1,7 @@
 package cn.wanghaomiao.seimi.spring.common;
 
 import cn.wanghaomiao.seimi.Constants;
+import cn.wanghaomiao.seimi.config.SeimiConfig;
 import cn.wanghaomiao.seimi.core.SeimiProcessor;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.exception.SeimiInitExcepiton;
@@ -92,6 +93,13 @@ public class SeimiCrawlerBootstrapListener implements ApplicationListener<Contex
                         crawlerModel.startRequest();
                     }
                 }
+                //统一通用配置信息至 seimiConfig
+                SeimiConfig config = new SeimiConfig();
+                config.setBloomFilterExpectedInsertions(crawlerProperties.getBloomFilterExpectedInsertions());
+                config.setBloomFilterFalseProbability(crawlerProperties.getBloomFilterFalseProbability());
+                config.setSeimiAgentHost(crawlerProperties.getSeimiAgentHost());
+                config.setSeimiAgentPort(crawlerProperties.getSeimiAgentPort());
+                CrawlerCache.setConfig(config);
             }
         }
     }

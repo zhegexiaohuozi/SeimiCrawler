@@ -57,7 +57,7 @@ public class Request extends CommonObject {
         this.callBack = callBack;
     }
 
-    public Request(String url,SeimiCallbackFunc<SeimiCrawler, Response> callBackFunc){
+    public <T,A1> Request(String url,SeimiCallbackFunc<T,A1> callBackFunc){
         this.url = url;
         this.callBackFunc = callBackFunc;
         this.lambdaCb = true;

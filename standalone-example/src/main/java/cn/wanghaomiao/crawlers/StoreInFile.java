@@ -28,11 +28,11 @@ public class StoreInFile extends BaseSeimiCrawler {
             List<Object> urls = doc.sel("//a[@class='titlelnk']/@href");
             logger.info("{}",urls.size());
             for (Object s:urls){
-                push(Request.build(s.toString(),this::saveFile));
+                push(Request.build(s.toString(),StoreInFile::saveFile));
             }
             List<Object> imgs = doc.sel("//a/img/@src");
             for (Object u:imgs){
-                push(Request.build(u.toString(),this::saveFile));
+                push(Request.build(u.toString(),StoreInFile::saveFile));
             }
         } catch (Exception e) {
             e.printStackTrace();

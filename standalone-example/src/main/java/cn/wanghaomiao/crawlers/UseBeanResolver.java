@@ -27,7 +27,7 @@ public class UseBeanResolver extends BaseSeimiCrawler {
             List<Object> urls = doc.sel("//a[@class='titlelnk']/@href");
             logger.info("{}", urls.size());
             for (Object s:urls){
-                push(Request.build(s.toString(),this::renderBean));
+                push(Request.build(s.toString(),UseBeanResolver::renderBean));
             }
         } catch (Exception e) {
             e.printStackTrace();

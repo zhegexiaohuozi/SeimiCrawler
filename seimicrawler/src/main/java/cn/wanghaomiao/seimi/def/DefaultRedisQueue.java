@@ -46,9 +46,11 @@ public class DefaultRedisQueue implements SeimiQueue {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
-     * 默认的数据量预计消耗4G内存,请根据使用情况自行调整
+     * 默认的数据量预计消耗100M 内存,请根据使用情况自行调整
+     * 可参考
+     * https://hur.st/bloomfilter/?n=100M&p=0.01&m=&k=
      */
-    private long expectedInsertions = 429496729L;
+    private long expectedInsertions = 1_0000_0000L;
     private double falseProbability = 0.01;
 
     @Autowired(required = false)

@@ -4,26 +4,20 @@ import cn.wanghaomiao.seimi.annotation.Crawler;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
-import org.seimicrawler.xpath.JXDocument;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.seimicrawler.xpath.JXDocument;
 
 /**
  * 这个例子演示如何使用SeimiAgent进行复杂动态页面信息抓取
+ * 独立启动需通过 {@link cn.wanghaomiao.seimi.config.SeimiConfig} 配置，spring boot通过标准的 application.properties来进行配置，
+ * #seimi.crawler.seimi-agent-host=
+ * #seimi.crawler.seimi-agent-port=
+ *
  * @author 汪浩淼 et.tw@163.com
  * @since 2016/4/14.
  */
 @Crawler(name = "seimiagent")
 public class SeimiAgentDemo extends BaseSeimiCrawler{
-
-    /**
-     * 在resource/config/seimi.properties中配置方便更换，当然也可以自行根据情况使用自己的统一配置中心等服务
-     */
-    @Value("${seimiAgentHost}")
-    private String seimiAgentHost;
-
-    @Value("${seimiAgentPort}")
-    private int seimiAgentPort;
 
     @Override
     public String[] startUrls() {
@@ -31,18 +25,8 @@ public class SeimiAgentDemo extends BaseSeimiCrawler{
     }
 
     @Override
-    public String seimiAgentHost() {
-        return this.seimiAgentHost;
-    }
-
-    @Override
-    public int seimiAgentPort() {
-        return this.seimiAgentPort;
-    }
-
-    @Override
     public void start(Response response) {
-        Request seimiAgentReq = Request.build("https://www.souyidai.com",this::getTotalTransactions)
+        Request seimiAgentReq = Request.build("https://www.souyidai.com",SeimiAgentDemo::getTotalTransactions)
                 .useSeimiAgent()
 //                告诉SeimiAgent针对这个请求是否使用cookie，如果没有设置使用当前Crawler关于cookie使用条件作为默认值。
 //                .setSeimiAgentUseCookie(true)
