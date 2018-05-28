@@ -44,28 +44,28 @@ public class Basic extends BaseSeimiCrawler {
     public String[] startUrls() {
         return new String[]{"http://www.cnblogs.com/"};
     }
-    @Override
-    public void start(Response response) {
-        JXDocument doc = response.document();
-        try {
-            List<Object> urls = doc.sel("//a[@class='titlelnk']/@href");
-            logger.info("{}", urls.size());
-            for (Object s:urls){
-                push(new Request(s.toString(),"getTitle"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void getTitle(Response response){
-        JXDocument doc = response.document();
-        try {
-            logger.info("url:{} {}", response.getUrl(), doc.sel("//h1[@class='postTitle']/a/text()|//a[@id='cb_post_title_url']/text()"));
-            //do something
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+     @Override
+     public void start(Response response) {
+         JXDocument doc = response.document();
+         try {
+             List<Object> urls = doc.sel("//a[@class='titlelnk']/@href");
+             logger.info("{}", urls.size());
+             for (Object s:urls){
+                 push(Request.build(s.toString(),Basic::getTitle));
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+     }
+     public void getTitle(Response response){
+         JXDocument doc = response.document();
+         try {
+             logger.info("url:{} {}", response.getUrl(), doc.sel("//h1[@class='postTitle']/a/text()|//a[@id='cb_post_title_url']/text()"));
+             //do something
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+     }
 }
 ```
 然后随便某个包下添加启动Main函数，启动SeimiCrawler：
@@ -80,6 +80,14 @@ public class Boot {
 以上便是一个最简单的爬虫系统开发流程。
 
 ## 工程化打包部署 ##
+
+### Spring boot(推荐) ###
+推荐使用spring boot方式来构建项目，这样能借助现有的spring boot生态扩展出很多意想不到的玩法。Spring boot项目打包参考spring boot官网的标准打包方式即可
+```
+mvn package
+```
+
+### 独立运行 ###
 上面可以方便的用来开发或是调试，当然也可以成为生产环境下一种启动方式。但是，为了便于工程化部署与分发，SeimiCrawler提供了专门的打包插件用来对SeimiCrawler工程进行打包，打好的包可以直接分发部署运行了。
 
 pom中添加添加plugin
