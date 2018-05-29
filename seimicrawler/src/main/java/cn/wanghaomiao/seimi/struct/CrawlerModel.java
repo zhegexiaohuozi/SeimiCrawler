@@ -248,6 +248,11 @@ public class CrawlerModel {
 
     public void sendRequest(Request request) {
         request.setCrawlerName(crawlerName);
+        //如果启用了系统级去重机制并且为首次处理则判断一个Request是否已经被处理过了
+        if (!request.isSkipDuplicateFilter() && isUseUnrepeated() && queueInstance.isProcessed(request) && request.getCurrentReqCount() == 0) {
+            logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
+            return;
+        }
         if (request.isLambdaCb()) {
             request.setCallBack(getMethodName(request.getCallBackFunc()));
         }
