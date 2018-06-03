@@ -90,7 +90,9 @@ public class SeimiProcessor implements Runnable {
                 if (request.getCurrentReqCount() >= request.getMaxReqCount()+3) {
                     continue;
                 }
-
+                if(!crawlerModel.checkRequest(request)){
+                    continue;
+                }
                 queue.addProcessed(request);
 
                 SeimiDownloader downloader;
