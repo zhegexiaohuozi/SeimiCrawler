@@ -1,6 +1,7 @@
 SeimiCrawler
 ============
 [![GitHub release](https://img.shields.io/github/release/zhegexiaohuozi/SeimiCrawler.svg)](https://github.com/zhegexiaohuozi/JsoupXpath/releases)
+[![Maven](https://maven-badges.herokuapp.com/maven-central/cn.wanghaomiao/SeimiCrawler/badge.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22cn.wanghaomiao%22%20AND%20a%3A%22SeimiCrawler%22)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 An agile,powerful,standalone,distributed crawler framework.Support spring boot and redisson.
@@ -16,7 +17,7 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 - 支持 spring boot，同时也依然保留可以独立的启动运行
 - 支持方法引用，更自然方式去设置回调函数
 - 分布式消息队列改用 Redisson（基于redis的分布式计算框架） 实现
-- 分布式场景去重，默认采用 BloomFilter ，参数可自行配置
+- 分布式场景去重，默认采用 BloomFilter ，参数可自行配置，[调参模拟器地址](https://hur.st/bloomfilter/?n=4000&p=1.0E-7&m=&k=8)
 
 # 原理示例 #
 ## 基本原理 ##
