@@ -260,7 +260,7 @@ public class CrawlerModel {
     public boolean checkRequest(Request request){
         //如果启用了系统级去重机制并且为首次处理则判断一个Request是否已经被处理过了
         if (!request.isSkipDuplicateFilter() && isUseUnrepeated() && queueInstance.isProcessed(request) && request.getCurrentReqCount() == 0) {
-            logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
+            logger.debug("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
             return false;
         }
         return true;
