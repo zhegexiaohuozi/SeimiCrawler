@@ -255,6 +255,7 @@ public class CrawlerModel {
             request.setCallBack(getMethodName(request.getCallBackFunc()));
         }
         queueInstance.push(request);
+        queueInstance.addProcessed(request);
     }
 
     public boolean checkRequest(Request request){

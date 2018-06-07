@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * StrFormatUtil Tester.
  *
- * @author <seimimaster@gmail.com>
+ * @author SeimiMaster seimimaster@gmail.com
  * @version 1.0
  */
 public class StrFormatUtilTest {
