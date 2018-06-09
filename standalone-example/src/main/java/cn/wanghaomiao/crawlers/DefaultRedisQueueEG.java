@@ -1,6 +1,8 @@
 package cn.wanghaomiao.crawlers;
 
+import cn.wanghaomiao.seimi.annotation.Crawler;
 import cn.wanghaomiao.seimi.def.BaseSeimiCrawler;
+import cn.wanghaomiao.seimi.def.DefaultRedisQueue;
 import cn.wanghaomiao.seimi.struct.Request;
 import cn.wanghaomiao.seimi.struct.Response;
 import org.seimicrawler.xpath.JXDocument;
@@ -13,8 +15,9 @@ import java.util.List;
  * @author github.com/zhegexiaohuozi seimimaster@gmail.com
  * @since 2015/10/21.
  */
-//@Crawler(name = "DefRedis",queue = DefaultRedisQueue.class,useUnrepeated = false)
+@Crawler(name = "distributed",queue = DefaultRedisQueue.class,useUnrepeated = false)
 public class DefaultRedisQueueEG extends BaseSeimiCrawler {
+
     @Override
     public String[] startUrls() {
         return new String[]{"http://www.cnblogs.com/"};

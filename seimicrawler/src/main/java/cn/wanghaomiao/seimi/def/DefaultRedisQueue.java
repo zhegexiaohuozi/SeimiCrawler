@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author github.com/zhegexiaohuozi seimimaster@gmail.com
@@ -52,6 +54,8 @@ public class DefaultRedisQueue implements SeimiQueue {
      */
     private long expectedInsertions = 1_0000_0000L;
     private double falseProbability = 0.01;
+    private Map<String,RBlockingQueue<Request>> queueCache = new HashMap<>();
+    private Map<String,RBloomFilter<String>> bloomFilterCache = new HashMap<>();
 
     @Autowired(required = false)
     private CrawlerProperties crawlerProperties;
@@ -98,7 +102,7 @@ public class DefaultRedisQueue implements SeimiQueue {
     public Request bPop(String crawlerName) {
         Request request = null;
         try {
-            RBlockingQueue<Request> rBlockingQueue = redisson.getBlockingQueue(quueNamePrefix + crawlerName, new FstCodec());
+            RBlockingQueue<Request> rBlockingQueue = getQueue(crawlerName);
             request = rBlockingQueue.take();
         } catch (Exception e) {
             logger.warn(e.getMessage(), e);
@@ -109,7 +113,7 @@ public class DefaultRedisQueue implements SeimiQueue {
     @Override
     public boolean push(Request req) {
         try {
-            RBlockingQueue<Request> rBlockingQueue = redisson.getBlockingQueue(quueNamePrefix + req.getCrawlerName(), new FstCodec());
+            RBlockingQueue<Request> rBlockingQueue = getQueue(req.getCrawlerName());
             rBlockingQueue.put(req);
             return true;
         } catch (Exception e) {
@@ -122,7 +126,7 @@ public class DefaultRedisQueue implements SeimiQueue {
     public long len(String crawlerName) {
         long len = 0;
         try {
-            RBlockingQueue<Request> rBlockingQueue = redisson.getBlockingQueue(quueNamePrefix + crawlerName, new FstCodec());
+            RBlockingQueue<Request> rBlockingQueue = getQueue(crawlerName);
             len = rBlockingQueue.size();
         } catch (Exception e) {
             logger.warn(e.getMessage());
@@ -135,8 +139,7 @@ public class DefaultRedisQueue implements SeimiQueue {
         boolean res = false;
         try {
             String sign = GenericUtils.signRequest(req);
-            RBloomFilter<String> bloomFilter = redisson.getBloomFilter(setNamePrefix + req.getCrawlerName(), new StringCodec());
-            bloomFilter.tryInit(expectedInsertions, falseProbability);
+            RBloomFilter<String> bloomFilter = getFilter(req.getCrawlerName());
             res = bloomFilter.contains(sign);
         } catch (Exception e) {
             logger.warn(e.getMessage());
@@ -148,8 +151,7 @@ public class DefaultRedisQueue implements SeimiQueue {
     public void addProcessed(Request req) {
         try {
             String sign = DigestUtils.md5Hex(req.getUrl());
-            RBloomFilter<String> bloomFilter = redisson.getBloomFilter(setNamePrefix + req.getCrawlerName(), new StringCodec());
-            bloomFilter.tryInit(expectedInsertions, falseProbability);
+            RBloomFilter<String> bloomFilter = getFilter(req.getCrawlerName());
             bloomFilter.add(sign);
         } catch (Exception e) {
             logger.warn(e.getMessage());
@@ -160,8 +162,7 @@ public class DefaultRedisQueue implements SeimiQueue {
     public long totalCrawled(String crawlerName) {
         long count = 0;
         try {
-            RBloomFilter<String> bloomFilter = redisson.getBloomFilter(setNamePrefix + crawlerName, new StringCodec());
-            bloomFilter.tryInit(expectedInsertions, falseProbability);
+            RBloomFilter<String> bloomFilter = getFilter(crawlerName);
             count = bloomFilter.count();
         } catch (Exception e) {
             logger.warn(e.getMessage());
@@ -176,10 +177,29 @@ public class DefaultRedisQueue implements SeimiQueue {
     @Override
     public void clearRecord(String crawlerName) {
         try {
-            RBloomFilter<String> bloomFilter = redisson.getBloomFilter(setNamePrefix + crawlerName, new StringCodec());
+            RBloomFilter<String> bloomFilter = getFilter(crawlerName);
             bloomFilter.delete();
         } catch (Exception e) {
             logger.warn(e.getMessage());
         }
+    }
+
+    private RBlockingQueue<Request> getQueue(String crawlerName){
+        RBlockingQueue<Request> rBlockingQueue = queueCache.get(crawlerName);
+        if (rBlockingQueue == null){
+            rBlockingQueue = redisson.getBlockingQueue(quueNamePrefix + crawlerName, new FstCodec());
+            queueCache.put(crawlerName,rBlockingQueue);
+        }
+        return rBlockingQueue;
+    }
+
+    private RBloomFilter<String> getFilter(String crawlerName){
+        RBloomFilter<String> bloomFilter = bloomFilterCache.get(crawlerName);
+        if (bloomFilter == null){
+            bloomFilter = redisson.getBloomFilter(setNamePrefix + crawlerName, new StringCodec());
+            bloomFilter.tryInit(expectedInsertions, falseProbability);
+            bloomFilterCache.put(crawlerName,bloomFilter);
+        }
+        return bloomFilter;
     }
 }
