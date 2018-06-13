@@ -168,4 +168,8 @@ public class SeimiConfig {
     public void setSeimiAgentPort(int seimiAgentPort) {
         this.seimiAgentPort = seimiAgentPort;
     }
+
+    public Config getRedissonConfig() {
+        return redissonConfig;
+    }
 }

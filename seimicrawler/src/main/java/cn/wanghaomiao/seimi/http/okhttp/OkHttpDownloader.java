@@ -68,6 +68,7 @@ public class OkHttpDownloader implements SeimiDownloader {
             hcBuilder.proxy(crawlerModel.getStdProxy());
         }
         hcBuilder.readTimeout(crawlerModel.getHttpTimeOut(), TimeUnit.MILLISECONDS);
+        hcBuilder.connectTimeout(crawlerModel.getHttpTimeOut(),TimeUnit.MILLISECONDS);
         okHttpClient = hcBuilder.build();
         currentRequestBuilder = OkHttpRequestGenerator.getOkHttpRequesBuilder(request,crawlerModel);
         lastResponse = okHttpClient.newCall(currentRequestBuilder.build()).execute();

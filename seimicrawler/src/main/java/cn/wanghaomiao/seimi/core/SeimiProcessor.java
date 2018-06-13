@@ -90,12 +90,6 @@ public class SeimiProcessor implements Runnable {
                 if (request.getCurrentReqCount() >= request.getMaxReqCount()+3) {
                     continue;
                 }
-                //如果启用了系统级去重机制并且为首次处理则判断一个Request是否已经被处理过了
-                if (!request.isSkipDuplicateFilter() && crawlerModel.isUseUnrepeated() && queue.isProcessed(request) && request.getCurrentReqCount() == 0) {
-                    logger.info("This request has bean processed,so current request={} will be dropped!", JSON.toJSONString(request));
-                    continue;
-                }
-                queue.addProcessed(request);
 
                 SeimiDownloader downloader;
                 if (SeimiHttpType.APACHE_HC.val() == crawlerModel.getSeimiHttpType().val()) {
@@ -122,7 +116,7 @@ public class SeimiProcessor implements Runnable {
                     doLambdaCallback(request, seimiResponse);
                 }
                 logger.debug("Crawler[{}] ,url={} ,responseStatus={}", crawlerModel.getCrawlerName(), request.getUrl(), downloader.statusCode());
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 logger.error(e.getMessage(), e);
                 if (request == null) {
                     continue;
