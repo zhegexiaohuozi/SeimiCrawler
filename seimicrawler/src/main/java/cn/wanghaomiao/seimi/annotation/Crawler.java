@@ -75,7 +75,7 @@ public @interface Crawler {
     SeimiHttpType httpType() default SeimiHttpType.APACHE_HC;
 
     /**
-     * 支持自定义超时间，单位毫秒，默认15000ms
+     * 支持自定义超时时间，单位毫秒，默认15000ms
      */
     int httpTimeOut() default 15000;
 }

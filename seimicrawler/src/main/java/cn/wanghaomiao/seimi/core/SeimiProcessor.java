@@ -116,7 +116,7 @@ public class SeimiProcessor implements Runnable {
                     doLambdaCallback(request, seimiResponse);
                 }
                 logger.debug("Crawler[{}] ,url={} ,responseStatus={}", crawlerModel.getCrawlerName(), request.getUrl(), downloader.statusCode());
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 logger.error(e.getMessage(), e);
                 if (request == null) {
                     continue;
