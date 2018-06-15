@@ -86,7 +86,7 @@ public class HttpClientFactory {
             }
         };
         RedirectStrategy redirectStrategy = new SeimiRedirectStrategy();
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout).build();
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(timeout).setConnectionRequestTimeout(timeout).setSocketTimeout(timeout).build();
         PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = HttpClientConnectionManagerProvider.getHcPoolInstance();
         return HttpClients.custom().setDefaultRequestConfig(requestConfig).setConnectionManager(poolingHttpClientConnectionManager)
                 .setRedirectStrategy(redirectStrategy).setRetryHandler(retryHander);
