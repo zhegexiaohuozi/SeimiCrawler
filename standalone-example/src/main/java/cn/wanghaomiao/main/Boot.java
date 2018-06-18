@@ -12,7 +12,6 @@ public class Boot {
         SeimiConfig config = new SeimiConfig();
         config.setSeimiAgentHost("127.0.0.1");
 //        config.redisSingleServer().setAddress("redis://127.0.0.1:6379");
-
         Seimi s = new Seimi(config);
         s.goRun("basic");
     }
