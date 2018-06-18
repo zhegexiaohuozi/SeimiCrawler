@@ -36,7 +36,7 @@
                 failed-attempts="3"
                 subscriptions-per-connection="5"
                 client-name="none"
-                address="redis://192.168.100.57:6379"
+                address="redis://127.0.0.1:6379"
                 subscription-connection-minimum-idle-size="1"
                 subscription-connection-pool-size="50"
                 connection-minimum-idle-size="10"
