@@ -38,44 +38,44 @@ import java.lang.annotation.Target;
 @Component
 public @interface Crawler {
     /**
-     * 如果需要特殊指定爬虫规则的名字，那么就设置这个就好了，默认爬虫类名
+     * @return 如果需要特殊指定爬虫规则的名字，那么就设置这个就好了，默认爬虫类名
      */
     String name() default "";
 
     /**
-     * e.g.  http://user:passwd@host:port
+     * @return  e.g.  http://user:passwd@host:port
      * https://user:passwd@host:port
      * socket://user:passwd@host:port
      */
     String proxy() default "";
 
     /**
-     * 指定crawler是否启用cookie
+     * @return 指定crawler是否启用cookie
      */
     boolean useCookie() default false;
 
     /**
-     * 抓取请求间隔延时，单位为秒
+     * @return 抓取请求间隔延时，单位为秒
      */
     int delay() default 0;
 
     /**
-     * 用来指定消费队列的具体实现
+     * @return 用来指定消费队列的具体实现
      */
     Class<? extends SeimiQueue> queue() default DefaultLocalQueue.class;
 
     /**
-     * 是否启用系统级去重机制，默认启用
+     * @return  是否启用系统级去重机制，默认启用
      */
     boolean useUnrepeated() default true;
 
     /**
-     * Downloader实现类型，默认的Downloader实现为APACHE_HC
+     * @return Downloader实现类型，默认的Downloader实现为APACHE_HC
      */
     SeimiHttpType httpType() default SeimiHttpType.APACHE_HC;
 
     /**
-     * 支持自定义超时时间，单位毫秒，默认15000ms
+     * @return 支持自定义超时时间，单位毫秒，默认15000ms
      */
     int httpTimeOut() default 15000;
 }

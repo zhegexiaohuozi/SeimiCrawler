@@ -82,6 +82,8 @@ public class Seimi {
 
     /**
      * 按名称启动爬虫并开启http服务接口API
+     * @param port 端口
+     * @param crawlerNames 要开启的爬虫规则
      */
     public void goRunWithHttpd(int port, String... crawlerNames) {
         goRun(false, crawlerNames);

@@ -146,10 +146,10 @@ public class Response extends CommonObject {
     /**
      * 通过bean中定义的Xpath注解进行自动填充
      *
-     * @param bean
-     * @param <T>
-     * @return
-     * @throws Exception
+     * @param bean --
+     * @param <T> --
+     * @return --
+     * @throws Exception --
      */
     public <T> T render(Class<T> bean) throws Exception {
         if (bodyType.equals(BodyType.TEXT)) {

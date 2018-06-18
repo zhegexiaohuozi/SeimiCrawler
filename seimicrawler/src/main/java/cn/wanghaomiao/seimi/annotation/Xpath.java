@@ -34,7 +34,7 @@ public @interface Xpath {
     /**
      * JsoupXpath支持的XPath语句，JsoupXpath默认支持标准的XPath语句，但也支持一些很有帮助的扩展，具体可以参见：https://github.com/zhegexiaohuozi/JsoupXpath
      *
-     * @return
+     * @return --
      */
     String value();
 }

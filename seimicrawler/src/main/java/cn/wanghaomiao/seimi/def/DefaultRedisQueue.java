@@ -49,8 +49,7 @@ public class DefaultRedisQueue implements SeimiQueue {
 
     /**
      * 默认的数据量预计消耗100M 内存,请根据使用情况自行调整
-     * 可参考
-     * https://hur.st/bloomfilter/?n=100M&p=0.01&m=&k=
+     * 可参考 <a href="https://hur.st/bloomfilter/?n=100M&p=0.01&m=&k=">bloomfilter</a>
      */
     private long expectedInsertions = 1_0000_0000L;
     private double falseProbability = 0.01;

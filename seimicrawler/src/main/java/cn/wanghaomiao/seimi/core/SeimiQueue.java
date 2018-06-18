@@ -27,42 +27,46 @@ import java.io.Serializable;
 public interface SeimiQueue extends Serializable {
     /**
      * 阻塞式出队一个请求
-     * @return
+     * @param crawlerName --
+     * @return --
      */
     Request bPop(String crawlerName);
     /**
      * 入队一个请求
-     * @param req
-     * @return
+     * @param req 请求
+     * @return --
      */
     boolean push(Request req);
     /**
      * 任务队列剩余长度
-     * @return
+     * @param crawlerName --
+     * @return num
      */
     long len(String crawlerName);
 
     /**
      * 判断一个URL是否处理过了
-     * @param req
-     * @return
+     * @param req --
+     * @return --
      */
     boolean isProcessed(Request req);
 
     /**
      * 记录一个处理过的请求
-     * @param req
+     * @param req --
      */
     void addProcessed(Request req);
 
     /**
      * 目前总共的抓取数量
-     * @return
+     * @param crawlerName --
+     * @return num
      */
     long totalCrawled(String crawlerName);
 
     /**
      * 清除抓取记录
+     * @param crawlerName --
      */
     void clearRecord(String crawlerName);
 }

@@ -86,11 +86,6 @@ public class DefaultLocalQueue implements SeimiQueue {
         return set.size();
     }
 
-    /**
-     * 清除抓取记录
-     *
-     * @param crawlerName
-     */
     @Override
     public void clearRecord(String crawlerName) {
         ConcurrentSkipListSet<String> set = getProcessedSet(crawlerName);
