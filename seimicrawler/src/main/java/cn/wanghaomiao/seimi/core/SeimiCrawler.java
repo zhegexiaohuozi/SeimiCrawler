@@ -31,20 +31,17 @@ public interface SeimiCrawler extends Serializable {
     String getUserAgent();
 
     /**
-     * 可以自定义返回随机的代理
-     * @return
+     * @return  可以自定义返回随机的代理
      */
     String proxy();
 
     /**
-     * 设置起始url
-     * @return
+     * @return 设置起始url
      */
     String[] startUrls();
 
     /**
-     * 起始的Request，可以应对更复杂的情况，当<code>String[] startUrls();</code>无法满足需求的情况下推荐使用
-     * @return
+     * @return  起始的Request，可以应对更复杂的情况，当<code>String[] startUrls();</code>无法满足需求的情况下推荐使用
      */
     List<Request> startRequests();
 
@@ -61,14 +58,13 @@ public interface SeimiCrawler extends Serializable {
     String[] denyRules();
     /**
      * 针对startUrl生成首批的response回调这个初始接口
-     * @param response
-     * @return
+     * @param response --
      */
     void start(Response response);
 
     /**
      * 当一个请求处理异常次数超过开发者所设置或是默认设置的最大重新处理次数时会调用该方法记录异常请求
-     * @param request
+     * @param request --
      */
     void handleErrorRequest(Request request);
 }

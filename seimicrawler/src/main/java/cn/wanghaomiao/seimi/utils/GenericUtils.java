@@ -90,8 +90,8 @@ public class GenericUtils {
     /**
      * 判断给定类是否是支持的数字类型
      *
-     * @param cls
-     * @return
+     * @param cls --
+     * @return --
      */
     public static boolean isNumber(Class cls) {
         return numberClass.containsKey(cls);

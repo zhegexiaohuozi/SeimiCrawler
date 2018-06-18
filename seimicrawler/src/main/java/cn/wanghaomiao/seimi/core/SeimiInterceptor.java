@@ -43,11 +43,15 @@ public interface SeimiInterceptor {
 
     /**
      * 可以在目标方法执行之前定义一些处理逻辑
+     * @param method 当前拦截器生效的方法
+     * @param response 拦截到的参数
      */
     public void before(Method method, Response response);
 
     /**
      * 可以在目标方法执行之后定义一些处理逻辑
+     * @param method 当前拦截器生效的方法
+     * @param response 拦截到的参数
      */
     public void after(Method method, Response response);
 }

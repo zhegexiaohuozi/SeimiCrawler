@@ -37,7 +37,7 @@ public @interface Interceptor {
     /**
      * 用于判断是否每个拦截到的方法都进行拦截并执行
      *
-     * @return
+     * @return --
      */
     boolean everyMethod() default false;
 }

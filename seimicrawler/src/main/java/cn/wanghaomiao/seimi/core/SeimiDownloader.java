@@ -28,6 +28,9 @@ import java.util.List;
 public interface SeimiDownloader {
     /**
      * 处理抓取请求生成response
+     * @param request 请求
+     * @return {@link Response} 封装响应对象
+     * @throws Exception --
      */
     Response process(Request request) throws Exception;
 
@@ -36,6 +39,7 @@ public interface SeimiDownloader {
      *
      * @param nextUrl 重定向URL
      * @return 请求的最终返回体
+     * @throws Exception --
      */
     Response metaRefresh(String nextUrl) throws Exception;
 
