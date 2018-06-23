@@ -14,10 +14,47 @@ SeimiCrawler是一个敏捷的，独立部署的，支持分布式的Java爬虫�
 
 # V2.0版本新特性(文档补充中) #
 
-- 支持 spring boot，同时也依然保留可以独立的启动运行
-- 支持方法引用，更自然方式去设置回调函数
-- 分布式消息队列改用 Redisson（基于redis的分布式计算框架） 实现
-- 分布式场景去重，默认采用 BloomFilter ，参数可自行配置，[调参模拟器地址](https://hur.st/bloomfilter/?n=4000&p=1.0E-7&m=&k=8)
+- 完美支持SpringBoot，[demo参考](https://github.com/zhegexiaohuozi/SeimiCrawler/tree/master/spring-boot-example)
+
+- 回调函数支持方法引用，设置起来更自然
+
+```
+    push(Request.build(s.toString(),Basic::getTitle));
+
+```
+
+- 非SpringBoot模式全局配置项通过`SeimiConfig`进行配置，包括 Redis集群信息，SeimiAgent信息等，SpringBoot模式则通过SpringBoot标准模式配置
+
+```
+SeimiConfig config = new SeimiConfig();
+config.setSeimiAgentHost("127.0.0.1");
+//config.redisSingleServer().setAddress("redis://127.0.0.1:6379");
+Seimi s = new Seimi(config);
+s.goRun("basic");
+```
+
+SpringBoot模式，在application.properties中配置
+
+```
+seimi.crawler.enabled=true
+# 指定要发起start请求的crawler的name
+seimi.crawler.names=basic,test
+
+seimi.crawler.seimi-agent-host=xx
+seimi.crawler.seimi-agent-port=xx
+
+#开启分布式队列
+seimi.crawler.enable-redisson-queue=true
+#自定义bloomFilter预期插入次数，不设置用默认值 （）
+#seimi.crawler.bloom-filter-expected-insertions=
+#自定义bloomFilter预期的错误率，0.001为1000个允许有一个判断错误的。不设置用默认值（0.001）
+#seimi.crawler.bloom-filter-false-probability=
+```
+
+- 分布式队列改用Redisson实现，底层依旧为redis，去重引入BloomFilter以提高空间利用率，一个线上的[BloomFilter调参模拟器地址](https://hur.st/bloomfilter/?n=4000&p=1.0E-7&m=&k=8)
+
+- JDK要求 1.8+
+
 
 # 原理示例 #
 ## 基本原理 ##
