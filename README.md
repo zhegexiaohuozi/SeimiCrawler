@@ -65,12 +65,12 @@ seimi.crawler.enable-redisson-queue=true
 
 # 快速开始 #
 
-添加maven依赖(中央maven库最新版本2.0)：
+添加maven依赖(中央maven库最新版本2.1)：
 ```
 <dependency>
     <groupId>cn.wanghaomiao</groupId>
     <artifactId>SeimiCrawler</artifactId>
-    <version>2.0</version>
+    <version>2.1</version>
 </dependency>
 ```
 
