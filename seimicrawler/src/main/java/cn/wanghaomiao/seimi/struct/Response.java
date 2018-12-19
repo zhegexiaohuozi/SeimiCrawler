@@ -178,6 +178,7 @@ public class Response extends CommonObject {
                 FileOutputStream fileOutputStream = new FileOutputStream(targetFile);
                 FileChannel fo = fileOutputStream.getChannel();
         ) {
+
             File pf = targetFile.getParentFile();
             if (!pf.exists()) {
                 pf.mkdirs();
@@ -195,22 +196,19 @@ public class Response extends CommonObject {
     private <T> T parse(Class<T> target, String text) throws Exception {
         T bean = target.newInstance();
         final List<Field> props = new LinkedList<>();
-        ReflectionUtils.doWithFields(target, new ReflectionUtils.FieldCallback() {
-            @Override
-            public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                props.add(field);
-            }
-        });
+        ReflectionUtils.doWithFields(target, props::add);
         JXDocument jxDocument = JXDocument.create(text);
         for (Field f:props){
             Xpath xpathInfo = f.getAnnotation(Xpath.class);
             if (xpathInfo!=null){
                 String xpath = xpathInfo.value();
                 List<Object> res = jxDocument.sel(xpath);
-                boolean accessFlag = f.isAccessible();
-                f.setAccessible(true);
-                f.set(bean,defaultCastToTargetValue(target, f, res));
-                f.setAccessible(accessFlag);
+                synchronized (f){
+                    boolean accessFlag = f.isAccessible();
+                    f.setAccessible(true);
+                    f.set(bean,defaultCastToTargetValue(target, f, res));
+                    f.setAccessible(accessFlag);
+                }
             }
         }
         return bean;
