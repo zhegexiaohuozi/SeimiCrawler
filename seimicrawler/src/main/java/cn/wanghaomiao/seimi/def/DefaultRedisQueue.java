@@ -98,15 +98,9 @@ public class DefaultRedisQueue implements SeimiQueue {
     }
 
     @Override
-    public Request bPop(String crawlerName) {
-        Request request = null;
-        try {
-            RBlockingQueue<Request> rBlockingQueue = getQueue(crawlerName);
-            request = rBlockingQueue.take();
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-        }
-        return request;
+    public Request bPop(String crawlerName) throws InterruptedException {
+        RBlockingQueue<Request> rBlockingQueue = getQueue(crawlerName);
+        return rBlockingQueue.take();
     }
 
     @Override

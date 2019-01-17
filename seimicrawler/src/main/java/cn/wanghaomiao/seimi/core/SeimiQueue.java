@@ -30,7 +30,7 @@ public interface SeimiQueue extends Serializable {
      * @param crawlerName --
      * @return --
      */
-    Request bPop(String crawlerName);
+    Request bPop(String crawlerName) throws Exception;
     /**
      * 入队一个请求
      * @param req 请求
