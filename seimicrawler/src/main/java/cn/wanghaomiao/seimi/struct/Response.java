@@ -176,7 +176,7 @@ public class Response extends CommonObject {
     public void saveTo(File targetFile) {
         try (
                 FileOutputStream fileOutputStream = new FileOutputStream(targetFile);
-                FileChannel fo = fileOutputStream.getChannel();
+                FileChannel fo = fileOutputStream.getChannel()
         ) {
 
             File pf = targetFile.getParentFile();
