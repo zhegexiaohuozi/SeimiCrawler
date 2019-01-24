@@ -19,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * @author: github.com/zhegexiaohuozi seimimaster@gmail.com
@@ -61,7 +62,8 @@ public class SeimiCrawlerBootstrapListener implements ApplicationListener<Contex
                 logger.info("Not find any crawler,may be you need to check.");
                 return;
             }
-            workersPool = Executors.newFixedThreadPool(Constants.BASE_THREAD_NUM * Runtime.getRuntime().availableProcessors() * CrawlerCache.getCrawlers().size());
+            workersPool = new ScheduledThreadPoolExecutor(CrawlerCache.getCrawlers().size());
+//            workersPool = Executors.newFixedThreadPool(Constants.BASE_THREAD_NUM * Runtime.getRuntime().availableProcessors() * CrawlerCache.getCrawlers().size());
             for (Class<? extends BaseSeimiCrawler> a : CrawlerCache.getCrawlers()) {
                 CrawlerModel crawlerModel = new CrawlerModel(a, context);
                 if (CrawlerCache.isExist(crawlerModel.getCrawlerName())) {
@@ -72,9 +74,9 @@ public class SeimiCrawlerBootstrapListener implements ApplicationListener<Contex
             }
 
             for (Map.Entry<String, CrawlerModel> crawlerEntry : CrawlerCache.getCrawlerModelContext().entrySet()) {
-                for (int i = 0; i < Constants.BASE_THREAD_NUM * Runtime.getRuntime().availableProcessors(); i++) {
+//                for (int i = 0; i < Constants.BASE_THREAD_NUM * Runtime.getRuntime().availableProcessors(); i++) {
                     workersPool.execute(new SeimiProcessor(CrawlerCache.getInterceptors(), crawlerEntry.getValue()));
-                }
+//                }
             }
 
             if (isSpringBoot){
