@@ -177,13 +177,13 @@ pom中添加添加plugin
 
 - QQ群:`557410934`
 
-![QQ群](http://wjcdn.u.qiniudn.com/seimiqq.png)
+![QQ群](http://img.wanghaomiao.cn/seimiqq.png)
 
 这个就是给大家自由沟通啦
 
 - 微信订阅号
 
-![weixin](http://wjcdn.u.qiniudn.com/seimiweixin.jpg)
+![weixin](http://img.wanghaomiao.cn/seimiweixin.jpg)
 
 里面会发布一些使用案例等文章，以及seimi体系相关项目的最新更新动态等。
 
