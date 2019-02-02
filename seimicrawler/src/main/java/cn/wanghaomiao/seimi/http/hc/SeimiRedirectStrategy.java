@@ -45,7 +45,7 @@ public class SeimiRedirectStrategy extends LaxRedirectStrategy {
             httpRequestWrapper.removeHeaders("Content-Length");
             return httpRequestWrapper;
         } else {
-            return getRedirect(request,response,context);
+            return super.getRedirect(request,response,context);
         }
     }
 }
