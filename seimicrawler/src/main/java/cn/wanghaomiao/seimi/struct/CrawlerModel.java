@@ -41,6 +41,7 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -230,8 +231,9 @@ public class CrawlerModel {
             }
             trigger = true;
         }
-        if (!CollectionUtils.isEmpty(instance.startRequests())) {
-            for (Request request : instance.startRequests()) {
+        List<Request> requestList;
+        if (!CollectionUtils.isEmpty(requestList=instance.startRequests())) {
+            for (Request request : requestList){
                 request.setCrawlerName(crawlerName);
                 if (StringUtils.isBlank(request.getCallBack())) {
                     request.setCallBack("start");
