@@ -15,7 +15,7 @@ import java.util.List;
  * @author github.com/zhegexiaohuozi seimimaster@gmail.com
  * @since 2015/10/21.
  */
-@Crawler(name = "DefRedis",queue = DefaultRedisQueue.class,useUnrepeated = false)
+//@Crawler(name = "DefRedis",queue = DefaultRedisQueue.class,useUnrepeated = false)
 public class DefaultRedisQueueEG extends BaseSeimiCrawler {
     @Override
     public String[] startUrls() {

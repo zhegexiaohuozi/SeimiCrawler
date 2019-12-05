@@ -15,35 +15,35 @@
         http://redisson.org/schema/redisson/redisson.xsd">
 
 
-    <redisson:client
-            id="redisson"
-            name="test_redisson"
-    >
-        <!--
-        这里的name属性和qualifier子元素不能同时使用。
+<!--    <redisson:client-->
+<!--            id="redisson"-->
+<!--            name="test_redisson"-->
+<!--    >-->
+<!--        &lt;!&ndash;-->
+<!--        这里的name属性和qualifier子元素不能同时使用。-->
 
-        id和name的属性都可以被用来作为qualifier的备选值。
-        -->
-        <!--<qualifier value="redisson3"/>-->
-        <redisson:single-server
-                idle-connection-timeout="10000"
-                ping-timeout="1000"
-                connect-timeout="10000"
-                timeout="3000"
-                retry-attempts="3"
-                retry-interval="1500"
-                reconnection-timeout="3000"
-                failed-attempts="3"
-                subscriptions-per-connection="5"
-                client-name="none"
-                address="redis://127.0.0.1:6379"
-                subscription-connection-minimum-idle-size="1"
-                subscription-connection-pool-size="50"
-                connection-minimum-idle-size="10"
-                connection-pool-size="64"
-                database="0"
-                dns-monitoring="false"
-                dns-monitoring-interval="5000"
-        />
-    </redisson:client>
+<!--        id和name的属性都可以被用来作为qualifier的备选值。-->
+<!--        &ndash;&gt;-->
+<!--        &lt;!&ndash;<qualifier value="redisson3"/>&ndash;&gt;-->
+<!--        <redisson:single-server-->
+<!--                idle-connection-timeout="10000"-->
+<!--                ping-timeout="1000"-->
+<!--                connect-timeout="10000"-->
+<!--                timeout="3000"-->
+<!--                retry-attempts="3"-->
+<!--                retry-interval="1500"-->
+<!--                reconnection-timeout="3000"-->
+<!--                failed-attempts="3"-->
+<!--                subscriptions-per-connection="5"-->
+<!--                client-name="none"-->
+<!--                address="redis://127.0.0.1:6379"-->
+<!--                subscription-connection-minimum-idle-size="1"-->
+<!--                subscription-connection-pool-size="50"-->
+<!--                connection-minimum-idle-size="10"-->
+<!--                connection-pool-size="64"-->
+<!--                database="0"-->
+<!--                dns-monitoring="false"-->
+<!--                dns-monitoring-interval="5000"-->
+<!--        />-->
+<!--    </redisson:client>-->
 </beans>
