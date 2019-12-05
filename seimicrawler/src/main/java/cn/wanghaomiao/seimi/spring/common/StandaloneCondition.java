@@ -5,7 +5,7 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * @author 汪浩淼  wanghaomiao@huli.com
+ * @author 汪浩淼  seimimaster@gmail.com
  * @since 2018/5/29.
  */
 public class StandaloneCondition implements Condition {

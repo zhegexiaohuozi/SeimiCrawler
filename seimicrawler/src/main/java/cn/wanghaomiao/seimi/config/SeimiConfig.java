@@ -9,7 +9,7 @@ import org.redisson.config.SentinelServersConfig;
 import org.redisson.config.SingleServerConfig;
 
 /**
- * @author 汪浩淼  wanghaomiao@huli.com
+ * @author 汪浩淼  seimimaster@gmail.com
  * @since 2018/5/11.
  */
 public class SeimiConfig {
