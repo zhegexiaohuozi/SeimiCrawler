@@ -29,6 +29,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.util.CollectionUtils;
 
@@ -77,7 +78,10 @@ public class HcRequestGenerator {
         } else {
             if (HttpMethod.POST.equals(request.getHttpMethod())) {
                 requestBuilder = RequestBuilder.post().setUri(request.getUrl());
-                if (request.getParams() != null) {
+                if (StringUtils.isNotBlank(request.getJsonBody())){
+                    requestBuilder.addHeader("Content-type","application/json; charset=utf-8");
+                    requestBuilder.setEntity(new StringEntity(request.getJsonBody(), Charset.forName("UTF-8")));
+                }else if (request.getParams() != null) {
                     List<NameValuePair> nameValuePairList = new LinkedList<>();
                     for (Map.Entry<String, String> entry : request.getParams().entrySet()) {
                         nameValuePairList.add(new BasicNameValuePair(entry.getKey(),entry.getValue()));

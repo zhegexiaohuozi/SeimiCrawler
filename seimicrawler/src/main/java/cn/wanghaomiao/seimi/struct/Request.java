@@ -174,6 +174,11 @@ public class Request extends CommonObject {
      */
     private List<SeimiCookie> seimiCookies;
 
+    /**
+     * 添加json request body支持
+     */
+    private String jsonBody;
+
     public void incrReqCount(){
         this.currentReqCount +=1;
     }
@@ -352,5 +357,13 @@ public class Request extends CommonObject {
 
     public boolean isLambdaCb() {
         return lambdaCb;
+    }
+
+    public String getJsonBody() {
+        return jsonBody;
+    }
+
+    public void setJsonBody(String jsonBody) {
+        this.jsonBody = jsonBody;
     }
 }

@@ -9,7 +9,9 @@ import cn.wanghaomiao.seimi.spring.common.CrawlerCache;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import com.alibaba.fastjson.JSON;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -63,13 +65,18 @@ public class OkHttpRequestGenerator {
                 }
             }
             if (HttpMethod.POST.equals(seimiReq.getHttpMethod())) {
-                FormBody.Builder formBodyBuilder = new FormBody.Builder();
-                if (seimiReq.getParams() != null) {
-                    for (Map.Entry<String, String> entry : seimiReq.getParams().entrySet()) {
-                        formBodyBuilder.add(entry.getKey(), entry.getValue());
+                if (StringUtils.isNotBlank(seimiReq.getJsonBody())){
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),seimiReq.getJsonBody());
+                    requestBuilder.post(requestBody);
+                }else {
+                    FormBody.Builder formBodyBuilder = new FormBody.Builder();
+                    if (seimiReq.getParams() != null) {
+                        for (Map.Entry<String, String> entry : seimiReq.getParams().entrySet()) {
+                            formBodyBuilder.add(entry.getKey(), entry.getValue());
+                        }
                     }
+                    requestBuilder.post(formBodyBuilder.build());
                 }
-                requestBuilder.post(formBodyBuilder.build());
             } else {
                 String queryStr = "";
                 if (seimiReq.getParams()!=null&&!seimiReq.getParams().isEmpty()){
