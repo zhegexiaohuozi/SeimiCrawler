@@ -47,6 +47,11 @@ public class SeimiCrawlerBootstrapListener implements ApplicationListener<Contex
      */
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        //解决某些场景执行两次问题
+        if (event.getApplicationContext().getParent() == null) {
+            return ;
+        }
+
         ApplicationContext context = event.getApplicationContext();
         if (isSpringBoot){
             CrawlerProperties crawlerProperties = context.getBean(CrawlerProperties.class);
@@ -66,7 +71,9 @@ public class SeimiCrawlerBootstrapListener implements ApplicationListener<Contex
                 CrawlerModel crawlerModel = new CrawlerModel(a, context);
                 if (CrawlerCache.isExist(crawlerModel.getCrawlerName())) {
                     logger.error("Crawler:{} is repeated,please check", crawlerModel.getCrawlerName());
-                    throw new SeimiInitExcepiton(StrFormatUtil.info("Crawler:{} is repeated,please check", crawlerModel.getCrawlerName()));
+//                    重名应该不允许覆盖提示个错误信息，而不是直接中断
+                    continue;
+//                    throw new SeimiInitExcepiton(StrFormatUtil.info("Crawler:{} is repeated,please check", crawlerModel.getCrawlerName()));
                 }
                 CrawlerCache.putCrawlerModel(crawlerModel.getCrawlerName(), crawlerModel);
             }
