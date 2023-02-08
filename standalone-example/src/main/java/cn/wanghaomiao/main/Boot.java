@@ -10,7 +10,7 @@ import cn.wanghaomiao.seimi.core.Seimi;
 public class Boot {
     public static void main(String[] args){
         SeimiConfig config = new SeimiConfig();
-        config.setSeimiAgentHost("127.0.0.1");
+//        config.setSeimiAgentHost("127.0.0.1");
 //        config.redisSingleServer().setAddress("redis://127.0.0.1:6379");
         Seimi s = new Seimi(config);
         s.goRun("basic");
