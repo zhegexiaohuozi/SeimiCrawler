@@ -32,18 +32,29 @@ import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.UnknownHostException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author github.com/zhegexiaohuozi seimimaster@gmail.com
  *         Date: 2014/11/13.
  */
 public class HttpClientFactory {
+
+    private static final Map<String, HttpClient> hcCache = new ConcurrentHashMap<>();
     public static HttpClient getHttpClient() {
-        return cliBuilder(10000).build();
+        int defTimeout = 10000;
+        return getHttpClient(defTimeout);
     }
 
     public static HttpClient getHttpClient(int timeout) {
-        return cliBuilder(timeout).build();
+        String defKey = String.valueOf(timeout);
+        HttpClient hc = hcCache.get(defKey);
+        if (hc == null){
+            hc = cliBuilder(timeout).build();
+            hcCache.put(defKey, hc);
+        }
+        return hc;
     }
 
     public static HttpClient getHttpClient(int timeout, CookieStore cookieStore) {
