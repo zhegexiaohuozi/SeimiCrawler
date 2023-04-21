@@ -8,6 +8,7 @@ import cn.wanghaomiao.seimi.exception.SeimiInitExcepiton;
 import cn.wanghaomiao.seimi.spring.boot.CrawlerProperties;
 import cn.wanghaomiao.seimi.struct.CrawlerModel;
 import cn.wanghaomiao.seimi.utils.StrFormatUtil;
+import cn.wanghaomiao.seimi.utils.SysEnvUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +62,13 @@ public class SeimiCrawlerBootstrapListener implements ApplicationListener<Contex
                 logger.info("Not find any crawler,may be you need to check.");
                 return;
             }
-            workersPool = Executors.newFixedThreadPool(Constants.BASE_THREAD_NUM * Runtime.getRuntime().availableProcessors() * CrawlerCache.getCrawlers().size());
+            int customThreadNum = SysEnvUtil.customThreadNum();
+            int poolSize = customThreadNum * CrawlerCache.getCrawlers().size();
+            if (customThreadNum <= 0){
+                poolSize = Constants.BASE_THREAD_NUM * Runtime.getRuntime().availableProcessors() * CrawlerCache.getCrawlers().size();
+                customThreadNum = Constants.BASE_THREAD_NUM * Runtime.getRuntime().availableProcessors();
+            }
+            workersPool = Executors.newFixedThreadPool(poolSize);
             for (Class<? extends BaseSeimiCrawler> a : CrawlerCache.getCrawlers()) {
                 CrawlerModel crawlerModel = new CrawlerModel(a, context);
                 if (CrawlerCache.isExist(crawlerModel.getCrawlerName())) {
@@ -72,7 +79,7 @@ public class SeimiCrawlerBootstrapListener implements ApplicationListener<Contex
             }
 
             for (Map.Entry<String, CrawlerModel> crawlerEntry : CrawlerCache.getCrawlerModelContext().entrySet()) {
-                for (int i = 0; i < Constants.BASE_THREAD_NUM * Runtime.getRuntime().availableProcessors(); i++) {
+                for (int i = 0; i < customThreadNum; i++) {
                     workersPool.execute(new SeimiProcessor(CrawlerCache.getInterceptors(), crawlerEntry.getValue()));
                 }
             }
