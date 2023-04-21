@@ -1,7 +1,6 @@
 package cn.wanghaomiao.seimi.utils;
 
 
-import cn.wanghaomiao.seimi.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
