@@ -18,6 +18,7 @@ package cn.wanghaomiao.seimi.struct;
 
 import cn.wanghaomiao.seimi.annotation.validate.NotNull;
 import cn.wanghaomiao.seimi.core.SeimiCrawler;
+import cn.wanghaomiao.seimi.core.SeimiDownloader;
 import cn.wanghaomiao.seimi.http.HttpMethod;
 import cn.wanghaomiao.seimi.http.SeimiAgentContentType;
 import cn.wanghaomiao.seimi.http.SeimiCookie;
@@ -178,6 +179,11 @@ public class Request extends CommonObject {
      * 添加json request body支持
      */
     private String jsonBody;
+
+    /**
+     * 是否指定下载器
+     */
+    private Class<? extends SeimiDownloader> downloader;
 
     public void incrReqCount(){
         this.currentReqCount +=1;
@@ -365,5 +371,27 @@ public class Request extends CommonObject {
 
     public void setJsonBody(String jsonBody) {
         this.jsonBody = jsonBody;
+    }
+
+    public Class<? extends SeimiDownloader> getDownloader() {
+        return downloader;
+    }
+
+    public void setDownloader(Class<? extends SeimiDownloader> downloader) {
+        this.downloader = downloader;
+    }
+
+    public void putParam(String name, String val){
+        if (this.params == null){
+            params = new HashMap<>();
+        }
+        params.put(name, val);
+    }
+
+    public void putMeta(String key, Object val){
+        if (this.meta == null){
+            meta = new HashMap<>();
+        }
+        meta.put(key, val);
     }
 }
