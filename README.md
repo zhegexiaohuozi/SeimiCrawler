@@ -1,9 +1,3 @@
-SeimiCrawler是一款功能强大的分布式爬虫框架。对于涉及Google SERP收集、亚马逊监控、社交媒体分析或大规模数据采集的项目而言，将您的爬虫与可靠的住宅代理结合使用，可以显著提高稳定性和覆盖范围。
-
-**IPWO爬虫住宅代理提供全球超过9000万个住宅IP、爬虫使用保护账号不封号，专为开发者和数据团队设计。0元测试，优惠折扣码“xiaohuo”。[IPWO官网入口](https://www.ipwo.net/?ref=githubxiaohuo)**
-
-[![weixin](./docs/ads/ipwo.png)](https://www.ipwo.net/?ref=githubxiaohuo)
-
 SeimiCrawler
 ============
 [![GitHub release](https://img.shields.io/github/release/zhegexiaohuozi/SeimiCrawler.svg)](https://github.com/zhegexiaohuozi/JsoupXpath/releases)
