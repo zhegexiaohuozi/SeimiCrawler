@@ -1,3 +1,9 @@
+SeimiCrawler是一款功能强大的分布式爬虫框架。对于涉及Google SERP收集、亚马逊监控、社交媒体分析或大规模数据采集的项目而言，将您的爬虫与可靠的住宅代理结合使用，可以显著提高稳定性和覆盖范围。
+
+**Swiftproxy 专注于提供高质量动态和静态住宅代理，拥有 8000 万+住宅 IP，覆盖全球 220+ 个地区，支持 HTTP(S)、SOCKS5 协议及动态轮换和粘性会话。无论是使用 SeimiCrawler 进行网页抓取，还是开展分布式数据采集，Swiftproxy 都能为你提供灵活的住宅代理支持。免费试用，动态住宅代理低至 $0.7/GB，使用优惠码 PROXY90 再享九折优惠。[访问 Swiftproxy](https://www.swiftproxy.net/?ref=SeimiCrawler)**
+
+[![Swiftproxy](./docs/ads/swiftproxy.png)](https://www.swiftproxy.net/?ref=SeimiCrawler)
+
 SeimiCrawler
 ============
 [![GitHub release](https://img.shields.io/github/release/zhegexiaohuozi/SeimiCrawler.svg)](https://github.com/zhegexiaohuozi/JsoupXpath/releases)

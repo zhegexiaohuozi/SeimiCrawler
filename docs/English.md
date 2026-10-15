@@ -1,8 +1,23 @@
+SeimiCrawler is a powerful distributed crawler framework. For projects involving Google SERP collection, Amazon monitoring, social media analytics, or large-scale data acquisition, pairing your crawler with reliable residential proxies can significantly improve stability and coverage.
+
+**Swiftproxy specializes in providing high-quality dynamic and static residential proxies, with 80 million+ residential IPs covering 220+ regions worldwide, supporting HTTP(S) and SOCKS5 protocols along with dynamic rotation and sticky sessions. Whether you are using SeimiCrawler for web scraping or conducting distributed data collection, Swiftproxy offers you flexible residential proxy support. Free trial available, with dynamic residential proxies starting as low as $0.7/GB, and enjoy an extra 10% off with the promo code PROXY90. [Visit Swiftproxy](https://www.swiftproxy.net/?ref=SeimiCrawler)**
+
+[![Swiftproxy](ads/swiftproxy-en.png)](https://www.swiftproxy.net/?ref=SeimiCrawler)
+
 SeimiCrawler - An Agile and Powerful Java Crawler Framework
 ==========
+
+[![GitHub release](https://img.shields.io/github/release/zhegexiaohuozi/SeimiCrawler.svg)](https://github.com/zhegexiaohuozi/SeimiCrawler/releases)
+[![Maven](https://img.shields.io/maven-central/v/cn.wanghaomiao/SeimiCrawler?logo=apache-maven&color=green)](https://central.sonatype.com/artifact/cn.wanghaomiao/SeimiCrawler)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 An agile, powerful, standalone, and distributed crawler framework.
 
 The goal of SeimiCrawler is to become the most user-friendly and practical crawler framework in the Java world.
+
+If you like this project, please give it a Star.
+Read detail document in [English](English.md) | [日本語](Japanese.md) | [한국어](Korean.md) | [Русский](Russian.md) | [Français](Franch.md) | [Deutsch](German.md) | [Italiano](Italian.md) | [Español](Spanish.md).
+
 # Introduction #
 
 SeimiCrawler is an agile, independently deployable, and distributed Java crawler framework. It aims to significantly lower the barrier for new developers to create a highly available and performant crawler system while also improving the efficiency of developing such systems. In the world of SeimiCrawler, most users only need to focus on writing the business logic for data collection, with the rest handled by Seimi. The design of SeimiCrawler is inspired by Python's Scrapy framework, while also integrating the characteristics of the Java language and Spring. It also aims to facilitate more efficient use of XPath for HTML parsing in a domestic context, so SeimiCrawler uses [JsoupXpath](http://jsoupxpath.wanghaomiao.cn) (an independent extension project, not part of Jsoup) as the default HTML parser, with all default HTML data extraction performed using XPath (though, of course, other parsers can be chosen for data processing). Combined with [SeimiRender](https://github.com/zhegexiaohuozi/seimi-render) — the modern successor to SeimiAgent, a Chromium-based web rendering service that executes JS, handles SPAs and dynamic content, and returns the rendered HTML / Markdown / PDF / screenshot / structured search results — SeimiCrawler perfectly addresses the issue of crawling complex dynamic pages. It fully supports SpringBoot, allowing for the utmost expression of your imagination and creativity.
