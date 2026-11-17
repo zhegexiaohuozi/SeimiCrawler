@@ -1,9 +1,3 @@
-SeimiCrawler is a powerful distributed crawler framework. For projects involving Google SERP collection, Amazon monitoring, social media analytics, or large-scale data acquisition, pairing your crawler with reliable residential proxies can significantly improve stability and coverage.
-
-**Swiftproxy specializes in providing high-quality dynamic and static residential proxies, with 80 million+ residential IPs covering 220+ regions worldwide, supporting HTTP(S) and SOCKS5 protocols along with dynamic rotation and sticky sessions. Whether you are using SeimiCrawler for web scraping or conducting distributed data collection, Swiftproxy offers you flexible residential proxy support. Free trial available, with dynamic residential proxies starting as low as $0.7/GB, and enjoy an extra 10% off with the promo code PROXY90. [Visit Swiftproxy](https://www.swiftproxy.net/?ref=SeimiCrawler)**
-
-[![Swiftproxy](ads/swiftproxy-en.png)](https://www.swiftproxy.net/?ref=SeimiCrawler)
-
 SeimiCrawler - An Agile and Powerful Java Crawler Framework
 ==========
 
